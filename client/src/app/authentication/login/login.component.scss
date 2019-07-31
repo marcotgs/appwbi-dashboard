@@ -1,0 +1,28 @@
+@import "variables";
+
+.auth-wrapper{
+    min-height: 100vh;
+    position: relative;
+    background: #F5F5F5;
+    .auth-box{
+        background: $white;
+        padding: 20px;
+        box-shadow: $shadow;
+        max-width: 400px;
+        width: 90%;
+        margin: 10% 0;
+        .logo{
+            text-align: center;
+            img{
+                height: 5REM;
+                margin-bottom: 1rem;
+            }
+        }
+
+        #loginForm{
+            .invalid-feedback{
+                margin-left: 3.1rem;
+            }
+        }
+    }
+}

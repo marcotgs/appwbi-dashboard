@@ -1,17 +1,40 @@
 import { Component } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import validationMessages from '@app/constants/form-validation/form-validation.constants';
+
 
 @Component({
   selector: 'app-login',
-  templateUrl: './login.component.html'
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
-  constructor() {}
+  public loginForm: FormGroup;
 
-  loginform = true;
-  recoverform = false;
+  constructor() {
+    this.initLoginForm();
+  }
 
-  showRecoverForm() {
-    this.loginform = !this.loginform;
-    this.recoverform = !this.recoverform;
+  getMessagesError(controlName: string) {
+    return validationMessages[controlName];
+  }
+
+  private initLoginForm(): void {
+    this.loginForm = new FormGroup({
+      email: new FormControl('', {
+        validators: Validators.compose([
+          Validators.required,
+          Validators.pattern('^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$')
+        ]),
+        updateOn: 'blur',
+      }),
+      password: new FormControl('', {
+        validators: Validators.compose([
+          Validators.required,
+          Validators.minLength(8)
+        ]),
+        updateOn: 'blur'
+      }),
+    });
   }
 }
