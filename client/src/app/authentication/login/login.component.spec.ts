@@ -38,4 +38,10 @@ describe('LoginComponent', () => {
         expect(component.loginForm.value).toEqual(inputValues);
         expect(component.loginForm.valid).toBeTruthy();
     });
+
+    it('Should component have function with error messages', () => {
+        const emailErrors = fixture.componentInstance.getMessagesError('email');
+        expect(emailErrors.length).not.toBeUndefined();
+        expect(emailErrors[0].type).not.toBeNull();
+    });
 });
