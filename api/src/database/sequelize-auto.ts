@@ -8,6 +8,8 @@ const auto = new SequelizeAuto(process.env["DB_SERVER_DATABASE"], process.env["D
     host: process.env["DB_SERVER"],
     dialect: "mssql",
     directory: "./src/database/models",
+    camelCase: true,
+    dashesForFileName: true,
     additional: {
         timestamps: false
     },

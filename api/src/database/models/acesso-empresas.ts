@@ -1,71 +1,81 @@
 /* eslint-disable */
 import { Model, BuildOptions, DataTypes, Sequelize } from "sequelize";
 
-const acesso_empresasModelInit = (sequelize: Sequelize): acesso_empresasModelStatic => {
-	return sequelize.define("acesso_empresas", {
+const acessoEmpresasModelInit = (sequelize: Sequelize): acessoEmpresasModelStatic => {
+	return sequelize.define("acessoEmpresas", {
 		'id': {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 			primaryKey: true,
 			comment: "null",
-			autoIncrement: true
+			autoIncrement: true,
+			field: 'id'
 		},
 		'razaoSocial': {
 			type: DataTypes.STRING(40),
 			allowNull: false,
-			comment: "null"
+			comment: "null",
+			field: 'razaoSocial'
 		},
 		'nomeFantasia': {
 			type: DataTypes.STRING(30),
 			allowNull: false,
-			comment: "null"
+			comment: "null",
+			field: 'nomeFantasia'
 		},
 		'email': {
 			type: DataTypes.STRING(50),
 			allowNull: false,
-			comment: "null"
+			comment: "null",
+			field: 'email'
 		},
 		'endereco': {
 			type: DataTypes.STRING(50),
 			allowNull: false,
-			comment: "null"
+			comment: "null",
+			field: 'endereco'
 		},
 		'numero': {
 			type: DataTypes.STRING(6),
 			allowNull: false,
-			comment: "null"
+			comment: "null",
+			field: 'numero'
 		},
 		'complemento': {
 			type: DataTypes.STRING(4),
 			allowNull: true,
-			comment: "null"
+			comment: "null",
+			field: 'complemento'
 		},
 		'bairro': {
 			type: DataTypes.STRING(50),
 			allowNull: false,
-			comment: "null"
+			comment: "null",
+			field: 'bairro'
 		},
 		'cep': {
 			type: DataTypes.STRING(10),
 			allowNull: false,
-			comment: "null"
+			comment: "null",
+			field: 'cep'
 		},
-		'id_municipio': {
+		'idMunicipio': {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 			comment: "null",
 			references: {
 				model: 'municipio',
 				key: 'id'
-			}
+			},
+			field: 'id_municipio'
 		}
 	}, {
 		tableName: 'acesso_empresas',
 		timestamps: false
-	}) as acesso_empresasModelStatic;
+	}) as acessoEmpresasModelStatic;
 };
 
-interface acesso_empresasModel extends Model {
+export interface acessoEmpresasModel extends Model {
 	id:number;
 	razaoSocial:string;
 	nomeFantasia:string;
@@ -75,11 +85,11 @@ interface acesso_empresasModel extends Model {
 	complemento:string;
 	bairro:string;
 	cep:string;
-	id_municipio:number;
+	idMunicipio:number;
 }
 
-type acesso_empresasModelStatic = typeof Model & {
-	new(values?: object, options?: BuildOptions):acesso_empresasModel;
+export type acessoEmpresasModelStatic = typeof Model & {
+	new(values?: object, options?: BuildOptions):acessoEmpresasModel;
 };
 
-export default acesso_empresasModelInit;
+export default acessoEmpresasModelInit;

@@ -1,77 +1,85 @@
 /* eslint-disable */
 import { Model, BuildOptions, DataTypes, Sequelize } from "sequelize";
 
-const acesso_usuariosModelInit = (sequelize: Sequelize): acesso_usuariosModelStatic => {
-	return sequelize.define("acesso_usuarios", {
+const acessoUsuariosModelInit = (sequelize: Sequelize): acessoUsuariosModelStatic => {
+	return sequelize.define("acessoUsuarios", {
 		'id': {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 			primaryKey: true,
 			comment: "null",
-			autoIncrement: true
+			autoIncrement: true,
+			field: 'id'
 		},
 		'nome': {
 			type: DataTypes.STRING(30),
 			allowNull: false,
-			comment: "null"
+			comment: "null",
+			field: 'nome'
 		},
 		'sobrenome': {
 			type: DataTypes.STRING(50),
 			allowNull: false,
-			comment: "null"
+			comment: "null",
+			field: 'sobrenome'
 		},
 		'email': {
 			type: DataTypes.STRING(60),
 			allowNull: false,
-			comment: "null"
+			comment: "null",
+			field: 'email'
 		},
 		'password': {
 			type: DataTypes.STRING,
 			allowNull: false,
-			comment: "null"
+			comment: "null",
+			field: 'password'
 		},
-		'password_salt': {
+		'passwordSalt': {
 			type: DataTypes.STRING,
 			allowNull: false,
-			comment: "null"
+			comment: "null",
+			field: 'password_salt'
 		},
-		'id_acesso_empresas': {
+		'idAcessoEmpresas': {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 			comment: "null",
 			references: {
 				model: 'acesso_empresas',
 				key: 'id'
-			}
+			},
+			field: 'id_acesso_empresas'
 		},
-		'id_niveis_permissao': {
+		'idNiveisPermissao': {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 			comment: "null",
 			references: {
 				model: 'acesso_niveis_permissao',
 				key: 'id'
-			}
+			},
+			field: 'id_niveis_permissao'
 		}
 	}, {
 		tableName: 'acesso_usuarios',
 		timestamps: false
-	}) as acesso_usuariosModelStatic;
+	}) as acessoUsuariosModelStatic;
 };
 
-interface acesso_usuariosModel extends Model {
+export interface acessoUsuariosModel extends Model {
 	id:number;
 	nome:string;
 	sobrenome:string;
 	email:string;
 	password:string;
-	password_salt:string;
-	id_acesso_empresas:number;
-	id_niveis_permissao:number;
+	passwordSalt:string;
+	idAcessoEmpresas:number;
+	idNiveisPermissao:number;
 }
 
-type acesso_usuariosModelStatic = typeof Model & {
-	new(values?: object, options?: BuildOptions):acesso_usuariosModel;
+export type acessoUsuariosModelStatic = typeof Model & {
+	new(values?: object, options?: BuildOptions):acessoUsuariosModel;
 };
 
-export default acesso_usuariosModelInit;
+export default acessoUsuariosModelInit;
