@@ -6,7 +6,7 @@ const routes: Routes = [
         path: '',
         component: AppComponent,
         loadChildren:
-            () => import('../authentication/authentication.module').then(m => m.AuthenticationModule)
+            () => import('../components/authentication/authentication.module').then(m => m.AuthenticationModule)
     }
 ];
 
