@@ -4,5 +4,5 @@ export interface ApiResponseErrors {
 
 export interface ApiResponseError {
     type?: string;
-    message: any; 
+    message: string; 
 }

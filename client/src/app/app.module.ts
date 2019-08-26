@@ -1,7 +1,12 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { AppRoutingModule } from './routing/app-routing.module';
-import { AppComponent } from './app.component';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { AppRoutingModule } from '@app/routing/app-routing.module';
+import { AppComponent } from '@app/app.component';
+import { reducers } from '@app/store/reducers';
+import { ApiModule } from '@api/api.module';
+
 
 @NgModule({
   declarations: [
@@ -9,7 +14,15 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ApiModule,
+    EffectsModule.forRoot([]),
+    StoreModule.forRoot(reducers, {
+      runtimeChecks: {
+        strictStateImmutability: true,
+        strictActionImmutability: true
+      }
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]
