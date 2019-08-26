@@ -15,6 +15,7 @@ Config.init();
 // Cria um servidor express.
 const app = createExpressServer({
     routePrefix: "/api",
+    cors: true,
     controllers: [UserController]
 });
 app.set("port", process.env.PORT || 3000); // porta
