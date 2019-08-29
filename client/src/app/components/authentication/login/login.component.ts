@@ -67,14 +67,14 @@ export class LoginComponent {
 
   private initLoginForm(): void {
     this.loginForm = new FormGroup({
-      email: new FormControl('marcot.gualberto@gmail.com', {
+      email: new FormControl('', {
         validators: Validators.compose([
           Validators.required,
           Validators.pattern('^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$')
         ]),
         updateOn: 'blur',
       }),
-      password: new FormControl('teste1234567', {
+      password: new FormControl('', {
         validators: Validators.compose([
           Validators.required,
           Validators.minLength(8)
