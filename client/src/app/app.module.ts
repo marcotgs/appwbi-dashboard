@@ -2,10 +2,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
-import { AppRoutingModule } from '@app/routing/app-routing.module';
+import { RouterModule } from '@angular/router';
 import { AppComponent } from '@app/app.component';
 import { reducers } from '@app/store/reducers';
 import { ApiModule } from '@api/api.module';
+import { AppRoutes } from './app.routes';
+import { ServicesModule } from '@app/services';
 
 
 @NgModule({
@@ -14,8 +16,9 @@ import { ApiModule } from '@api/api.module';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
+    ServicesModule,
     ApiModule,
+    RouterModule.forRoot(AppRoutes),
     EffectsModule.forRoot([]),
     StoreModule.forRoot(reducers, {
       runtimeChecks: {

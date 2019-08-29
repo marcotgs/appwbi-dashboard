@@ -8,7 +8,8 @@
             <!-- Form -->
             <div class="row">
                 <div class="col-12">
-                    <form class="form-horizontal m-t-20" (ngSubmit)="formSubmit()" id="loginForm" [formGroup]="loginForm">
+                    <form class="form-horizontal m-t-20" (ngSubmit)="formSubmit()" id="loginForm"
+                        [formGroup]="loginForm">
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="login-email-input"><i
@@ -42,13 +43,24 @@
                                     <input type="checkbox" class="custom-control-input" id="customCheck1">
                                     <label class="custom-control-label" for="customCheck1">Lembrar de mim</label>
                                     <a (click)="showRecoverForm()" href="javascript:void(0)" id="to-recover"
-                                        class="text-dark float-right"><i class="fa fa-lock m-r-5"></i> Esqueceu sua senha?</a>
+                                        class="text-dark float-right"><i class="fa fa-lock m-r-5"></i> Esqueceu sua
+                                        senha?</a>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group text-center">
                             <div class="col-xs-12 p-b-20">
-                                <button class="btn btn-block btn-lg btn-info" type="submit">Entrar</button>
+                                <button class="btn btn-block btn-lg btn-info" type="submit">
+                                    <span *ngIf="!loginForm.disabled">Entrar</span>
+                                    <ngx-spinner bdColor="transparent" size="default" color="#fff" type="ball-beat"
+                                        [fullScreen]="false">
+                                    </ngx-spinner>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group text-center">
+                            <div class="invalid-feedback--request invalid-feedback" *ngFor="let error of loginErrors">
+                                <span>{{error.message}}</span>
                             </div>
                         </div>
                     </form>

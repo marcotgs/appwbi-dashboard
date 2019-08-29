@@ -22,6 +22,19 @@
         #loginForm{
             .invalid-feedback{
                 margin-left: 3.1rem;
+                &--request{
+                    margin-left: 0;
+                    display: block;
+                    font-size: 0.95rem;
+                }
+            }
+
+            button {
+                position: relative;
+                height: 3rem;
+                &:disabled{
+                    opacity: 1;
+                }
             }
         }
     }

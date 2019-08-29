@@ -6,5 +6,5 @@ import { userReducer } from '@app/store/user';
 
 
 export const reducers: ActionReducerMap<AppState> = {
-  user: userReducer
+  userState: userReducer
 };

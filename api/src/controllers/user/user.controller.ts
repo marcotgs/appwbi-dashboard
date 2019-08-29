@@ -63,9 +63,8 @@ export default class UserController extends BaseController {
             const date = new Date();
             date.setDate(date.getDate() + 30);
             const result: LoginResponse = {
-                expiresIn: date.getTime(),
+                expiresIn: date.valueOf(),
                 token,
-                email: userData.email,
             };
             return this.sendResponse(res, 200, result);
         } catch (ex) {
