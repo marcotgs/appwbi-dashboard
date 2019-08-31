@@ -1,6 +1,7 @@
 import ValidationMessagesTypes from "./validation-message-types.enum";
 import { ValidationMessage } from "@api/interfaces";
 
+// Mensagens de validações.
 const validationMessages: ValidationMessage = {
     email: {
         [ValidationMessagesTypes.PATTERN]: "Email inválido!",

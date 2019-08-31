@@ -1,3 +1,10 @@
+
+
+/**
+ * Enum com os tipos de validações.
+ *
+ * @enum {number}
+ */
 enum ValidationMessagesTypes {
     PATTERN = "pattern",
     REQUIRED = "required",

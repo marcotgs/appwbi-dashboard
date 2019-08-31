@@ -3,15 +3,41 @@ import { Repository } from "@api/database/repositories";
 import acessoUsuariosModelInit, { acessoUsuariosModelStatic, acessoUsuariosModel } from "@api/database/models/acesso-usuarios";
 import logger from "@api/util/logger";
 
+/**
+ * Essa classe é um repositorio com os método que acessam a tabela `acesso_usuarios`.
+ *
+ * @export
+ * @class AcessoUsuariosRepository
+ * @extends {Repository}
+ */
 export default class AcessoUsuariosRepository extends Repository {
 
+    /**
+     * Dados do modelo da tabela.
+     *
+     * @private
+     * @type {acessoUsuariosModelStatic}
+     * @memberof AcessoUsuariosRepository
+     */
     private acessoUsuariosModel: acessoUsuariosModelStatic;
 
+    /**
+     * Inicia a classe e model da tabela.
+     * @param {Sequelize} sequelize
+     * @memberof AcessoUsuariosRepository
+     */
     public constructor(sequelize: Sequelize) {
         super(sequelize);
         this.acessoUsuariosModel = acessoUsuariosModelInit(this.databaseContext);
     }
 
+    /**
+     * Procura um registro por id na tabela.
+     *
+     * @param {number} id
+     * @returns {Promise<acessoUsuariosModel>}
+     * @memberof AcessoUsuariosRepository
+     */
     public async findById(id: number): Promise<acessoUsuariosModel> {
         try {
             return await this.acessoUsuariosModel.findByPk(id, {
@@ -23,7 +49,14 @@ export default class AcessoUsuariosRepository extends Repository {
         }
     };
 
-    public async getByEmail(email: string): Promise<acessoUsuariosModel> {
+    /**
+     * Procura um registro por email na tabela.
+     *
+     * @param {string} email
+     * @returns {Promise<acessoUsuariosModel>}
+     * @memberof AcessoUsuariosRepository
+     */
+    public async findByEmail(email: string): Promise<acessoUsuariosModel> {
         try {
             return await this.acessoUsuariosModel.findOne({
                 where: {
@@ -37,6 +70,14 @@ export default class AcessoUsuariosRepository extends Repository {
         }
     };
 
+    /**
+     * verifica se existe um resgistro relacionados ao email e a senha recebidos por parametro.
+     *
+     * @param {string} email
+     * @param {string} password
+     * @returns {Promise<boolean>}
+     * @memberof AcessoUsuariosRepository
+     */
     public async authenticate(email: string, password: string): Promise<boolean> {
         try {
             const data = await this.acessoUsuariosModel.findOne({

@@ -4,6 +4,10 @@ import Config from "@api/util/config";
 
 Config.init();
 
+
+// Essa Lógica é usada para gerar os modelos do banco de dados correspondente. 
+// Para mais detalhes ler o arquivo de Readme desta API.
+
 const auto = new SequelizeAuto(process.env["DB_SERVER_DATABASE"], process.env["DB_SERVER_USERNAME"], process.env["DB_SERVER_PASSWORD"], {
     host: process.env["DB_SERVER"],
     dialect: "mssql",

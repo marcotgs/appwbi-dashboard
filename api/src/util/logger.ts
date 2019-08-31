@@ -1,5 +1,8 @@
 import { Logger, LoggerOptions, transports } from "winston";
 
+
+// Esse arquivo é responsável por inicializar os logs da aplicação.
+
 const options: LoggerOptions = {
     transports: [
         new transports.Console({

@@ -1,6 +1,12 @@
 import logger from "./logger";
 import dotenv from "dotenv";
 
+/**
+ * Essa classe é responsável por carregar as configurações da aplicação em determinado ambiente.
+ * Para mais detalhes ler o arquivo de Readme desta API.
+ *
+ * @class Config
+ */
 class Config {
     public init(): void {
         if (process.env.NODE_ENV === "production") {
