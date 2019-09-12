@@ -1,13 +1,14 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
-// declare var $: any;
+import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
+declare var $: any;
 
 @Component({
     selector: 'dashboard-content',
     templateUrl: './dashboard-content.component.html',
 })
 export class DashboardContentComponent implements OnInit {
-    // public config: PerfectScrollbarConfigInterface = {};
+    public config: PerfectScrollbarConfigInterface = {};
 
     constructor(public router: Router) { }
 

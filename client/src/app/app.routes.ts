@@ -6,9 +6,9 @@ export const AppRoutes: Routes = [
     {
         path: '',
         component: DashboardContentComponent,
-        canActivate: [AuthGuard],
-        loadChildren:
-            () => import('./components/authentication/authentication.module').then(m => m.AuthenticationModule)
+        // canActivate: [AuthGuard],
+        // loadChildren:
+        //     () => import('./components/authentication/authentication.module').then(m => m.AuthenticationModule)
     },
     {
         path: '**',
