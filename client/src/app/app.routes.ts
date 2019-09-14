@@ -4,14 +4,19 @@ import { AuthGuard } from '@app/components/authentication/auth.guard';
 
 export const AppRoutes: Routes = [
     {
+        path: 'auth',
+        loadChildren:
+            () => import('./components/authentication/authentication.module').then(m => m.AuthenticationModule)
+    },
+    {
         path: '',
         component: DashboardContentComponent,
-        // canActivate: [AuthGuard],
-        // loadChildren:
-        //     () => import('./components/authentication/authentication.module').then(m => m.AuthenticationModule)
+        canActivate: [AuthGuard],
+        loadChildren:
+            () => import('./components/authentication/authentication.module').then(m => m.AuthenticationModule)
     },
     {
         path: '**',
-        redirectTo: '/login'
+        redirectTo: '/'
     },
 ];

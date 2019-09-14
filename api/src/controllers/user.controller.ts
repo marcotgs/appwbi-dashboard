@@ -82,11 +82,11 @@ export default class UserController extends BaseController {
             }
 
             const token = jwt.sign({ id: userData.id, email: userData.email }, process.env["JWT_SECRET"], {
-                expiresIn: "30d",
+                expiresIn: "180d",
             });
 
             const date = new Date();
-            date.setDate(date.getDate() + 30);
+            date.setDate(date.getDate() + 180);
             const result: LoginResponse = {
                 expiresIn: date.valueOf(),
                 token,
