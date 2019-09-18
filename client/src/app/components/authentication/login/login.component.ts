@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { Actions, ofType } from '@ngrx/effects';
 import validationMessages from '@app/constants/form-validation/form-validation.constants';
 import { Store } from '@ngrx/store';
-import { UserState, LOGIN, getUserState, getToken } from '@app/store/user';
+import { UserState, getUserState, LOGIN, LOGIN_ERROR, } from '@app/store/user';
 import { ApiResponseError } from '@app/api/interfaces';
 import { AuthService } from '@app/services';
 
@@ -14,35 +14,38 @@ import { AuthService } from '@app/services';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   public loginForm: FormGroup;
   public loginErrors: ApiResponseError[] = [];
-  private subscriptionUserState: Subscription;
 
   constructor(
     private store: Store<UserState>,
     private spinner: NgxSpinnerService,
     private router: Router,
+    private _actions$: Actions,
     authService: AuthService,
   ) {
     if (authService.isLoggedIn()) {
       this.router.navigate(['/'], { replaceUrl: true });
     }
+  }
+
+  ngOnInit(): void {
     this.initLoginForm();
-    this.subscriptionUserState = this.store.select(getUserState).subscribe((userState) => {
-      this.toggleErrors(userState);
+    this._actions$.pipe(ofType(LOGIN_ERROR)).subscribe((data: any) => {
+      this.toggleErrors(data.payload.errors);
+    });
+    this.store.select(getUserState).subscribe((userState) => {
+      if (userState.token) {
+        this.router.navigate(['/'], { replaceUrl: true });
+      }
     });
   }
 
-  private toggleErrors(userState: UserState) {
-    if (userState.errors && userState.errors.length > 0) {
-      this.loginErrors = userState.errors;
-      this.loginForm.enable();
-      this.spinner.hide();
-    }
-    else if (userState.token && !userState.errors) {
-      this.router.navigate(['/'], { replaceUrl: true });
-    }
+  private toggleErrors(errors: ApiResponseError[]) {
+    this.loginErrors = errors;
+    this.loginForm.enable();
+    this.spinner.hide();
   }
 
   public async formSubmit(): Promise<void> {
@@ -82,9 +85,5 @@ export class LoginComponent {
         updateOn: 'blur'
       }),
     });
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptionUserState.unsubscribe();
   }
 }

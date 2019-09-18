@@ -10,6 +10,7 @@ import { AppRoutes } from './app.routes';
 import { ServicesModule } from '@app/services';
 import { AuthGuard } from '@app/components/authentication/auth.guard';
 import { LayoutModule } from '@app/components/layout/layout.module';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import { LayoutModule } from '@app/components/layout/layout.module';
     ServicesModule,
     ApiModule,
     LayoutModule,
+    SweetAlert2Module.forRoot(),
     RouterModule.forRoot(AppRoutes),
     EffectsModule.forRoot([]),
     StoreModule.forRoot(reducers, {

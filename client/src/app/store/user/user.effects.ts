@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { switchMap, map, catchError } from 'rxjs/operators';
-import { LOGIN, LOGIN_SUCCESS, LOGIN_ERROR } from '@app/store/user/user.actions';
+import {
+    LOGIN, LOGIN_SUCCESS, LOGIN_ERROR,
+    EMAIL_CHANGE_PASSWORD, EMAIL_CHANGE_PASSWORD_ERROR, EMAIL_CHANGE_PASSWORD_SUCCESS,
+} from '@app/store/user/user.actions';
 import { UserService } from '@api/services';
 import { AuthService } from '@app/services';
 import { of } from 'rxjs';
@@ -25,6 +28,19 @@ export class UserEffects {
                         return { type: LOGIN_SUCCESS, payload: res.data };
                     }),
                     catchError(res => of({ type: LOGIN_ERROR, payload: res.error.data }))
+                )
+        )
+    ));
+
+    public sendEmailChangePassword$ = createEffect(() => this.actions$.pipe(
+        ofType(EMAIL_CHANGE_PASSWORD),
+        switchMap((action: any) =>
+            this.userService.sendEmailChangePassword(action.payload)
+                .pipe(
+                    map(() => {
+                        return { type: EMAIL_CHANGE_PASSWORD_SUCCESS };
+                    }),
+                    catchError(res => of({ type: EMAIL_CHANGE_PASSWORD_ERROR, payload: res.error.data }))
                 )
         )
     ));

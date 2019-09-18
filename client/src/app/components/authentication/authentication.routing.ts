@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { ForgetPasswordComponent } from './forget-password/forget-password.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 
 const AuthenticationRoutes: Routes = [
   {
@@ -16,7 +17,7 @@ const AuthenticationRoutes: Routes = [
       },
       {
         path: 'alterar-senha/:token',
-        component: ForgetPasswordComponent
+        component: ChangePasswordComponent
       },
     ]
   }

@@ -29,6 +29,10 @@
                 }
             }
 
+            input.ng-valid{
+                border: 1px solid #e9ecef;
+            }
+
             button {
                 position: relative;
                 height: 3rem;
