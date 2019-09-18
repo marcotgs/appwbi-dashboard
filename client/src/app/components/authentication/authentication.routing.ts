@@ -14,6 +14,10 @@ const AuthenticationRoutes: Routes = [
         path: 'esqueceu-senha',
         component: ForgetPasswordComponent
       },
+      {
+        path: 'alterar-senha/:token',
+        component: ForgetPasswordComponent
+      },
     ]
   }
 ];

@@ -24,7 +24,7 @@ export default abstract class BaseController {
      */
     public sendResponse<T = any>(res: Response, statusCode: number, data?: T): Response {
         if (!data) {
-            return res.status(statusCode);
+            return res.status(statusCode).send();
         }
         let result: ApiPayload<T> = {
             status: statusCode,

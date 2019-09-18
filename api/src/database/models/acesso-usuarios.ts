@@ -60,6 +60,12 @@ const acessoUsuariosModelInit = (sequelize: Sequelize): acessoUsuariosModelStati
 				key: 'id'
 			},
 			field: 'id_niveis_permissao'
+		},
+		'resetPasswordToken': {
+			type: DataTypes.STRING,
+			allowNull: true,
+			comment: "null",
+			field: 'reset_password_token'
 		}
 	}, {
 		tableName: 'acesso_usuarios',
@@ -76,6 +82,7 @@ export interface acessoUsuariosModel extends Model {
 	passwordSalt:string;
 	idAcessoEmpresas:number;
 	idNiveisPermissao:number;
+	resetPasswordToken:string;
 }
 
 export type acessoUsuariosModelStatic = typeof Model & {

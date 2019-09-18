@@ -1,7 +1,7 @@
-import { Sequelize } from "sequelize/types";
-import { Repository } from "@api/database/repositories";
-import acessoUsuariosModelInit, { acessoUsuariosModelStatic, acessoUsuariosModel } from "@api/database/models/acesso-usuarios";
-import logger from "@api/util/logger";
+import { Sequelize } from 'sequelize/types';
+import { Repository } from '@api/database/repositories';
+import acessoUsuariosModelInit, { acessoUsuariosModelStatic, acessoUsuariosModel } from '@api/database/models/acesso-usuarios';
+import logger from '@api/util/logger';
 
 /**
  * Essa classe é um repositorio com os método que acessam a tabela `acesso_usuarios`.
@@ -41,7 +41,7 @@ export default class AcessoUsuariosRepository extends Repository {
     public async findById(id: number): Promise<acessoUsuariosModel> {
         try {
             return await this.acessoUsuariosModel.findByPk(id, {
-                attributes: ["email"],
+                attributes: ['email'],
             });
         } catch (ex) {
             logger.error(`Erro ao realizar consulta no repository :'AcessoUsuarios'-> 'findById'. Error: ${ex}`);
@@ -62,7 +62,7 @@ export default class AcessoUsuariosRepository extends Repository {
                 where: {
                     email: email,
                 },
-                attributes: ["id", "email", ["password_salt", "passwordSalt"]],
+                attributes: ['id', 'email', ['password_salt', 'passwordSalt']],
             });
         } catch (ex) {
             logger.error(`Erro ao realizar consulta no repository :'AcessoUsuarios'-> 'getByEmail'. Error: ${ex}`);
@@ -85,11 +85,25 @@ export default class AcessoUsuariosRepository extends Repository {
                     email,
                     password,
                 },
-                attributes: ["id", "email"],
+                attributes: ['id', 'email'],
             });
             return (data !== null);
         } catch (ex) {
             logger.error(`Erro ao realizar consulta no repository :'AcessoUsuarios'-> 'authenticate'. Error: ${ex}`);
+            throw ex;
+        }
+    };
+
+    public async updateResetPasswordToken(email: string, resetPasswordToken: string): Promise<void> {
+        try {
+            await this.acessoUsuariosModel.update({ resetPasswordToken, },
+                {
+                    where: {
+                        email: email,
+                    },
+                });
+        } catch (ex) {
+            logger.error(`Erro ao realizar update no repository :'AcessoUsuarios'-> 'updateResetPasswordToken'. Error: ${ex}`);
             throw ex;
         }
     };

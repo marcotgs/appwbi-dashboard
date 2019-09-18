@@ -1,13 +1,15 @@
 import "reflect-metadata";
 import errorHandler from "errorhandler";
 import compression from "compression";  // compresses requests
+import passport from "passport";
+import SendGrid from "@sendgrid/mail";
 import { createExpressServer } from "routing-controllers";
 import bodyParser from "body-parser";
 import Config from "@api/util/config";
 import Database from "@api/database";
 import { UserController } from "@api/controllers";
 import Passaport from "@api/util/passport";
-import passport = require("passport");
+
 
 
 Config.init();
@@ -22,6 +24,8 @@ app.set("port", process.env.PORT || 3000); // porta
 
 Database.connect().
     then((): void => {
+
+        SendGrid.setApiKey(process.env.SENDGRID_API_KEY);
 
         // Configurações do express 
         app.use(passport.initialize());

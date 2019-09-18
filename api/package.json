@@ -16,6 +16,7 @@
     "update:models": "set NODE_ENV=development && ts-node -r tsconfig-paths/register src/database/sequelize-auto.ts"
   },
   "dependencies": {
+    "@sendgrid/mail": "^6.4.0",
     "async": "^3.0.1",
     "body-parser": "^1.19.0",
     "class-validator": "^0.10.0",

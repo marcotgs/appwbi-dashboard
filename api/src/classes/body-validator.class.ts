@@ -1,25 +1,24 @@
 
-import { LoginBody } from "@api/classes";
 import { validate } from "class-validator";
 import logger from "@api/util/logger";
 import { ApiResponseErrors, ApiResponseError } from "@api/interfaces";
 
 /**
- * Classe responsável por validar os dados do login.
+ * Classe responsável por validar os dados do body de uma requisição.
  *
  * @export
- * @class LoginValidator
+ * @class BodyValidator
  */
-export default class LoginValidator {
+export default class BodyValidator {
 
     /**
-     * Método que valida os dados de login.
+     * Método que valida os dados de uma requisição.
      *
-     * @param {LoginBody} body
+     * @param {T} body
      * @returns {(Promise<ApiResponseErrors | null>)}
-     * @memberof LoginValidator
+     * @memberof BodyValidator
      */
-    public async validate(body: LoginBody): Promise<ApiResponseErrors | null> {
+    public async validate<T>(body: T): Promise<ApiResponseErrors | null> {
         try {
             const errors = await validate(body);
             if (errors.length !== 0) {
@@ -33,7 +32,7 @@ export default class LoginValidator {
             }
             return null;
         } catch (ex) {
-            logger.error(`Erro na validação dos dados do login: Erro: ${ex}`);
+            logger.error(`Erro na validação dos dados da requisição: Erro: ${ex}`);
             throw ex;
         }
     }
