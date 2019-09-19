@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { switchMap, map, catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
 import {
     LOGIN, LOGIN_SUCCESS, LOGIN_ERROR,
     EMAIL_CHANGE_PASSWORD, EMAIL_CHANGE_PASSWORD_ERROR, EMAIL_CHANGE_PASSWORD_SUCCESS,
 } from '@app/store/user/user.actions';
 import { UserService } from '@api/services';
 import { AuthService } from '@app/services';
-import { of } from 'rxjs';
+import { ApiConstants } from '@app/constants/api';
 
 @Injectable()
 export class UserEffects {
@@ -27,7 +28,10 @@ export class UserEffects {
                         this.authService.setSession(res.data);
                         return { type: LOGIN_SUCCESS, payload: res.data };
                     }),
-                    catchError(res => of({ type: LOGIN_ERROR, payload: res.error.data }))
+                    catchError(res => of({
+                        type: LOGIN_ERROR,
+                        payload: (res.error.data || { errors: [ApiConstants.UNEXPECTED_ERROR] })
+                    }))
                 )
         )
     ));
@@ -40,7 +44,10 @@ export class UserEffects {
                     map(() => {
                         return { type: EMAIL_CHANGE_PASSWORD_SUCCESS };
                     }),
-                    catchError(res => of({ type: EMAIL_CHANGE_PASSWORD_ERROR, payload: res.error.data }))
+                    catchError(res => of({
+                        type: EMAIL_CHANGE_PASSWORD_ERROR,
+                        payload: (res.error.data || { errors: [ApiConstants.UNEXPECTED_ERROR] })
+                    }))
                 )
         )
     ));

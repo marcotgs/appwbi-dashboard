@@ -16,7 +16,7 @@ import { AuthService } from '@app/services';
 })
 export class LoginComponent implements OnInit {
   public loginForm: FormGroup;
-  public loginErrors: ApiResponseError[] = [];
+  public loginErrors: ApiResponseError[] | string[] = [];
 
   constructor(
     private store: Store<UserState>,
@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  private toggleErrors(errors: ApiResponseError[]) {
+  private toggleErrors(errors: ApiResponseError[] | string[]) {
     this.loginErrors = errors;
     this.loginForm.enable();
     this.spinner.hide();

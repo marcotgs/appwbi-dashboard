@@ -19,7 +19,7 @@ import {
 })
 export class ForgetPasswordComponent implements OnInit {
     public forgetPasswordForm: FormGroup;
-    public forgetPasswordErrors: ApiResponseError[] = [];
+    public forgetPasswordErrors: ApiResponseError[] | string[] = [];
     @ViewChild('successAlert', { static: false }) private successAlert: SwalComponent;
 
     constructor(
@@ -53,7 +53,7 @@ export class ForgetPasswordComponent implements OnInit {
         }
     }
 
-    private toggleErrors(errors: ApiResponseError[]) {
+    private toggleErrors(errors: ApiResponseError[] | string[]) {
         this.forgetPasswordErrors = errors;
         this.forgetPasswordForm.enable();
         this.spinner.hide();
