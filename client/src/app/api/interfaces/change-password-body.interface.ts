@@ -1,7 +1,7 @@
 interface ChangePasswordBody {
-    email: string;
+    resetPasswordToken: string;
 
-    forgotPassword: boolean;
+    newPassword: string;
 };
 
 export default ChangePasswordBody;

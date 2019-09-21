@@ -34,7 +34,7 @@ export class ForgetPasswordComponent implements OnInit {
         this._actions$.pipe(ofType(EMAIL_CHANGE_PASSWORD_SUCCESS)).subscribe(async () => {
             await this.spinner.hide();
             await this.successAlert.fire();
-            this.router.navigate(['/auth/login']);
+            this.router.navigate(['/auth/login'], { replaceUrl: true });
         });
         this._actions$.pipe(ofType(EMAIL_CHANGE_PASSWORD_ERROR)).subscribe((data: any) => {
             this.toggleErrors(data.payload.errors);

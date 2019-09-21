@@ -1,14 +1,14 @@
-import "reflect-metadata";
-import errorHandler from "errorhandler";
-import compression from "compression";  // compresses requests
-import passport from "passport";
-import SendGrid from "@sendgrid/mail";
-import { createExpressServer } from "routing-controllers";
-import bodyParser from "body-parser";
-import Config from "@api/util/config";
-import Database from "@api/database";
-import { UserController } from "@api/controllers";
-import Passaport from "@api/util/passport";
+import 'reflect-metadata';
+import errorHandler from 'errorhandler';
+import compression from 'compression';  // compresses requests
+import passport from 'passport';
+import SendGrid from '@sendgrid/mail';
+import { createExpressServer } from 'routing-controllers';
+import bodyParser from 'body-parser';
+import Config from '@api/util/config';
+import Database from '@api/database';
+import { UserController } from '@api/controllers';
+import Passaport from '@api/util/passport';
 
 
 
@@ -16,11 +16,11 @@ Config.init();
 
 // Cria um servidor express.
 const app = createExpressServer({
-    routePrefix: "/api",
+    routePrefix: '/api',
     cors: true,
     controllers: [UserController]
 });
-app.set("port", process.env.PORT || 3000); // porta
+app.set('port', process.env.PORT || 3000); // porta
 
 Database.connect().
     then((): void => {
@@ -46,11 +46,11 @@ Database.connect().
  */
 const server = app.listen(process.env.PORT || 3000, (): void => {
     console.log(
-        "  App is running at http://localhost:%d in %s mode",
-        app.get("port"),
-        app.get("env")
+        '  App is running at http://localhost:%d in %s mode',
+        app.get('port'),
+        app.get('env')
     );
-    console.log("  Press CTRL-C to stop\n");
+    console.log('  Press CTRL-C to stop\n');
 });
 
 export default server;

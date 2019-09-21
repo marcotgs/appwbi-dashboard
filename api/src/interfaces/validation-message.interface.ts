@@ -1,4 +1,4 @@
-import { ValidationMessagesTypes } from "@api/messages";
+import { ValidationMessagesTypes } from '@api/messages';
 
 /**
  * Mensagens de validação de dados.
@@ -6,8 +6,6 @@ import { ValidationMessagesTypes } from "@api/messages";
  * @interface ValidationMessage
  */
 interface ValidationMessage {
-    email?: ValidationMessageFields;
-    password?: ValidationMessageFields;
     [key: string]: ValidationMessageFields;
 };
 

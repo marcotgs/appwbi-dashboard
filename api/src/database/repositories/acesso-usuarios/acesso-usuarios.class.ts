@@ -94,6 +94,14 @@ export default class AcessoUsuariosRepository extends Repository {
         }
     };
 
+    /**
+     * Atualiza o token de redefinição de senha.
+     *
+     * @param {string} email
+     * @param {string} resetPasswordToken
+     * @returns {Promise<void>}
+     * @memberof AcessoUsuariosRepository
+     */
     public async updateResetPasswordToken(email: string, resetPasswordToken: string): Promise<void> {
         try {
             await this.acessoUsuariosModel.update({ resetPasswordToken, },
@@ -104,6 +112,28 @@ export default class AcessoUsuariosRepository extends Repository {
                 });
         } catch (ex) {
             logger.error(`Erro ao realizar update no repository :'AcessoUsuarios'-> 'updateResetPasswordToken'. Error: ${ex}`);
+            throw ex;
+        }
+    };
+
+    /**
+    * Atualiza a senha do usuário.
+    *
+    * @param {string} email
+    * @param {string} resetPasswordToken
+    * @returns {Promise<void>}
+    * @memberof AcessoUsuariosRepository
+    */
+    public async updatePassword(email: string, newPassword: string): Promise<void> {
+        try {
+            await this.acessoUsuariosModel.update({ password: newPassword, resetPasswordToken: null },
+                {
+                    where: {
+                        email: email,
+                    },
+                });
+        } catch (ex) {
+            logger.error(`Erro ao realizar update no repository :'AcessoUsuarios'-> 'updatePassword'. Error: ${ex}`);
             throw ex;
         }
     };

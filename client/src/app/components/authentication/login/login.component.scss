@@ -29,6 +29,10 @@
                 }
             }
 
+            input::placeholder{
+                font-size: 1rem;
+            }
+
             input.ng-valid{
                 border: 1px solid #e9ecef;
             }
@@ -38,6 +42,12 @@
                 height: 3rem;
                 &:disabled{
                     opacity: 1;
+                }
+            }
+
+            @media only screen and (max-width: 768px) {
+                input::placeholder{
+                    font-size: 0.9rem;
                 }
             }
         }

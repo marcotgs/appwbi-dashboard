@@ -1,21 +1,22 @@
-import { IsEmail, IsBoolean } from 'class-validator';
+import { MinLength, IsNotEmpty } from 'class-validator';
 import { validationMessages } from '@api/messages';
 
 /**
- * Classe que tipo o body da requisição de `sendEmailChangePassword`.
+ * Classe que tipo o body da requisição de `changePassword`.
  *
  * @export
  * @class ChangePasswordBody
  */
 export default class ChangePasswordBody {
 
-    @IsEmail({}, {
-        message: validationMessages.email.pattern
+    @IsNotEmpty({
+        message: validationMessages.resetPasswordToken.required
     })
-    public email: string;
+    public resetPasswordToken: string;
 
-    @IsBoolean({
+    @MinLength(8, {
         message: validationMessages.password.minlength
     })
-    public forgotPassword: boolean = false;
+    public newPassword: string;
+
 }
