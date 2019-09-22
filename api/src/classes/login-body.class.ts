@@ -1,5 +1,5 @@
-import { IsEmail, MinLength } from "class-validator";
-import { validationMessages } from "@api/messages";
+import { IsEmail, MinLength } from 'class-validator';
+import { validationMessages } from '@api/messages';
 
 /**
  * Classe que tipo o body da requisição de `Login`.

@@ -1,4 +1,4 @@
-import { Sequelize } from 'sequelize/types';
+import { Sequelize, FindAttributeOptions } from 'sequelize/types';
 import { Repository } from '@api/database/repositories';
 import acessoUsuariosModelInit, { acessoUsuariosModelStatic, acessoUsuariosModel } from '@api/database/models/acesso-usuarios';
 import logger from '@api/util/logger';
@@ -38,10 +38,10 @@ export default class AcessoUsuariosRepository extends Repository {
      * @returns {Promise<acessoUsuariosModel>}
      * @memberof AcessoUsuariosRepository
      */
-    public async findById(id: number): Promise<acessoUsuariosModel> {
+    public async findById(id: number, attributes?: FindAttributeOptions): Promise<acessoUsuariosModel> {
         try {
             return await this.acessoUsuariosModel.findByPk(id, {
-                attributes: ['email'],
+                attributes,
             });
         } catch (ex) {
             logger.error(`Erro ao realizar consulta no repository :'AcessoUsuarios'-> 'findById'. Error: ${ex}`);
@@ -137,5 +137,27 @@ export default class AcessoUsuariosRepository extends Repository {
             throw ex;
         }
     };
+
+    /**
+      * Atualiza os dados do usuário.
+      *
+      * @param {acessoUsuariosModel} data
+      * @returns {Promise<void>}
+      * @memberof AcessoUsuariosRepository
+      */
+    public async updateUser(data: object): Promise<void> {
+        try {
+            await this.acessoUsuariosModel.update({ ...data },
+                {
+                    where: {
+                        id: (data as acessoUsuariosModel).id,
+                    },
+                });
+        } catch (ex) {
+            logger.error(`Erro ao realizar update no repository :'AcessoUsuarios'-> 'updateUser'. Error: ${ex}`);
+            throw ex;
+        }
+    };
+
 
 };

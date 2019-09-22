@@ -1,0 +1,245 @@
+<ngx-spinner [name]="initialSpinner" bdColor="transparent" size="medium" color="#39afdb" [fullScreen]="false"
+    type="ball-scale-multiple">
+    <p style="font-size: 20px; color: gray">Carregando...</p>
+</ngx-spinner>
+<notifier-container></notifier-container>
+<!-- Row -->
+<div *ngIf="manageAccountForm">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <hr class="m-t-0">
+                <form class="form-horizontal striped-rows b-form" (ngSubmit)="formSubmit()"
+                    [formGroup]="manageAccountForm" id="manageAccountForm">
+                    <div class="card-body">
+                        <h4 class="card-title">Informações Pessoais</h4>
+                        <div class="form-group row">
+                            <div class="col-sm-3">
+                                <div class="b-label">
+                                    <label for="nome" class="control-label col-form-label">Nome</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="nome" placeholder="Nome"
+                                    formControlName="nome" [ngClass]="{'is-invalid': manageAccountForm.get('nome').invalid  && (manageAccountForm.get('nome').dirty || 
+                                    manageAccountForm.get('nome').touched)}">
+                                <div class="invalid-feedback" *ngFor="let validation of getMessagesError('nome')">
+                                    <span *ngIf="manageAccountForm.get('nome').hasError(validation.type) && (manageAccountForm.get('nome').dirty || 
+                                    manageAccountForm.get('nome').touched)">{{validation.message}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-3">
+                                <div class="b-label">
+                                    <label for="sobrenome" class="control-label col-form-label">Sobrenome</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="sobrenome" placeholder="Sobrenome"
+                                    formControlName="sobrenome" [ngClass]="{'is-invalid': manageAccountForm.get('sobrenome').invalid  && (manageAccountForm.get('sobrenome').dirty || 
+                                    manageAccountForm.get('sobrenome').touched)}">
+                                <div class="invalid-feedback" *ngFor="let validation of getMessagesError('sobrenome')">
+                                    <span *ngIf="manageAccountForm.get('sobrenome').hasError(validation.type) && (manageAccountForm.get('sobrenome').dirty || 
+                                            manageAccountForm.get('sobrenome').touched)">{{validation.message}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-3">
+                                <div class="b-label">
+                                    <label for="email" class="control-label col-form-label">Email</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-9">
+                                <input type="email" class="form-control" id="email" placeholder="Email"
+                                    formControlName="email">
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="card-body">
+                        <h4 class="card-title">Endereço</h4>
+                        <div class="form-group row">
+                            <div class="col-sm-3">
+                                <div class="b-label">
+                                    <label for="inputEmail3" class="control-label col-form-label">Company</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="inputEmail3"
+                                    placeholder="Company Name Here">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-3">
+                                <div class="b-label">
+                                    <label for="inputEmail3" class="control-label col-form-label">Interested In</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-9">
+                                <select class="form-control">
+                                    <option>Choose Your Option</option>
+                                    <option>Desiging</option>
+                                    <option>Development</option>
+                                    <option>Videography</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-3">
+                                <div class="b-label">
+                                    <label for="inputEmail3" class="control-label col-form-label">Budget</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-9">
+                                <select class="form-control">
+                                    <option>Choose Your Option</option>
+                                    <option>Less then $5000</option>
+                                    <option>$5000 - $10000</option>
+                                    <option>$10000 - $20000</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-3">
+                                <div class="b-label">
+                                    <label for="inputEmail3" class="control-label col-form-label">Select File</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Upload</span>
+                                    </div>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="inputGroupFile01">
+                                        <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-3">
+                                <div class="b-label">
+                                    <label for="inputEmail3" class="control-label col-form-label">About Project</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="inputEmail3"
+                                    placeholder="About Project Here">
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="card-body">
+                        <div class="form-group m-b-0 text-right">
+                            <button type="submit" class="btn btn-info waves-effect waves-light">
+                                <span *ngIf="!manageAccountForm.disabled">Salvar</span>
+                                <ngx-spinner [name]="saveSpinner" bdColor="transparent" size="default" color="#fff" type="ball-beat"
+                                    [fullScreen]="false">
+                                </ngx-spinner>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- End Row -->
+<!-- Row -->
+<!-- <div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Senha</h4>
+                <h6 class="card-subtitle">Add
+                    <code>.striped-rows</code> class in the form with bordered form styling.</h6>
+            </div>
+            <hr class="m-t-0">
+            <form class="form-horizontal striped-rows b-form">
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <div class="b-label">
+                                <label for="inputEmail3" class="control-label col-form-label">Full Name</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="inputEmail3" placeholder="Full Name Here">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <div class="b-label">
+                                <label for="inputEmail3" class="control-label col-form-label">Title</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="inputEmail3" placeholder="Title Here">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <div class="b-label">
+                                <label for="inputEmail3" class="control-label col-form-label">Company</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="inputEmail3" placeholder="Company Name Here">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <div class="b-label">
+                                <label for="inputEmail3" class="control-label col-form-label">Email</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-9">
+                            <input type="email" class="form-control" id="inputEmail3" placeholder="Email Here">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <div class="b-label">
+                                <label for="inputEmail3" class="control-label col-form-label">Contact No</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="inputEmail3" placeholder="Contact No Here">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <div class="b-label">
+                                <label for="inputEmail3" class="control-label col-form-label">Existing Customer</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-9">
+                            <div class="custom-control custom-radio custom-control-inline m-t-5">
+                                <input type="radio" class="custom-control-input" id="customControlValidation2"
+                                    name="radio-stacked" required>
+                                <label class="custom-control-label" for="customControlValidation2">Yes</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" class="custom-control-input" id="customControlValidation3"
+                                    name="radio-stacked" required>
+                                <label class="custom-control-label" for="customControlValidation3">No</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="card-body">
+                    <div class="form-group m-b-0 text-right">
+                        <button type="submit" class="btn btn-info waves-effect waves-light">Save</button>
+                        <button type="submit" class="btn btn-dark waves-effect waves-light">Cancel</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div> -->
+<!-- End Row -->

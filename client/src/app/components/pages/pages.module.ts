@@ -1,12 +1,30 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { EffectsModule } from '@ngrx/effects';
 import { RouterModule } from '@angular/router';
-import { StarterComponent } from './starter/starter.component';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { NotifierModule } from 'angular-notifier';
+import { UserEffects } from '@app/store/user';
+
+
 import pageRoutes from './pages.routes';
+import { StarterComponent } from './starter/starter.component';
+import { ManageAccountComponent } from './manage-account/manage-account.component';
+
 
 @NgModule({
-    imports: [FormsModule, CommonModule, RouterModule.forChild(pageRoutes)],
-    declarations: [StarterComponent]
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        NgxSpinnerModule,
+        NotifierModule,
+        EffectsModule.forFeature([UserEffects]),
+        CommonModule,
+        RouterModule.forChild(pageRoutes)],
+    declarations: [
+        StarterComponent,
+        ManageAccountComponent
+    ]
 })
 export class PagesModule { }

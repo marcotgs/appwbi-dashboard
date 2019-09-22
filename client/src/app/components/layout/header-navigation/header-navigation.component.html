@@ -21,12 +21,12 @@
                     <img src="assets/images/user.jpg" alt="user" class="img-circle" width="60">
                 </div>
                 <div class="m-l-10">
-                    <h4 class="m-b-0">{{userState.nome}}</h4>
-                    <p class=" m-b-0">{{userState.email}}</p>
+                    <h4 class="m-b-0">{{userState.user.nome}}</h4>
+                    <p class=" m-b-0">{{userState.user.email}}</p>
                 </div>
             </div>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="forms/conta-usuario">
+            <a class="dropdown-item" href="dashboard/minha-conta">
                 <i class="ti-settings m-r-5 m-l-5"></i> Acessar Conta</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="javascript:void(0)" (click)="logout()">

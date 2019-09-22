@@ -2,7 +2,7 @@ import { Response } from 'express';
 import sha256 from 'crypto-js/sha256';
 import jwt from 'jsonwebtoken';
 import SendGrid from '@sendgrid/mail';
-import { Post, Res, JsonController, Body, Put } from 'routing-controllers';
+import { Post, Res, JsonController, Body, Put, Authorized, CurrentUser, Get } from 'routing-controllers';
 import Database from '@api/database';
 import { AcessoUsuariosRepository } from '@api/database/repositories/acesso-usuarios';
 import { LoginBody, ChangePasswordBody, SendEmailChangePasswordBody } from '@api/classes';
@@ -10,6 +10,7 @@ import { BodyValidator } from '@api/classes';
 import BaseController from '@api/controllers/base-controller.class';
 import { ApiResponseErrors, LoginResponse } from '@api/interfaces';
 import logger from '@api/util/logger';
+import { acessoUsuariosModel } from '@api/database/models';
 
 
 /**
@@ -136,7 +137,7 @@ export default class UserController extends BaseController {
                 templateId: 'd-26cac983cafe468db185c1ac9a4bc71c',
                 // eslint-disable-next-line @typescript-eslint/camelcase
                 dynamic_template_data: {
-                    subject: '[APPWBI] Alteração de senha!',
+                    subject: (body.forgotPassword) ? '[APPWBI] Esqueceu sua senha?' : '[APPWBI] Alteração de senha!',
                     title: (body.forgotPassword) ? 'Esqueceu sua senha?' : 'Alterar sua senha?',
                     link: process.env.AUTH_BASE_URL.concat(`/alterar-senha/${resetPasswordToken}`)
                 },
@@ -191,7 +192,7 @@ export default class UserController extends BaseController {
                 //Retorna 401 se caso a senha estiver inválida.
                 return this.sendResponse(res, 401, response);
             }
-            
+
             const token = jwt.sign({
                 email: userData.email,
                 nome: userData.nome,
@@ -210,6 +211,65 @@ export default class UserController extends BaseController {
             return this.sendResponse(res, 200, result);
         } catch (ex) {
             logger.error(`Erro na requisição de login. Erro -> ${ex}`);
+            return this.sendResponse(res, 500);
+        }
+    }
+
+    /**
+     * Esse método recupera os dados do usuário.
+     *
+     * Get: /api/userProfile
+     * @param {Response} res
+     * @param {number} [userId]
+     * @returns {Promise<Response>}
+     * @memberof UserController
+     */
+    @Authorized()
+    @Get('/profile')
+    public async getUserProfile(
+        @Res() res: Response,
+        @CurrentUser() userId?: number,
+    ): Promise<Response> {
+        try {
+            const userData = await this.acessoUsuariosRepository.findById(userId, ['email', 'nome', 'sobrenome']);
+            delete userData.passwordSalt;
+            delete userData.id;
+            delete userData.passwordSalt;
+            delete userData.resetPasswordToken;
+            return this.sendResponse(res, 200, userData);
+        } catch (ex) {
+            logger.error(`Erro na requisição de updateProfile. Erro -> ${ex}`);
+            return this.sendResponse(res, 500);
+        }
+    }
+
+    /**
+     * Esse método atualiza os dados do usuário.
+     *
+     * POST: /api/updateProfile
+     * @param {acessoUsuariosModel} body
+     * @param {Response} res
+     * @param {number} [userId]
+     * @returns {Promise<Response>}
+     * @memberof UserController
+     */
+    @Authorized()
+    @Post('/profile')
+    public async updateProfile(
+        @Body() body: acessoUsuariosModel,
+        @Res() res: Response,
+        @CurrentUser() userId?: number,
+    ): Promise<Response> {
+        try {
+            const userData = await this.acessoUsuariosRepository.findById(userId);
+            if (body.id !== userData.id || body.email !== userData.email) {
+                return this.sendResponse(res, 400);
+            }
+            const mergeData = { ...userData.toJSON(), ...body };
+            this.acessoUsuariosRepository.updateUser(mergeData);
+            return this.sendResponse(res, 200, mergeData);
+        } catch (ex) {
+            logger.error(`Erro na requisição de updateProfile. Erro -> ${ex}`);
             return this.sendResponse(res, 500);
         }
     }

@@ -13,6 +13,9 @@ const validationMessages: FormValidationMessages = {
         { type: 'mismatch', message: 'As senhas não coincidem.' },
         { type: 'required', message: 'O campo confirmação de senha é obrigatório.' },
     ],
+    default: [
+        { type: 'required', message: 'Este campo é obrigatório.' },
+    ],
 };
 
 export default validationMessages;

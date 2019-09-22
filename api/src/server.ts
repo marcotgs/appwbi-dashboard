@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import 'reflect-metadata';
 import errorHandler from 'errorhandler';
 import compression from 'compression';  // compresses requests
 import passport from 'passport';
+import jwt from 'jsonwebtoken';
 import SendGrid from '@sendgrid/mail';
-import { createExpressServer } from 'routing-controllers';
+import { createExpressServer, Action } from 'routing-controllers';
 import bodyParser from 'body-parser';
 import Config from '@api/util/config';
 import Database from '@api/database';
@@ -11,19 +13,44 @@ import { UserController } from '@api/controllers';
 import Passaport from '@api/util/passport';
 
 
-
 Config.init();
 
-// Cria um servidor express.
-const app = createExpressServer({
-    routePrefix: '/api',
-    cors: true,
-    controllers: [UserController]
-});
-app.set('port', process.env.PORT || 3000); // porta
+let server: any;
 
 Database.connect().
     then((): void => {
+
+        // Cria um servidor express.
+        const app = createExpressServer({
+            routePrefix: '/api',
+            cors: true,
+            controllers: [UserController],
+            authorizationChecker: async (action: Action): Promise<boolean> => {
+                const token = action.request.headers.authorization.split('Bearer ')[1];
+                try {
+                    jwt.verify(token, process.env.JWT_SECRET);
+                    return true;
+                } catch{
+                    return false;
+                }
+            },
+            currentUserChecker: async (action: Action): Promise<number> => {
+                const token = action.request.headers.authorization.split('Bearer ')[1];
+                const payload: any = jwt.verify(token, process.env.JWT_SECRET);
+                return Number(payload.sub);
+            }
+        });
+
+        app.set('port', process.env.PORT || 3000); // porta
+
+        server = app.listen(process.env.PORT || 3000, (): void => {
+            console.log(
+                '  App is running at http://localhost:%d in %s mode',
+                app.get('port'),
+                app.get('env')
+            );
+            console.log('  Press CTRL-C to stop\n');
+        });
 
         SendGrid.setApiKey(process.env.SENDGRID_API_KEY);
 
@@ -40,17 +67,5 @@ Database.connect().
         //     res.sendFile('dist/angular-cosmosdb/index.html', { root });
         // });
     });
-
-/**
- * Start Express server
- */
-const server = app.listen(process.env.PORT || 3000, (): void => {
-    console.log(
-        '  App is running at http://localhost:%d in %s mode',
-        app.get('port'),
-        app.get('env')
-    );
-    console.log('  Press CTRL-C to stop\n');
-});
 
 export default server;

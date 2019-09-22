@@ -15,7 +15,7 @@ export default class AuthService {
     public logout() {
         localStorage.removeItem(this.keyIdToken);
         localStorage.removeItem(this.keyExpiresAt);
-    } 
+    }
 
     public isLoggedIn() {
         return (this.getToken() && new Date() <= this.getExpiration());
@@ -23,17 +23,16 @@ export default class AuthService {
 
     public decodeToken(token?: string): any {
         const helper = new JwtHelperService();
-        console.log(helper.decodeToken(token || this.getToken()));
         return helper.decodeToken(token || this.getToken());
+    }
+
+    public getToken(): string {
+        return localStorage.getItem(this.keyIdToken);
     }
 
     private getExpiration() {
         const expiration = localStorage.getItem(this.keyExpiresAt);
         const expiresAt = JSON.parse(expiration);
         return new Date(expiresAt);
-    }
-
-    private getToken(): string {
-        return localStorage.getItem(this.keyIdToken);
     }
 }

@@ -60,4 +60,19 @@ export class UserEffects {
                 )
         )
     ));
+
+    public getProfile$ = createEffect(() => this.actions$.pipe(
+        ofType(userActions.getProfile),
+        switchMap(() =>
+            this.userService.getUserProfile()
+                .pipe(
+                    map((response) => {
+                        return userActions.getProfileSuccess(response.data);
+                    }),
+                    catchError(res => of(userActions.getProfileError((
+                        (res.error && res.error.data) || { errors: [ApiConstants.UNEXPECTED_ERROR] }
+                    ))))
+                )
+        )
+    ));
 }

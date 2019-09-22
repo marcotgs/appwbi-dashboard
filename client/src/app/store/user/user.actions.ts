@@ -1,6 +1,6 @@
 import { props, createAction } from '@ngrx/store';
 import * as userTypes from "./user.types";
-import { LoginBody, ApiResponseErrors, ChangePasswordBody, SendEmailChangePasswordBody } from '@api/interfaces';
+import { LoginBody, ApiResponseErrors, ChangePasswordBody, SendEmailChangePasswordBody, acessoUsuariosModel } from '@api/interfaces';
 
 export const login = createAction(
     userTypes.LOGIN,
@@ -46,5 +46,20 @@ export const changePasswordSuccess = createAction(
 
 export const changePasswordError = createAction(
     userTypes.CHANGE_PASSWORD_ERROR,
+    props<ApiResponseErrors>(),
+);
+
+
+export const getProfile = createAction(
+    userTypes.GET_PROFILE,
+);
+
+export const getProfileSuccess = createAction(
+    userTypes.GET_PROFILE_SUCCESS,
+    props<acessoUsuariosModel>()
+);
+
+export const getProfileError = createAction(
+    userTypes.GET_PROFILE_ERROR,
     props<ApiResponseErrors>(),
 );

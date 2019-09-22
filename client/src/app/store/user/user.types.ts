@@ -11,3 +11,7 @@ export const EMAIL_CHANGE_PASSWORD_ERROR = '[USER] Send Email Change Passwordd e
 export const CHANGE_PASSWORD = '[USER] Change Password';
 export const CHANGE_PASSWORD_SUCCESS = '[USER] Change Password success';
 export const CHANGE_PASSWORD_ERROR = '[USER] Change Passwordd error';
+
+export const GET_PROFILE = '[USER] get profile';
+export const GET_PROFILE_SUCCESS = '[USER] get profile success';
+export const GET_PROFILE_ERROR = '[USER] get profile error';
