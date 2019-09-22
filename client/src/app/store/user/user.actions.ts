@@ -1,64 +1,50 @@
-import { Action } from '@ngrx/store';
-import { LoginResponse, LoginBody, ApiResponseErrors, ChangePasswordBody } from '@api/interfaces';
+import { props, createAction } from '@ngrx/store';
+import * as userTypes from "./user.types";
+import { LoginBody, ApiResponseErrors, ChangePasswordBody, SendEmailChangePasswordBody } from '@api/interfaces';
 
-export const LOGIN = '[USER] Login';
-export const LOGIN_SUCCESS = '[USER] Login success';
-export const LOGIN_ERROR = '[USER] Login error';
+export const login = createAction(
+    userTypes.LOGIN,
+    props<LoginBody>()
+);
 
-export const EMAIL_CHANGE_PASSWORD = '[USER] Send Email Change Password';
-export const EMAIL_CHANGE_PASSWORD_SUCCESS = '[USER] Send Email Change Password success';
-export const EMAIL_CHANGE_PASSWORD_ERROR = '[USER] Send Email Change Passwordd error';
+export const loginSuccess = createAction(
+    userTypes.LOGIN_SUCCESS,
+    props<{ email: string, nome: string }>()
+);
 
-export const CHANGE_PASSWORD = '[USER] Change Password';
-export const CHANGE_PASSWORD_SUCCESS = '[USER] Change Password success';
-export const CHANGE_PASSWORD_ERROR = '[USER] Change Passwordd error';
+export const loginError = createAction(
+    userTypes.LOGIN_ERROR,
+    props<ApiResponseErrors>()
+);
 
-export class LoginAction implements Action {
-    readonly type = LOGIN;
-    constructor(public payload: LoginBody) { }
-}
+export const logout = createAction(
+    userTypes.LOGOUT,
+);
 
-export class LoginActionSuccess implements Action {
-    readonly type = LOGIN_SUCCESS;
-    constructor(public payload: LoginResponse) { }
-}
+export const sendEmailChangePassword = createAction(
+    userTypes.EMAIL_CHANGE_PASSWORD,
+    props<SendEmailChangePasswordBody>()
+);
 
-export class LoginActionError implements Action {
-    readonly type = LOGIN_ERROR;
-    constructor(public payload: ApiResponseErrors) { }
-}
+export const sendEmailChangePasswordSuccess = createAction(
+    userTypes.EMAIL_CHANGE_PASSWORD_SUCCESS,
+);
 
-export class SendEmailChangePasswordAction implements Action {
-    readonly type = EMAIL_CHANGE_PASSWORD;
-    constructor(public payload: ChangePasswordBody) { }
-}
+export const sendEmailChangePasswordError = createAction(
+    userTypes.EMAIL_CHANGE_PASSWORD_ERROR,
+    props<ApiResponseErrors>(),
+);
 
-export class SendEmailChangePasswordActionSuccess implements Action {
-    readonly type = EMAIL_CHANGE_PASSWORD_SUCCESS;
-    constructor() { }
-}
+export const changePassword = createAction(
+    userTypes.CHANGE_PASSWORD,
+    props<ChangePasswordBody>()
+);
 
-export class SendEmailChangePasswordActionError implements Action {
-    readonly type = EMAIL_CHANGE_PASSWORD_ERROR;
-    constructor(public payload: ApiResponseErrors) { }
-}
+export const changePasswordSuccess = createAction(
+    userTypes.CHANGE_PASSWORD_SUCCESS,
+);
 
-export class ChangePasswordAction implements Action {
-    readonly type = CHANGE_PASSWORD;
-    constructor(public payload: ChangePasswordBody) { }
-}
-
-export class ChangePasswordActionSuccess implements Action {
-    readonly type = CHANGE_PASSWORD_SUCCESS;
-    constructor() { }
-}
-
-export class ChangePasswordActionError implements Action {
-    readonly type = CHANGE_PASSWORD_ERROR;
-    constructor(public payload: ApiResponseErrors) { }
-}
-
-
-export type All = LoginAction | LoginActionSuccess | LoginActionError
-| SendEmailChangePasswordAction | SendEmailChangePasswordActionSuccess | SendEmailChangePasswordActionError
-| ChangePasswordAction | ChangePasswordActionSuccess | ChangePasswordActionError;
+export const changePasswordError = createAction(
+    userTypes.CHANGE_PASSWORD_ERROR,
+    props<ApiResponseErrors>(),
+);

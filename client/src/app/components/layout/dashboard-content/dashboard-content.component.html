@@ -1,17 +1,14 @@
-<!-- ============================================================== -->
-<!-- Main wrapper - style you can find in pages.scss -->
-<!-- ============================================================== -->
-<div id="main-wrapper" data-layout="horizontal" data-boxed-layout="boxed" [ngClass]="{'show-sidebar': showMobileMenu}"
-    [dir]="options.dir" [attr.data-theme]="options.theme" [attr.data-layout]="options.layout"
-    [attr.data-sidebartype]="options.sidebartype" [attr.data-sidebar-position]="options.sidebarpos"
-    [attr.data-header-position]="options.headerpos" [attr.data-boxed-layout]="options.boxed">
+<div id="main-wrapper" [ngClass]="{'show-sidebar': showMobileMenu}" [dir]="options.dir"
+    [attr.data-theme]="options.theme" [attr.data-layout]="options.layout" [attr.data-sidebartype]="options.sidebartype"
+    [attr.data-sidebar-position]="options.sidebarpos" [attr.data-header-position]="options.headerpos"
+    [attr.data-boxed-layout]="options.boxed">
     <!-- ============================================================== -->
     <!-- Topbar header - style you can find in topbar.scss -->
     <!-- ============================================================== -->
     <header class="topbar" [attr.data-navbarbg]="options.navbarbg">
         <nav class="d-flex top-navbar navbar-expand-md"
             [ngClass]="(options.navbarbg=='skin6')?'navbar-light':'navbar-dark'">
-            <div class="navbar-header" [attr.data-logobg]="options.logobg">
+            <div class="navbar-header"  [ngClass]="(expandLogo)?'expand-logo':''" data-logobg="skin6">
                 <!-- This is for the sidebar toggle which is visible on mobile only -->
                 <a (click)="showMobileMenu = !showMobileMenu"
                     class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)">
@@ -21,21 +18,11 @@
                 <!-- Logo -->
                 <!-- ============================================================== -->
                 <a class="navbar-brand" href="/">
-                    <!-- Logo icon -->
                     <b class="logo-icon">
-                        <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
-                        <!-- Dark Logo icon -->
-                        <img src="assets/images/logo-icon.png" alt="homepage" class="dark-logo" />
-                        <!-- Light Logo icon -->
-                        <img src="assets/images/logo-light-icon.png" alt="homepage" class="light-logo" />
+                        <i class="mdi mdi-view-dashboard" ></i>
                     </b>
-                    <!--End Logo icon -->
-                    <!-- Logo text -->
                     <span class="logo-text">
-                        <!-- dark Logo text -->
                         <img src="assets/images/logo-text.png" alt="homepage" class="dark-logo" />
-                        <!-- Light Logo text -->
-                        <img src="assets/images/logo-light-text.png" class="light-logo" alt="homepage" />
                     </span>
                 </a>
                 <!-- ============================================================== -->
@@ -55,16 +42,16 @@
             <!-- ============================================================== -->
             <div class="navbar-collapse collapse" id="navbarSupportedContent" [attr.data-navbarbg]="options.navbarbg"
                 [ngbCollapse]="!isCollapsed">
-                <header-navigation class="w-100"></header-navigation>
+                <header-navigation (toggleSidebar)="toggleSidebarType()" class="w-100"></header-navigation>
             </div>
         </nav>
     </header>
     <!-- ============================================================== -->
     <!-- Left Sidebar - style you can find in sidebar.scss  -->
     <!-- ============================================================== -->
-    <aside class="left-sidebar" [attr.data-sidebarbg]="options.sidebarbg">
+    <aside class="left-sidebar" [attr.data-sidebarbg]="options.sidebarbg" (mouseover)="Logo()" (mouseout)="Logo()">
         <!-- Sidebar scroll-->
-        <div class="scroll-sidebar">
+        <div class="scroll-sidebar" [perfectScrollbar]="config">
             <dashboard-sidebar></dashboard-sidebar>
         </div>
         <!-- End Sidebar scroll-->
@@ -96,14 +83,11 @@
         <!-- footer -->
         <!-- ============================================================== -->
         <footer class="footer text-center">
-            All Rights Reserved by Xtreme Admin. Designed and Developed by
-            <a href="https://wrappixel.com">WrapPixel</a>.
+            Todos os Direitos Reservados.
         </footer>
         <!-- ============================================================== -->
         <!-- End footer -->
         <!-- ============================================================== -->
     </div>
-    <!-- ============================================================== -->
-    <!-- End Page wrapper  -->
-    <!-- ============================================================== -->
+    <div class="chat-windows"></div>
 </div>

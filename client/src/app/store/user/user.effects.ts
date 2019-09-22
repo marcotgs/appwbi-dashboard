@@ -17,50 +17,46 @@ export class UserEffects {
     ) { }
 
     public userLogin$ = createEffect(() => this.actions$.pipe(
-        ofType(userActions.LOGIN),
-        switchMap((action: any) =>
-            this.userService.login(action.payload)
+        ofType(userActions.login),
+        switchMap((action) =>
+            this.userService.login(action)
                 .pipe(
                     map(res => {
                         this.authService.setSession(res.data);
-                        return { type: userActions.LOGIN_SUCCESS, payload: res.data };
+                        return userActions.loginSuccess(this.authService.decodeToken(res.data.token));
                     }),
-                    catchError(res => of({
-                        type: userActions.LOGIN_ERROR,
-                        payload: (res.error.data || { errors: [ApiConstants.UNEXPECTED_ERROR] })
-                    }))
+                    catchError(res => {
+                        return of(userActions.loginError(((res.error && res.error.data) || { errors: [ApiConstants.UNEXPECTED_ERROR] })));
+                    })
                 )
-        )
-    ));
+        )));
 
     public sendEmailChangePassword$ = createEffect(() => this.actions$.pipe(
-        ofType(userActions.EMAIL_CHANGE_PASSWORD),
-        switchMap((action: any) =>
-            this.userService.sendEmailChangePassword(action.payload)
+        ofType(userActions.sendEmailChangePassword),
+        switchMap((action) =>
+            this.userService.sendEmailChangePassword(action)
                 .pipe(
                     map(() => {
-                        return { type: userActions.EMAIL_CHANGE_PASSWORD_SUCCESS };
+                        return userActions.sendEmailChangePasswordSuccess();
                     }),
-                    catchError(res => of({
-                        type: userActions.EMAIL_CHANGE_PASSWORD_ERROR,
-                        payload: (res.error.data || { errors: [ApiConstants.UNEXPECTED_ERROR] })
-                    }))
+                    catchError(res => of(userActions.sendEmailChangePasswordError((
+                        (res.error && res.error.data) || { errors: [ApiConstants.UNEXPECTED_ERROR] }
+                    ))))
                 )
         )
     ));
 
     public changePassword$ = createEffect(() => this.actions$.pipe(
-        ofType(userActions.CHANGE_PASSWORD),
-        switchMap((action: any) =>
-            this.userService.changePassword(action.payload)
+        ofType(userActions.changePassword),
+        switchMap((action) =>
+            this.userService.changePassword(action)
                 .pipe(
                     map(() => {
-                        return { type: userActions.CHANGE_PASSWORD_SUCCESS };
+                        return userActions.changePasswordSuccess();
                     }),
-                    catchError(res => of({
-                        type: userActions.CHANGE_PASSWORD_ERROR,
-                        payload: (res.error.data || { errors: [ApiConstants.UNEXPECTED_ERROR] })
-                    }))
+                    catchError(res => of(userActions.changePasswordError((
+                        (res.error && res.error.data) || { errors: [ApiConstants.UNEXPECTED_ERROR] }
+                    ))))
                 )
         )
     ));

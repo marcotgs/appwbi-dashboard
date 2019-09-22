@@ -62,7 +62,7 @@ export default class AcessoUsuariosRepository extends Repository {
                 where: {
                     email: email,
                 },
-                attributes: ['id', 'email', ['password_salt', 'passwordSalt']],
+                attributes: ['id', 'email', 'nome', ['password_salt', 'passwordSalt']],
             });
         } catch (ex) {
             logger.error(`Erro ao realizar consulta no repository :'AcessoUsuarios'-> 'getByEmail'. Error: ${ex}`);

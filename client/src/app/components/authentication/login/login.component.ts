@@ -5,7 +5,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Actions, ofType } from '@ngrx/effects';
 import validationMessages from '@app/constants/form-validation/form-validation.constants';
 import { Store } from '@ngrx/store';
-import { UserState, getUserState, LOGIN, LOGIN_ERROR, } from '@app/store/user';
+import { UserState, getUserState, loginError, login } from '@app/store/user';
 import { ApiResponseError } from '@app/api/interfaces';
 import { AuthService } from '@app/services';
 
@@ -32,11 +32,11 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.initLoginForm();
-    this._actions$.pipe(ofType(LOGIN_ERROR)).subscribe((data: any) => {
-      this.toggleErrors(data.payload.errors);
+    this._actions$.pipe(ofType(loginError)).subscribe((data) => {
+      this.toggleErrors(data.errors);
     });
     this.store.select(getUserState).subscribe((userState) => {
-      if (userState.token) {
+      if (userState.email) {
         this.router.navigate(['/'], { replaceUrl: true });
       }
     });
@@ -53,7 +53,7 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       this.loginForm.disable();
       await this.spinner.show();
-      this.store.dispatch({ type: LOGIN, payload: this.loginForm.value });
+      this.store.dispatch(login(this.loginForm.value));
     }
   }
 
@@ -75,14 +75,12 @@ export class LoginComponent implements OnInit {
           Validators.required,
           Validators.pattern('^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$')
         ]),
-        updateOn: 'blur',
       }),
       password: new FormControl('', {
         validators: Validators.compose([
           Validators.required,
           Validators.minLength(8)
         ]),
-        updateOn: 'blur'
       }),
     });
   }

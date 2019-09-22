@@ -8,8 +8,7 @@ import { ApiResponseError } from '@app/api/interfaces';
 import { NgxSpinnerService } from 'ngx-spinner';
 import validationMessages from '@app/constants/form-validation/form-validation.constants';
 import {
-    UserState, EMAIL_CHANGE_PASSWORD,
-    EMAIL_CHANGE_PASSWORD_ERROR, EMAIL_CHANGE_PASSWORD_SUCCESS
+    UserState, sendEmailChangePasswordSuccess, sendEmailChangePasswordError, sendEmailChangePassword
 } from '@app/store/user';
 
 
@@ -31,13 +30,13 @@ export class ForgetPasswordComponent implements OnInit {
 
     ngOnInit(): void {
         this.initForgetPasswordForm();
-        this._actions$.pipe(ofType(EMAIL_CHANGE_PASSWORD_SUCCESS)).subscribe(async () => {
+        this._actions$.pipe(ofType(sendEmailChangePasswordSuccess)).subscribe(async () => {
             await this.spinner.hide();
             await this.successAlert.fire();
             this.router.navigate(['/auth/login'], { replaceUrl: true });
         });
-        this._actions$.pipe(ofType(EMAIL_CHANGE_PASSWORD_ERROR)).subscribe((data: any) => {
-            this.toggleErrors(data.payload.errors);
+        this._actions$.pipe(ofType(sendEmailChangePasswordError)).subscribe((data) => {
+            this.toggleErrors(data.errors);
         });
     }
 
@@ -46,10 +45,7 @@ export class ForgetPasswordComponent implements OnInit {
         if (this.forgetPasswordForm.valid) {
             this.forgetPasswordForm.disable();
             await this.spinner.show();
-            this.store.dispatch({
-                type: EMAIL_CHANGE_PASSWORD,
-                payload: { ...this.forgetPasswordForm.value, forgotPassword: true },
-            });
+            this.store.dispatch(sendEmailChangePassword( { ...this.forgetPasswordForm.value, forgotPassword: true }));
         }
     }
 
@@ -77,7 +73,6 @@ export class ForgetPasswordComponent implements OnInit {
                     Validators.required,
                     Validators.pattern('^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$')
                 ]),
-                updateOn: 'blur',
             }),
         });
     }

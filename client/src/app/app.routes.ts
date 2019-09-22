@@ -12,11 +12,12 @@ export const AppRoutes: Routes = [
         path: '',
         component: DashboardContentComponent,
         canActivate: [AuthGuard],
-        loadChildren:
-            () => import('./components/authentication/authentication.module').then(m => m.AuthenticationModule)
+        children: [
+            { path: 'dashboard', loadChildren: () => import('./components/pages/pages.module').then(m => m.PagesModule) }
+        ]
     },
     {
         path: '**',
-        redirectTo: '/'
+        redirectTo: '/dashboard/home'
     },
 ];

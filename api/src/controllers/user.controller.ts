@@ -191,9 +191,13 @@ export default class UserController extends BaseController {
                 //Retorna 401 se caso a senha estiver inválida.
                 return this.sendResponse(res, 401, response);
             }
-
-            const token = jwt.sign({ id: userData.id, email: userData.email }, process.env.JWT_SECRET, {
+            
+            const token = jwt.sign({
+                email: userData.email,
+                nome: userData.nome,
+            }, process.env.JWT_SECRET, {
                 expiresIn: '180d',
+                subject: userData.id.toString(),
             });
 
             const date = new Date();

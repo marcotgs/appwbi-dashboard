@@ -7,11 +7,15 @@ File: scss
 //(Required file)
 @import 'variables';
 
+
 //Theme colors
 @import 'theme-colors/dark-theme';
 
 // Import Bootstrap source files (Required file)
 @import "../../../node_modules/bootstrap/scss/bootstrap";
+
+// core
+@import 'core/core';
 
 //This is for the components (Required file)
 @import 'components';
