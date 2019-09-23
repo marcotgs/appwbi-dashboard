@@ -1,0 +1,1 @@
+export { default as MunicipioRepository } from './municipio.class';

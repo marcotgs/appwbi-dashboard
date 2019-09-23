@@ -1,4 +1,4 @@
-import { Sequelize, FindAttributeOptions } from 'sequelize/types';
+import { Sequelize } from 'sequelize/types';
 import { Repository } from '@api/database/repositories';
 import acessoUsuariosModelInit, { acessoUsuariosModelStatic, acessoUsuariosModel } from '@api/database/models/acesso-usuarios';
 import logger from '@api/util/logger';
@@ -38,11 +38,9 @@ export default class AcessoUsuariosRepository extends Repository {
      * @returns {Promise<acessoUsuariosModel>}
      * @memberof AcessoUsuariosRepository
      */
-    public async findById(id: number, attributes?: FindAttributeOptions): Promise<acessoUsuariosModel> {
+    public async findById(id: number): Promise<acessoUsuariosModel> {
         try {
-            return await this.acessoUsuariosModel.findByPk(id, {
-                attributes,
-            });
+            return await this.acessoUsuariosModel.findByPk(id);
         } catch (ex) {
             logger.error(`Erro ao realizar consulta no repository :'AcessoUsuarios'-> 'findById'. Error: ${ex}`);
             throw ex;

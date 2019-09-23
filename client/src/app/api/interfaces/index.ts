@@ -4,4 +4,5 @@ export { default as SendEmailChangePasswordBody } from "./send-email-password-bo
 export { default as LoginResponse } from "./login-response.interface";
 export { default as ApiPayload } from "./api-payload.interface";
 export { default as acessoUsuariosModel } from "./acessoUsuarios.model";
+export { default as municipioModel } from "./municipio.model";
 export * from "./api-response-error.interface";

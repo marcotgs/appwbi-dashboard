@@ -1,6 +1,6 @@
 import { props, createAction } from '@ngrx/store';
 import * as userTypes from "./user.types";
-import { LoginBody, ApiResponseErrors, ChangePasswordBody, SendEmailChangePasswordBody, acessoUsuariosModel } from '@api/interfaces';
+import { LoginBody, ApiResponseErrors, ChangePasswordBody, SendEmailChangePasswordBody, acessoUsuariosModel, municipioModel } from '@api/interfaces';
 
 export const login = createAction(
     userTypes.LOGIN,
@@ -65,7 +65,7 @@ export const getProfileError = createAction(
 
 export const updateProfile = createAction(
     userTypes.UPDATE_PROFILE,
-    props<acessoUsuariosModel>()
+    props<acessoUsuariosModel & municipioModel>()
 );
 
 

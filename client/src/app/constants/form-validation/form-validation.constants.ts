@@ -15,6 +15,7 @@ const validationMessages: FormValidationMessages = {
     ],
     default: [
         { type: 'required', message: 'Este campo é obrigatório.' },
+        { type: 'pattern', message: 'Valor inválido.' },
     ],
 };
 

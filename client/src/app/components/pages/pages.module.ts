@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { EffectsModule } from '@ngrx/effects';
+import { TextMaskModule } from 'angular2-text-mask';
 import { RouterModule } from '@angular/router';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { NotifierModule } from 'angular-notifier';
@@ -16,6 +17,7 @@ import { ManageAccountComponent } from './manage-account/manage-account.componen
 @NgModule({
     imports: [
         FormsModule,
+        TextMaskModule,
         ReactiveFormsModule,
         NgxSpinnerModule,
         NotifierModule.withConfig({

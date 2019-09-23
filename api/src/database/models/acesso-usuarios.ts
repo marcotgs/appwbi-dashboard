@@ -66,6 +66,46 @@ const acessoUsuariosModelInit = (sequelize: Sequelize): acessoUsuariosModelStati
 			allowNull: true,
 			comment: "null",
 			field: 'reset_password_token'
+		},
+		'cep': {
+			type: DataTypes.STRING(10),
+			allowNull: true,
+			comment: "null",
+			field: 'cep'
+		},
+		'endereco': {
+			type: DataTypes.STRING(100),
+			allowNull: true,
+			comment: "null",
+			field: 'endereco'
+		},
+		'bairro': {
+			type: DataTypes.STRING(80),
+			allowNull: true,
+			comment: "null",
+			field: 'bairro'
+		},
+		'complemento': {
+			type: DataTypes.STRING(255),
+			allowNull: true,
+			comment: "null",
+			field: 'complemento'
+		},
+		'idMunicipio': {
+			type: DataTypes.INTEGER,
+			allowNull: true,
+			comment: "null",
+			references: {
+				model: 'municipio',
+				key: 'id'
+			},
+			field: 'id_municipio'
+		},
+		'numero': {
+			type: DataTypes.INTEGER,
+			allowNull: true,
+			comment: "null",
+			field: 'numero'
 		}
 	}, {
 		tableName: 'acesso_usuarios',
@@ -83,6 +123,12 @@ export interface acessoUsuariosModel extends Model {
 	idAcessoEmpresas:number;
 	idNiveisPermissao:number;
 	resetPasswordToken:string;
+	cep:string;
+	endereco:string;
+	bairro:string;
+	complemento:string;
+	idMunicipio:number;
+	numero:number;
 }
 
 export type acessoUsuariosModelStatic = typeof Model & {

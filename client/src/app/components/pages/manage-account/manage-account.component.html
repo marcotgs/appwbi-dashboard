@@ -63,71 +63,99 @@
                         <div class="form-group row">
                             <div class="col-sm-3">
                                 <div class="b-label">
-                                    <label for="inputEmail3" class="control-label col-form-label">Company</label>
+                                    <label for="CEP" class="control-label col-form-label">CEP</label>
                                 </div>
                             </div>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" id="inputEmail3"
-                                    placeholder="Company Name Here">
+                            <div class="col-sm-auto">
+                                <input type="text" class="form-control" id="CEP" placeholder="CEP" formControlName="cep"
+                                    [textMask]="{mask: cepMask, guide: false}" [ngClass]="{'is-invalid': manageAccountForm.get('cep').invalid  && (manageAccountForm.get('cep').dirty || 
+                                    manageAccountForm.get('cep').touched)}">
+                                <div class="invalid-feedback" *ngFor="let validation of getMessagesError('cep')">
+                                    <span
+                                        *ngIf="manageAccountForm.get('cep').hasError(validation.type) && (manageAccountForm.get('cep').dirty || 
+                                                    manageAccountForm.get('cep').touched)">{{validation.message}}</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-auto">
+                                <button type="button" [disabled]="manageAccountForm.get('cep').invalid || manageAccountForm.disabled"
+                                    (click)="getAddressData()" class="btn btn-dark waves-effect waves-light">
+                                    <span *ngIf="!isCepSpinnerShow">Buscar</span>
+                                    <ngx-spinner [name]="cepSpinner" bdColor="transparent" size="default" color="#fff"
+                                        type="ball-beat" [fullScreen]="false">
+                                    </ngx-spinner>
+                                </button>
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-sm-3">
                                 <div class="b-label">
-                                    <label for="inputEmail3" class="control-label col-form-label">Interested In</label>
+                                    <label for="endereco" class="control-label col-form-label">Endereço</label>
                                 </div>
                             </div>
                             <div class="col-sm-9">
-                                <select class="form-control">
-                                    <option>Choose Your Option</option>
-                                    <option>Desiging</option>
-                                    <option>Development</option>
-                                    <option>Videography</option>
-                                </select>
+                                <input type="text" class="form-control" formControlName="endereco" id="endereco"
+                                    placeholder="Endereço">
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-sm-3">
                                 <div class="b-label">
-                                    <label for="inputEmail3" class="control-label col-form-label">Budget</label>
+                                    <label for="numero" class="control-label col-form-label">Número</label>
                                 </div>
                             </div>
                             <div class="col-sm-9">
-                                <select class="form-control">
-                                    <option>Choose Your Option</option>
-                                    <option>Less then $5000</option>
-                                    <option>$5000 - $10000</option>
-                                    <option>$10000 - $20000</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-sm-3">
-                                <div class="b-label">
-                                    <label for="inputEmail3" class="control-label col-form-label">Select File</label>
-                                </div>
-                            </div>
-                            <div class="col-sm-9">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">Upload</span>
-                                    </div>
-                                    <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="inputGroupFile01">
-                                        <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
-                                    </div>
+                                <input type="number" class="form-control" formControlName="numero" id="numero"
+                                    placeholder="Número"  [ngClass]="{'is-invalid': manageAccountForm.get('numero').invalid  && (manageAccountForm.get('numero').dirty || 
+                                    manageAccountForm.get('numero').touched)}">
+                                <div class="invalid-feedback" *ngFor="let validation of getMessagesError('numero')">
+                                    <span
+                                        *ngIf="manageAccountForm.get('numero').hasError(validation.type) && (manageAccountForm.get('numero').dirty || 
+                                                            manageAccountForm.get('numero').touched)">{{validation.message}}</span>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-sm-3">
                                 <div class="b-label">
-                                    <label for="inputEmail3" class="control-label col-form-label">About Project</label>
+                                    <label for="complemento" class="control-label col-form-label">Complemento</label>
                                 </div>
                             </div>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="inputEmail3"
-                                    placeholder="About Project Here">
+                                <input type="text" class="form-control" formControlName="complemento" id="complemento"
+                                    placeholder="Complemento">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-3">
+                                <div class="b-label">
+                                    <label for="bairro" class="control-label col-form-label">Bairro</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" formControlName="bairro" id="bairro"
+                                    placeholder="Bairro">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-3">
+                                <div class="b-label">
+                                    <label for="cidade" class="control-label col-form-label">Cidade</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="cidade" formControlName="cidade"
+                                    placeholder="Cidade">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-3">
+                                <div class="b-label">
+                                    <label for="estado" class="control-label col-form-label">Estado</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="estado" formControlName="estado"
+                                    placeholder="Estado">
                             </div>
                         </div>
                     </div>
@@ -136,8 +164,8 @@
                         <div class="form-group m-b-0 text-right">
                             <button type="submit" class="btn btn-info waves-effect waves-light">
                                 <span *ngIf="!manageAccountForm.disabled">Salvar</span>
-                                <ngx-spinner [name]="saveSpinner" bdColor="transparent" size="default" color="#fff" type="ball-beat"
-                                    [fullScreen]="false">
+                                <ngx-spinner [name]="saveSpinner" bdColor="transparent" size="default" color="#fff"
+                                    type="ball-beat" [fullScreen]="false">
                                 </ngx-spinner>
                             </button>
                         </div>

@@ -10,7 +10,8 @@ import { BodyValidator } from '@api/classes';
 import BaseController from '@api/controllers/base-controller.class';
 import { ApiResponseErrors, LoginResponse } from '@api/interfaces';
 import logger from '@api/util/logger';
-import { acessoUsuariosModel } from '@api/database/models';
+import { acessoUsuariosModel, municipioModel, estadoModel } from '@api/database/models';
+import { MunicipioRepository } from '@api/database/repositories/municipio';
 
 
 /**
@@ -34,6 +35,15 @@ export default class UserController extends BaseController {
     private acessoUsuariosRepository: AcessoUsuariosRepository;
 
     /**
+    * Repositorio de municipio.
+    *
+    * @private
+    * @type {AcessoUsuariosRepository}
+    * @memberof UserController
+    */
+    private municipioRepository: MunicipioRepository;
+
+    /**
      * Cria uma nova instância UserController.
      * Inicia respositório de dados.
      * @memberof UserController
@@ -41,6 +51,7 @@ export default class UserController extends BaseController {
     public constructor() {
         super();
         this.acessoUsuariosRepository = new AcessoUsuariosRepository(Database.context);
+        this.municipioRepository = new MunicipioRepository(Database.context);
     }
 
     /**
@@ -222,14 +233,29 @@ export default class UserController extends BaseController {
         @CurrentUser() userId?: number,
     ): Promise<Response> {
         try {
-            const userData = await this.acessoUsuariosRepository.findById(userId, ['email', 'nome', 'sobrenome']);
-            delete userData.passwordSalt;
-            delete userData.id;
-            delete userData.passwordSalt;
-            delete userData.resetPasswordToken;
-            return this.sendResponse(res, 200, userData);
+            const userData = await this.acessoUsuariosRepository.findById(userId);
+
+            let cityData: any = { estado: { sigla: null }, nome: null, codigoCompletoCidadeIbge: null };
+            if (userData.idMunicipio) {
+                cityData = await this.municipioRepository.findById(userData.idMunicipio);
+            }
+
+            const result: any = {
+                ...userData.toJSON(),
+                cidade: cityData.nome,
+                codigoCompletoCidadeIbge: cityData.codigoCompletoCidadeIbge,
+                estado: cityData.estado.sigla
+            };
+
+            delete result.password;
+            delete result.idNiveisPermissao;
+            delete result.id;
+            delete result.passwordSalt;
+            delete result.resetPasswordToken;
+
+            return this.sendResponse(res, 200, result);
         } catch (ex) {
-            logger.error(`Erro na requisição de updateProfile. Erro -> ${ex}`);
+            logger.error(`Erro na requisição de getUserProfile. Erro -> ${ex}`);
             return this.sendResponse(res, 500);
         }
     }
@@ -247,18 +273,23 @@ export default class UserController extends BaseController {
     @Authorized()
     @Post('/profile')
     public async updateProfile(
-        @Body() body: acessoUsuariosModel,
+        @Body() body: acessoUsuariosModel & municipioModel,
         @Res() res: Response,
         @CurrentUser() userId?: number,
     ): Promise<Response> {
         try {
             const userData = await this.acessoUsuariosRepository.findById(userId);
+            const municipio = await this.municipioRepository.findByIbgeCode(body.codigoCompletoCidadeIbge);
+            userData.idMunicipio = municipio.id;
+            body.id = userData.id;
+
             if ((body.id && body.id !== userData.id) || body.email !== userData.email) {
                 return this.sendResponse(res, 400);
             }
-            body.id = userData.id;
+
             const mergeData = { ...userData.toJSON(), ...body };
             this.acessoUsuariosRepository.updateUser(mergeData);
+
             const { token, expirationDate } = this.generateToken(body);
             const result: LoginResponse = {
                 expiresIn: expirationDate.valueOf(),

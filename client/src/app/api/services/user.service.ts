@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import sha1 from "crypto-js/sha1";
 import {
     LoginBody, ApiPayload, LoginResponse,
-    ChangePasswordBody, SendEmailChangePasswordBody, acessoUsuariosModel
+    ChangePasswordBody, SendEmailChangePasswordBody, acessoUsuariosModel, municipioModel
 } from '@api/interfaces';
 import { AuthService } from '@app/services';
 
@@ -21,7 +21,7 @@ export default class UserService {
         return this.http.get(`${this.controllerUser}/profile`, { headers });
     }
 
-    public updateUserProfile(newUserData: acessoUsuariosModel): Observable<ApiPayload<LoginResponse>> {
+    public updateUserProfile(newUserData: acessoUsuariosModel & municipioModel): Observable<ApiPayload<LoginResponse>> {
         const headers = new HttpHeaders().set('Authorization', `Bearer ${this.auth.getToken()}`);
         return this.http.post(`${this.controllerUser}/profile`, newUserData, { headers });
     }
