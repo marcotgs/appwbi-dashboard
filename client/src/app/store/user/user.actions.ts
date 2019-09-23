@@ -49,7 +49,6 @@ export const changePasswordError = createAction(
     props<ApiResponseErrors>(),
 );
 
-
 export const getProfile = createAction(
     userTypes.GET_PROFILE,
 );
@@ -61,5 +60,16 @@ export const getProfileSuccess = createAction(
 
 export const getProfileError = createAction(
     userTypes.GET_PROFILE_ERROR,
+    props<ApiResponseErrors>(),
+);
+
+export const updateProfile = createAction(
+    userTypes.UPDATE_PROFILE,
+    props<acessoUsuariosModel>()
+);
+
+
+export const updateProfileError = createAction(
+    userTypes.UPDATE_PROFILE_ERROR,
     props<ApiResponseErrors>(),
 );

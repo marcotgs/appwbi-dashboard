@@ -15,3 +15,6 @@ export const CHANGE_PASSWORD_ERROR = '[USER] Change Passwordd error';
 export const GET_PROFILE = '[USER] get profile';
 export const GET_PROFILE_SUCCESS = '[USER] get profile success';
 export const GET_PROFILE_ERROR = '[USER] get profile error';
+
+export const UPDATE_PROFILE = '[USER] update profile';
+export const UPDATE_PROFILE_ERROR = '[USER] update profile error';

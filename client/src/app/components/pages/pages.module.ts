@@ -18,7 +18,19 @@ import { ManageAccountComponent } from './manage-account/manage-account.componen
         FormsModule,
         ReactiveFormsModule,
         NgxSpinnerModule,
-        NotifierModule,
+        NotifierModule.withConfig({
+            position: {
+                vertical: {
+                    position: 'top',
+                },
+                horizontal: {
+                    position: 'right',
+                }
+            },
+            behaviour: {
+                autoHide: 2000,
+            }
+        }),
         EffectsModule.forFeature([UserEffects]),
         CommonModule,
         RouterModule.forChild(pageRoutes)],

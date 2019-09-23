@@ -21,6 +21,11 @@ export default class UserService {
         return this.http.get(`${this.controllerUser}/profile`, { headers });
     }
 
+    public updateUserProfile(newUserData: acessoUsuariosModel): Observable<ApiPayload<LoginResponse>> {
+        const headers = new HttpHeaders().set('Authorization', `Bearer ${this.auth.getToken()}`);
+        return this.http.post(`${this.controllerUser}/profile`, newUserData, { headers });
+    }
+
     public login(loginForm: LoginBody): Observable<ApiPayload<LoginResponse>> {
         const hashPassword = sha1(loginForm.password).toString();
         return this.http.post(`${this.controllerUser}/login`, { ...loginForm, password: hashPassword });

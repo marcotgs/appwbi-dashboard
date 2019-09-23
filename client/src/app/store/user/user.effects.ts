@@ -75,4 +75,20 @@ export class UserEffects {
                 )
         )
     ));
+
+    public updateProfile$ = createEffect(() => this.actions$.pipe(
+        ofType(userActions.updateProfile),
+        switchMap((action) =>
+            this.userService.updateUserProfile(action)
+                .pipe(
+                    map((response) => {
+                        this.authService.setSession(response.data);
+                        return userActions.loginSuccess(this.authService.decodeToken(response.data.token));
+                    }),
+                    catchError(res => of(userActions.updateProfileError((
+                        (res.error && res.error.data) || { errors: [ApiConstants.UNEXPECTED_ERROR] }
+                    ))))
+                )
+        )
+    ));
 }

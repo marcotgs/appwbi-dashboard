@@ -193,18 +193,9 @@ export default class UserController extends BaseController {
                 return this.sendResponse(res, 401, response);
             }
 
-            const token = jwt.sign({
-                email: userData.email,
-                nome: userData.nome,
-            }, process.env.JWT_SECRET, {
-                expiresIn: '180d',
-                subject: userData.id.toString(),
-            });
-
-            const date = new Date();
-            date.setDate(date.getDate() + 180);
+            const { token, expirationDate } = this.generateToken(userData);
             const result: LoginResponse = {
-                expiresIn: date.valueOf(),
+                expiresIn: expirationDate.valueOf(),
                 token,
             };
             //Retorna 200 com os dados de autenticação.
@@ -262,15 +253,36 @@ export default class UserController extends BaseController {
     ): Promise<Response> {
         try {
             const userData = await this.acessoUsuariosRepository.findById(userId);
-            if (body.id !== userData.id || body.email !== userData.email) {
+            if ((body.id && body.id !== userData.id) || body.email !== userData.email) {
                 return this.sendResponse(res, 400);
             }
+            body.id = userData.id;
             const mergeData = { ...userData.toJSON(), ...body };
             this.acessoUsuariosRepository.updateUser(mergeData);
-            return this.sendResponse(res, 200, mergeData);
+            const { token, expirationDate } = this.generateToken(body);
+            const result: LoginResponse = {
+                expiresIn: expirationDate.valueOf(),
+                token,
+            };
+            return this.sendResponse(res, 200, result);
         } catch (ex) {
             logger.error(`Erro na requisição de updateProfile. Erro -> ${ex}`);
             return this.sendResponse(res, 500);
         }
     }
+
+    private generateToken(userData: acessoUsuariosModel): { token: string; expirationDate: Date } {
+        const token = jwt.sign({
+            email: userData.email,
+            nome: userData.nome,
+        }, process.env.JWT_SECRET, {
+            expiresIn: '180d',
+            subject: userData.id.toString(),
+        });
+
+        const expirationDate = new Date();
+        expirationDate.setDate(expirationDate.getDate() + 180);
+        return { token, expirationDate };
+    }
+
 }
