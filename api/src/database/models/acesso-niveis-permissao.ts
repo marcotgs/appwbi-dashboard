@@ -8,11 +8,10 @@ const acessoNiveisPermissaoModelInit = (sequelize: Sequelize): acessoNiveisPermi
 			allowNull: false,
 			primaryKey: true,
 			comment: "null",
-			autoIncrement: true,
 			field: 'id'
 		},
 		'descricao': {
-			type: DataTypes.STRING(40),
+			type: DataTypes.STRING(50),
 			allowNull: false,
 			comment: "null",
 			field: 'descricao'

@@ -1,0 +1,61 @@
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Basic Drag and Drop</h4>
+                <h6 class="card-subtitle">Move stuff between these two containers. Note how the stuff gets inserted near the mouse pointer? Great stuff.</h6>
+                <div class="d-flex">
+                    <div class='dragndrop' [dragula]='"first-bag"'>
+                        <div>You can move these elements between these two containers</div>
+                        <div>Moving them anywhere else isn't quite possible</div>
+                        <div>There's also the possibility of moving elements around in the same container, changing their position</div>
+                    </div>
+                    <div class='dragndrop' [dragula]='"first-bag"'>
+                        <div>This is the default use case. You only need to specify the containers you want to use</div>
+                        <div>More interactive use cases lie ahead</div>
+                        <div>Make sure to check out the
+                            <a href='https://github.com/bevacqua/dragula#readme'>documentation on GitHub!</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Sortable Example</h4>
+                <h6 class="card-subtitle">Move stuff between these two containers. Note how the stuff gets inserted near the mouse pointer? Great stuff.</h6>
+                <div class='dragndrop' [dragula]='"third-bag"'>
+                    <div>Banana Boat</div>
+                    <div>Orange Juice</div>
+                    <div>Cuban Cigar</div>
+                    <div>Terrible Comedian</div>
+                    <div>Anxious Cab Driver</div>
+                    <div>Thriving Venture</div>
+                    <div>Calm Clam</div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">With output Example</h4>
+                <h6 class="card-subtitle">Move stuff between these two containers. Note how the stuff gets inserted near the mouse pointer? Great stuff.</h6>
+                <div class="d-flex">
+                    <div class='dragndrop' [dragula]='"another-bag"' [dragulaModel]='many'>
+                        <div *ngFor='let text of many' [innerHtml]='text'></div>
+                    </div>
+                    <div class='dragndrop' [dragula]='"another-bag"' [dragulaModel]='many2'>
+                        <div *ngFor='let text of many2' [innerHtml]='text'></div>
+                    </div>
+                </div>
+                <div class="d-flex m-t-30">
+                    <div class='dragndrop'>
+                        <pre>{{many | json}}</pre>
+                    </div>
+                    <div class='dragndrop'>
+                        <pre>{{many2 | json}}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

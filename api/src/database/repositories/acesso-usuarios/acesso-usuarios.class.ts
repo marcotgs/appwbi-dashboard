@@ -145,12 +145,15 @@ export default class AcessoUsuariosRepository extends Repository {
       */
     public async updateUser(data: object): Promise<void> {
         try {
-            await this.acessoUsuariosModel.update({ ...data },
-                {
-                    where: {
-                        id: (data as acessoUsuariosModel).id,
-                    },
-                });
+            delete (data as acessoUsuariosModel).dataNascimento;
+            await this.acessoUsuariosModel.update({
+                ...data,
+            },
+            {
+                where: {
+                    id: (data as acessoUsuariosModel).id,
+                },
+            });
         } catch (ex) {
             logger.error(`Erro ao realizar update no repository :'AcessoUsuarios'-> 'updateUser'. Error: ${ex}`);
             throw ex;

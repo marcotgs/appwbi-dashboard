@@ -1,0 +1,59 @@
+<div class="row">
+    <!-- column -->
+    <div class="col-lg-4">
+        <div class="card bg-info text-white  card-hover">
+            <div class="card-body">
+                <h4 class="card-title">Revenue Statistics</h4>
+                <div class="d-flex align-items-center m-t-30">
+                    <div class="mt-3" style="height: 84px; width: 100px">
+                        <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels"
+                            [options]="barChartOptions" [colors]="barChartColors" [legend]="barChartLegend"
+                            [chartType]="barChartType">
+                        </canvas>
+                    </div>
+                    <div class="ml-auto">
+                        <h3 class="font-medium white-text m-b-0">$351</h3>
+                        <span class="white-text op-5">Jan 10 - Jan 20</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- column -->
+    <div class="col-lg-4">
+        <div class="card bg-cyan text-white  card-hover">
+            <div class="card-body">
+                <h4 class="card-title">Page Views</h4>
+                <h3 class="white-text m-b-0">
+                    <i class="ti-arrow-up"></i> 6548</h3>
+            </div>
+            <div style="height: 90px;">
+                <canvas baseChart [datasets]="lineChartData1" [labels]="lineChartLabels1" [options]="lineChartOptions1"
+                    [colors]="lineChartColors1" [legend]="lineChartLegend1" [chartType]="lineChartType1">
+                </canvas>
+            </div>
+        </div>
+    </div>
+    <!-- column -->
+    <div class="col-lg-4">
+        <div class="card  card-hover">
+            <div class="card-body">
+                <h4 class="card-title">Bounce Rate</h4>
+                <div class="d-flex no-block align-items-center m-t-30">
+                    <div class="">
+                        <h3 class="font-medium m-b-0">56.33%</h3>
+                        <span class="">Total Bounce</span>
+                    </div>
+                    <div class="ml-auto">
+                        <div class="bounce m-b-40">
+                            <canvas baseChart [datasets]="lineChartData" [labels]="lineChartLabels"
+                                [options]="lineChartOptions" [colors]="lineChartColors" [legend]="lineChartLegend"
+                                [chartType]="lineChartType">
+                            </canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

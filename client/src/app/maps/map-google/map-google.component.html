@@ -1,0 +1,51 @@
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Basic Map</h4>
+                <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" #map1></agm-map>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Map Styles</h4>
+                <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" [styles]="styles" #map2></agm-map>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Polylines</h4>
+                <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" #map3>
+                    <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
+                    <agm-marker [latitude]="latA" [longitude]="lngA"></agm-marker>
+                    <agm-polyline>
+                        <agm-polyline-point [latitude]="lat" [longitude]="lng"></agm-polyline-point>
+                        <agm-polyline-point [latitude]="latA" [longitude]="lngA"></agm-polyline-point>
+                    </agm-polyline>
+                </agm-map>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Info Window</h4>
+                <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" [disableDefaultUI]="false" [zoomControl]="false" #map4>
+                    <agm-marker [latitude]="lat" [longitude]="lng">
+                        <agm-info-window>InfoWindow content</agm-info-window>
+                    </agm-marker>
+                </agm-map>
+            </div>
+        </div>
+    </div>
+</div>

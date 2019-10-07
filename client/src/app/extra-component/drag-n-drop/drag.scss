@@ -1,0 +1,14 @@
+.dragndrop {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 10px 15px;
+  > div {
+    border: 1px dashed rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    cursor: move;
+    margin: 5px 0;
+    &.ex-moved {
+      background: red;
+      color: white;
+    }
+  }
+}

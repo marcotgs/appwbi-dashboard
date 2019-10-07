@@ -1,0 +1,31 @@
+<!-- Work Tab Form Starts -->
+<form #workForm="ngForm" class="editForm" novalidate>
+    <div >
+        <div class="tab-pane active">
+            <h4 class="head text-center">{{title}}</h4>
+            <br/>
+            <div class='row'>
+                <div class='col-offset-4 col-10 col-sm-offset-5 col-sm-4'>
+                  <div class="custom-control custom-radio">
+                  <input type="radio" id="customRadio1" #work="ngModel" required name="work" class="custom-control-input" [(ngModel)]="workType" value="Design" class="custom-control-input">
+                  <label class="custom-control-label" for="customRadio1">Design</label>
+                </div>
+                <div class="custom-control custom-radio">
+                  <input type="radio" id="customRadio2" #work="ngModel" required name="work" class="custom-control-input" [(ngModel)]="workType" value="Code" class="custom-control-input">
+                  <label class="custom-control-label" for="customRadio2">Code</label>
+                </div>
+                <div class="custom-control custom-radio">
+                  <input type="radio" id="customRadio3" #work="ngModel" required name="work" class="custom-control-input" [(ngModel)]="workType" value="Deploy" class="custom-control-input">
+                  <label class="custom-control-label" for="customRadio3">Deploy</label>
+                </div>  
+                </div>
+                
+            </div>
+            <div class="form-group text-center space-20">
+                <button uiSref="personal" type="button" class="btn btn-raised btn-secondary mr-1" (click)="cancel()"> Previous</button>
+                <button uiSref="address" type="button" class="btn btn-raised btn-info" [disabled]="!workForm.valid" (click)="save(workForm)"> Next </button>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- Work Tab Form Ends -->

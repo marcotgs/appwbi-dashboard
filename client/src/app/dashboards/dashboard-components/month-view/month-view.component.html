@@ -1,0 +1,22 @@
+<!-- ============================================================== -->
+<!-- Earnings -->
+<!-- ============================================================== -->
+<div class="row m-t-40">
+    <!-- col -->
+    <div class="col-sm-12">
+        <div class="row ">
+            <div class="col-sm-12 col-lg-4">
+                <h1 class="font-bold m-b-5">$6,890.68</h1>
+                <h6 class="m-b-20">Current Month Earnings</h6>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec non pharetra ligula, sitametlaoreet arcu.</p>
+                <button class="waves-effect waves-light m-t-20 btn btn-lg btn-info">Last Month Summary</button>
+            </div>
+            <div class="col-sm-12 col-lg-8 border-left">
+                <div class="linearea">
+                    <x-chartist class="earnings ct-charts" [data]="lineChart.data" [type]="lineChart.type" [options]="lineChart.options" [responsiveOptions]="lineChart.responsiveOptions"
+                        [events]="lineChart.events"> </x-chartist>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

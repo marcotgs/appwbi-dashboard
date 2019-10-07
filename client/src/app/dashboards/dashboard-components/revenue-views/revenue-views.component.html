@@ -1,0 +1,41 @@
+<div class="card bg-info">
+    <div class="card-body">
+        <h4 class="card-title text-white">Revenue Statistics</h4>
+        <div class="d-flex align-items-center m-t-30">
+            <div style="height: 70px; width: 100px">
+                <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
+                    [colors]="barChartColors" [legend]="barChartLegend" [chartType]="barChartType">
+                </canvas>
+            </div>
+            <div class="ml-auto">
+                <h3 class="text-white m-b-0">
+                    <i class="ti-arrow-up"></i>$351</h3>
+                <span class="text-white op-5">Jan 10 - Jan 20</span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card bg-cyan">
+    <div class="card-body">
+        <div class="d-flex align-items-center">
+            <div>
+                <h5 class="card-title text-white">Page Views</h5>
+                <h3 class="text-white m-b-0">
+                    <i class="ti-arrow-up"></i> 6548</h3>
+            </div>
+            <div class="ml-auto">
+                <ul class="list-style-none m-b-0">
+                    <li class="text-white">
+                        <i class="fa fa-circle m-r-5 text-white font-12 op-3"></i> Visit </li>
+                    <li class="text-white">
+                        <i class="fa fa-circle m-r-5 text-white font-12"></i> Page Views </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div style="height: 70px;">
+        <canvas baseChart [datasets]="lineChartData1" [labels]="lineChartLabels1" [options]="lineChartOptions1"
+            [colors]="lineChartColors1" [legend]="lineChartLegend1" [chartType]="lineChartType1">
+        </canvas>
+    </div>
+</div>

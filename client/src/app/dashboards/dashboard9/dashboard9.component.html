@@ -1,0 +1,95 @@
+<!-- ============================================================== -->
+<!-- Notifications, Chart -->
+<!-- ============================================================== -->
+<div class="row">
+    <!-- column -->
+    <div class="col-sm-12">
+        <app-cam-stats></app-cam-stats>
+    </div>
+</div>
+<!-- ============================================================== -->
+<!-- Email Campaigns -->
+<!-- ============================================================== -->
+<div class="row">
+    <!-- column -->
+    <div class="col-sm-12 col-lg-8">
+        <app-email></app-email>
+        <app-product-approval></app-product-approval>
+        <div class="row">
+            <!-- column -->
+            <div class="col-sm-12 col-lg-6">
+                <app-review></app-review>
+            </div>
+            <!-- column -->
+            <div class="col-sm-12 col-lg-6">
+                <app-week-poll></app-week-poll>
+            </div>
+        </div>
+    </div>
+    <!-- column -->
+    <div class="col-sm-12 col-lg-4">
+        <app-user-profile></app-user-profile>
+        <app-social></app-social>
+        <div class="card poll-widget">
+            <div class="card-body">
+                <h4 class="card-title">Result of Poll</h4>
+                <h5 class="card-subtitle">Here is the result for the latest poll</h5>
+                <p class="font-bold text-muted">What is your mobile app usage daily?</p>
+                <ul class="list-style-none m-t-30">
+                    <li>
+                        <div class="d-flex align-items-center m-b-10">
+                            <div>
+                                <h6 class="m-b-0 font-bold">A
+                                    <span class="font-light">30 Minutes</span>
+                                </h6>
+                            </div>
+                            <div class="ml-auto">
+                                <h6 class="m-b-0 font-bold">55%</h6>
+                            </div>
+                        </div>
+                        <ngb-progressbar type="info" [value]="25"></ngb-progressbar>
+                    </li>
+                    <li class="m-t-25">
+                        <div class="d-flex align-items-center m-b-10">
+                            <div>
+                                <h6 class="m-b-0 font-bold">B
+                                    <span class="font-light">More than 30 minutes</span>
+                                </h6>
+                            </div>
+                            <div class="ml-auto">
+                                <h6 class="m-b-0 font-bold">20%</h6>
+                            </div>
+                        </div>
+                        <ngb-progressbar type="cyan" [value]="25"></ngb-progressbar>
+                    </li>
+                    <li class="m-t-25">
+                        <div class="d-flex align-items-center m-b-10">
+                            <div>
+                                <h6 class="m-b-0 font-bold">C
+                                    <span class="font-light">1 Hour</span>
+                                </h6>
+                            </div>
+                            <div class="ml-auto">
+                                <h6 class="m-b-0 font-bold">15%</h6>
+                            </div>
+                        </div>
+                        <ngb-progressbar type="success" [value]="25"></ngb-progressbar>
+                    </li>
+                    <li class="m-t-25">
+                        <div class="d-flex align-items-center m-b-10">
+                            <div>
+                                <h6 class="m-b-0 font-bold">D
+                                    <span class="font-light">More than 1 hour</span>
+                                </h6>
+                            </div>
+                            <div class="ml-auto">
+                                <h6 class="m-b-0 font-bold">10%</h6>
+                            </div>
+                        </div>
+                        <ngb-progressbar type="danger" [value]="25"></ngb-progressbar>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,7 +1,7 @@
 interface SendEmailChangePasswordBody {
     email: string;
 
-    forgotPassword: boolean;
+    forgotPassword?: boolean;
 };
 
 export default SendEmailChangePasswordBody;

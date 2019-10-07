@@ -1,0 +1,85 @@
+<!-- ============================================================== -->
+<!-- Conversation and active users -->
+<!-- ============================================================== -->
+<div class="row">
+    <!-- Column -->
+    <div class="col-sm-12 col-md-6 col-lg-3">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Conversion Rate</h4>
+                <div class="m-t-20 rate"></div>
+            </div>
+        </div>
+    </div>
+    <!-- Column -->
+    <div class="col-sm-12 col-md-6 col-lg-3">
+        <div class="card bg-orange">
+            <div class="card-body">
+                <h4 class="card-title text-white">Active Users</h4>
+                <h2 class="text-white">356</h2>
+                <div class="text-center">
+                    <div class="m-t-30 m-b-40">
+                        <div class="text-center" style="height: 122px;">
+                            <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels"
+                                [options]="barChartOptions" [colors]="barChartColors" [legend]="barChartLegend"
+                                [chartType]="barChartType">
+                            </canvas>
+                        </div>
+                    </div>
+                    <span class="text-white op-5">Users per Minute</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Column -->
+    <div class="col-sm-12 col-lg-6">
+        <div class="card bg-info">
+            <div class="card-body">
+                <h4 class="card-title text-white op-5">Total Earnings</h4>
+                <h2 class="text-white">$6,890.68</h2>
+                <div class="earnings"></div>
+                <div class="row">
+                    <!-- Column -->
+                    <div class="col-sm-12 col-lg-4">
+                        <div class="d-flex align-items-center m-t-5 m-b-5">
+                            <div class="m-r-10">
+                                <a class="btn btn-circle btn-lg btn-cyan text-white">EA</a>
+                            </div>
+                            <div class="text-white">
+                                <span class="font-14 op-5 d-block">Product A</span>
+                                <span class="font-16 font-medium">$15.56K</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Column -->
+                    <!-- Column -->
+                    <div class="col-sm-12 col-lg-4">
+                        <div class="d-flex no-block align-items-center m-t-5 m-b-5">
+                            <div class="m-r-10">
+                                <a class="btn btn-circle btn-lg btn-cyan text-white">EA</a>
+                            </div>
+                            <div class="text-white">
+                                <span class="font-14 op-5 d-block">Product B</span>
+                                <span class="font-16 font-medium">$15.56K</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Column -->
+                    <!-- Column -->
+                    <div class="col-sm-12 col-lg-4">
+                        <div class="d-flex no-block align-items-center m-t-5 m-b-5">
+                            <div class="m-r-10">
+                                <a class="btn btn-circle btn-lg btn-cyan text-white">EA</a>
+                            </div>
+                            <div class="text-white">
+                                <span class="font-14 op-5 d-block">Product C</span>
+                                <span class="font-16 font-medium">$15.56K</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Column -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

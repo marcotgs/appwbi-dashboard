@@ -2,6 +2,7 @@
 import 'reflect-metadata';
 import errorHandler from 'errorhandler';
 import compression from 'compression';  // compresses requests
+import path from 'path';
 import passport from 'passport';
 import jwt from 'jsonwebtoken';
 import SendGrid from '@sendgrid/mail';
@@ -11,6 +12,7 @@ import Config from '@api/util/config';
 import Database from '@api/database';
 import { UserController } from '@api/controllers';
 import Passaport from '@api/util/passport';
+import express from 'express';
 
 
 Config.init();
@@ -41,7 +43,9 @@ Database.connect().
             }
         });
 
+        const root = './';
         app.set('port', process.env.PORT || 3000); // porta
+        app.use(express.static(path.join(__dirname, '../..', 'client/dist/dashboard')));
 
         server = app.listen(process.env.PORT || 3000, (): void => {
             console.log(
@@ -63,9 +67,9 @@ Database.connect().
 
         new Passaport().use();
 
-        // app.get('*', (req, res) => {
-        //     res.sendFile('dist/angular-cosmosdb/index.html', { root });
-        // });
+        app.get('*', (_req: express.Request, res: express.Response): any => {
+            res.sendFile(path.join(__dirname, '../..', 'client/dist/dashboard/index.html'));
+        });
     });
 
 export default server;

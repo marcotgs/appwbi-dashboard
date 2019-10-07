@@ -258,13 +258,6 @@ label {
   justify-content: flex-end;
 }
 
-@include media-breakpoint-down(md){
-  .b-label {
-    justify-content: flex-start;
-  }
-  
-}
-
 // Custom validation Classes
 .error {
   .form-control {

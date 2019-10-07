@@ -1,0 +1,105 @@
+<div class="card">
+    <div class="card-body">
+        <div class="d-md-flex align-items-center">
+            <div>
+                <h4 class="card-title">Faturamento X Devolução</h4>
+                <h5 class="card-subtitle">Total do Faturamento Anual</h5>
+            </div>
+            <div class="ml-auto d-flex no-block align-items-center">
+                <div class="dl">
+                    <select class="custom-select">
+                        <option value="0">Diário</option>
+                        <option value="1">Mensal</option>
+                        <option value="2">Trimestral</option>
+                        <option value="3">Semestral</option>
+                        <option value="3" selected>Anual</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- Info Box -->
+        <!-- ============================================================== -->
+        <div class="card-body border-top">
+            <div class="row m-b-0">
+                <!-- col -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="d-flex align-items-center">
+                        <div class="m-r-10">
+                            <span class="text-orange display-5">
+                                <i class="mdi mdi-wallet"></i>
+                            </span>
+                        </div>
+                        <div>
+                            <span>Faturamento</span>
+                            <h3 class="font-medium m-b-0">R$ 32.350.126,34</h3>
+                        </div>
+                    </div>
+                </div>
+                <!-- col -->
+                <!-- col -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="d-flex align-items-center">
+                        <div class="m-r-10">
+                            <span class="text-cyan display-5">
+                                <i class="mdi mdi-star-circle"></i>
+                            </span>
+                        </div>
+                        <div>
+                            <span>Devolução</span>
+                            <h3 class="font-medium m-b-0">R$ 50.315,69</h3>
+                        </div>
+                    </div>
+                </div>
+                <!-- col -->
+                <!-- col -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="d-flex align-items-center">
+                        <div class="m-r-10">
+                            <span class="text-info display-5">
+                                <i class="mdi mdi-shopping"></i>
+                            </span>
+                        </div>
+                        <div>
+                            <span>Percentual de Devolução</span>
+                            <h3 class="font-medium m-b-0">3%</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grfatxdevol"></div>
+
+        <div class="ml-auto d-flex no-block align-items-center">
+            <ul class="list-inline font-12 dl m-r-15 m-b-0">
+                <li class="list-inline-item text-cyan">
+                    <i class="fa fa-circle"></i> Faturamento</li>
+                <li class="list-inline-item text-primary">
+                    <i class="fa fa-circle"></i> Devolução</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================== -->
+<!-- Notifications, Chart -->
+<!-- ============================================================== -->
+<div class="card">
+    <div class="card-body">
+        <!-- Sales Summery -->
+        <div class="p-t-20">
+            <div class="row">
+                <!-- column -->
+                <!-- column -->
+                <div class="col-md-12 col-lg-11">
+                    <div class="barchart m-t-30">
+                        <x-chartist class="net-income" [data]="barChart.data" [type]="barChart.type" [options]="barChart.options" [responsiveOptions]="barChart.responsiveOptions"
+                            [events]="barChart.events"> </x-chartist>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

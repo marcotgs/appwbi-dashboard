@@ -66,6 +66,7 @@
                 background: $skin2;
                 
                 &::after{
+                    background: url(../../assets/images/background/sidebarbg.png) no-repeat;
                     position: absolute;
                     top:0px;
                     content: "";

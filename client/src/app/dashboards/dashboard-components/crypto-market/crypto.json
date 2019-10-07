@@ -1,0 +1,235 @@
+[{
+        "#": "<span><a href='JavaScript: void(0);''><i class='display-7 cc XRP'></i></a></span>",
+        "Currency": "<h6><a class='font-medium link' href='JavaScript: void(0);'> Ripple</a></h6><small class='text-muted'>XRP</small>",
+        "Price": "$1.67",
+        "MarketCap": "$61,191,183,730",
+        "Volume 1D": "$10,133,400,000",
+        "Change % (1D)": "<span class='label label-success'><i class='fa fa-chevron-up'></i> 66.26%</span>",
+        "Change % (1W)": "<span class='label label-danger'><i class='fa fa-chevron-down'></i> -16.48%</span>"
+    }, {
+        "#": "<span><a href='JavaScript: void(0);''><i class='display-7 cc ETH'></i></a></span>",
+        "Currency": "<h6><a class='font-medium link' href='JavaScript: void(0);'> Ethereum</a></h6><small class='text-muted'>ETH</small>",
+        "Price": "$1.67",
+        "MarketCap": "$61,191,183,730",
+        "Volume 1D": "$10,133,400,000",
+        "Change % (1D)": "<span class='label label-success'><i class='fa fa-chevron-up'></i> 66.26%</span>",
+        "Change % (1W)": "<span class='label label-danger'><i class='fa fa-chevron-down'></i> -16.48%</span>"
+    }, {
+        "#": "<span><a href='JavaScript: void(0);''><i class='display-7 cc BTC'></i></a></span>",
+        "Currency": "<h6><a class='font-medium link' href='JavaScript: void(0);'> Bitcoin</a></h6><small class='text-muted'>BTC</small>",
+        "Price": "$1.67",
+        "MarketCap": "$61,191,183,730",
+        "Volume 1D": "$10,133,400,000",
+        "Change % (1D)": "<span class='label label-success'><i class='fa fa-chevron-up'></i> 66.26%</span>",
+        "Change % (1W)": "<span class='label label-danger'><i class='fa fa-chevron-down'></i> -16.48%</span>"
+    }, {
+        "#": "<span><a href='JavaScript: void(0);''><i class='display-7 cc ADA'></i></a></span>",
+        "Currency": "<h6><a class='font-medium link' href='JavaScript: void(0);'> Cardano</a></h6><small class='text-muted'>ADA</small>",
+        "Price": "$1.67",
+        "MarketCap": "$61,191,183,730",
+        "Volume 1D": "$10,133,400,000",
+        "Change % (1D)": "<span class='label label-success'><i class='fa fa-chevron-up'></i> 66.26%</span>",
+        "Change % (1W)": "<span class='label label-danger'><i class='fa fa-chevron-down'></i> -16.48%</span>"
+    }, {
+        "#": "<span><a href='JavaScript: void(0);''><i class='display-7 cc LTC'></i></a></span>",
+        "Currency": "<h6><a class='font-medium link' href='JavaScript: void(0);'> Litecoin</a></h6><small class='text-muted'>LTC</small>",
+        "Price": "$1.67",
+        "MarketCap": "$61,191,183,730",
+        "Volume 1D": "$10,133,400,000",
+        "Change % (1D)": "<span class='label label-success'><i class='fa fa-chevron-up'></i> 66.26%</span>",
+        "Change % (1W)": "<span class='label label-danger'><i class='fa fa-chevron-down'></i> -16.48%</span>"
+    }, {
+        "#": "<span><a href='JavaScript: void(0);''><i class='display-7 cc XEM'></i></a></span>",
+        "Currency": "<h6><a class='font-medium link' href='JavaScript: void(0);'> NEM</a></h6><small class='text-muted'>XEM</small>",
+        "Price": "$1.67",
+        "MarketCap": "$61,191,183,730",
+        "Volume 1D": "$10,133,400,000",
+        "Change % (1D)": "<span class='label label-success'><i class='fa fa-chevron-up'></i> 66.26%</span>",
+        "Change % (1W)": "<span class='label label-danger'><i class='fa fa-chevron-down'></i> -16.48%</span>"
+    }, {
+        "#": "<span><a href='JavaScript: void(0);''><i class='display-7 cc NEO'></i></a></span>",
+        "Currency": "<h6><a class='font-medium link' href='JavaScript: void(0);'> NEO</a></h6><small class='text-muted'>NEO</small>",
+        "Price": "$1.67",
+        "MarketCap": "$61,191,183,730",
+        "Volume 1D": "$10,133,400,000",
+        "Change % (1D)": "<span class='label label-success'><i class='fa fa-chevron-up'></i> 66.26%</span>",
+        "Change % (1W)": "<span class='label label-danger'><i class='fa fa-chevron-down'></i> -16.48%</span>"
+    }, {
+        "#": "<span><a href='JavaScript: void(0);''><i class='display-7 cc DASH'></i></a></span>",
+        "Currency": "<h6><a class='font-medium link' href='JavaScript: void(0);'> Dash</a></h6><small class='text-muted'>DASH</small>",
+        "Price": "$1.67",
+        "MarketCap": "$61,191,183,730",
+        "Volume 1D": "$10,133,400,000",
+        "Change % (1D)": "<span class='label label-success'><i class='fa fa-chevron-up'></i> 66.26%</span>",
+        "Change % (1W)": "<span class='label label-danger'><i class='fa fa-chevron-down'></i> -16.48%</span>"
+    }, {
+        "#": "<span><a href='JavaScript: void(0);''><i class='display-7 cc EOS'></i></a></span>",
+        "Currency": "<h6><a class='font-medium link' href='JavaScript: void(0);'> EOS</a></h6><small class='text-muted'>EOS</small>",
+        "Price": "$1.67",
+        "MarketCap": "$61,191,183,730",
+        "Volume 1D": "$10,133,400,000",
+        "Change % (1D)": "<span class='label label-success'><i class='fa fa-chevron-up'></i> 66.26%</span>",
+        "Change % (1W)": "<span class='label label-danger'><i class='fa fa-chevron-down'></i> -16.48%</span>"
+    }, {
+        "#": "<span><a href='JavaScript: void(0);''><i class='display-7 cc XMR'></i></a></span>",
+        "Currency": "<h6><a class='font-medium link' href='JavaScript: void(0);'> Monero</a></h6><small class='text-muted'>XMR</small>",
+        "Price": "$1.67",
+        "MarketCap": "$61,191,183,730",
+        "Volume 1D": "$10,133,400,000",
+        "Change % (1D)": "<span class='label label-success'><i class='fa fa-chevron-up'></i> 66.26%</span>",
+        "Change % (1W)": "<span class='label label-danger'><i class='fa fa-chevron-down'></i> -16.48%</span>"
+    }, {
+        "#": "<span><a href='JavaScript: void(0);''><i class='display-7 cc ETC'></i></a></span>",
+        "Currency": "<h6><a class='font-medium link' href='JavaScript: void(0);'> Ethereum Classic</a></h6><small class='text-muted'>ETC</small>",
+        "Price": "$1.67",
+        "MarketCap": "$61,191,183,730",
+        "Volume 1D": "$10,133,400,000",
+        "Change % (1D)": "<span class='label label-success'><i class='fa fa-chevron-up'></i> 66.26%</span>",
+        "Change % (1W)": "<span class='label label-danger'><i class='fa fa-chevron-down'></i> -16.48%</span>"
+    }, {
+        "#": "<span><a href='JavaScript: void(0);''><i class='display-7 cc QTUM'></i></a></span>",
+        "Currency": "<h6><a class='font-medium link' href='JavaScript: void(0);'> Qtum</a></h6><small class='text-muted'>QTUM</small>",
+        "Price": "$1.67",
+        "MarketCap": "$61,191,183,730",
+        "Volume 1D": "$10,133,400,000",
+        "Change % (1D)": "<span class='label label-success'><i class='fa fa-chevron-up'></i> 66.26%</span>",
+        "Change % (1W)": "<span class='label label-danger'><i class='fa fa-chevron-down'></i> -16.48%</span>"
+    }, {
+        "#": "<span><a href='JavaScript: void(0);''><i class='display-7 cc LSK'></i></a></span>",
+        "Currency": "<h6><a class='font-medium link' href='JavaScript: void(0);'> Lisk</a></h6><small class='text-muted'>LSK</small>",
+        "Price": "$1.67",
+        "MarketCap": "$61,191,183,730",
+        "Volume 1D": "$10,133,400,000",
+        "Change % (1D)": "<span class='label label-success'><i class='fa fa-chevron-up'></i> 66.26%</span>",
+        "Change % (1W)": "<span class='label label-danger'><i class='fa fa-chevron-down'></i> -16.48%</span>"
+    }, {
+        "#": "<span><a href='JavaScript: void(0);''><i class='display-7 cc OMG'></i></a></span>",
+        "Currency": "<h6><a class='font-medium link' href='JavaScript: void(0);'> OmiseGO</a></h6><small class='text-muted'>OMG</small>",
+        "Price": "$1.67",
+        "MarketCap": "$61,191,183,730",
+        "Volume 1D": "$10,133,400,000",
+        "Change % (1D)": "<span class='label label-success'><i class='fa fa-chevron-up'></i> 66.26%</span>",
+        "Change % (1W)": "<span class='label label-danger'><i class='fa fa-chevron-down'></i> -16.48%</span>"
+    }, {
+        "#": "<span><a href='JavaScript: void(0);''><i class='display-7 cc USDT'></i></a></span>",
+        "Currency": "<h6><a class='font-medium link' href='JavaScript: void(0);'> Tether</a></h6><small class='text-muted'>USDT</small>",
+        "Price": "$1.67",
+        "MarketCap": "$61,191,183,730",
+        "Volume 1D": "$10,133,400,000",
+        "Change % (1D)": "<span class='label label-success'><i class='fa fa-chevron-up'></i> 66.26%</span>",
+        "Change % (1W)": "<span class='label label-danger'><i class='fa fa-chevron-down'></i> -16.48%</span>"
+    }, {
+        "#": "<span><a href='JavaScript: void(0);''><i class='display-7 cc XVG'></i></a></span>",
+        "Currency": "<h6><a class='font-medium link' href='JavaScript: void(0);'> Verge</a></h6><small class='text-muted'>XVG</small>",
+        "Price": "$1.67",
+        "MarketCap": "$61,191,183,730",
+        "Volume 1D": "$10,133,400,000",
+        "Change % (1D)": "<span class='label label-success'><i class='fa fa-chevron-up'></i> 66.26%</span>",
+        "Change % (1W)": "<span class='label label-danger'><i class='fa fa-chevron-down'></i> -16.48%</span>"
+    }, {
+        "#": "<span><a href='JavaScript: void(0);''><i class='display-7 cc ZEC'></i></a></span>",
+        "Currency": "<h6><a class='font-medium link' href='JavaScript: void(0);'> Zcash</a></h6><small class='text-muted'>ZEC</small>",
+        "Price": "$1.67",
+        "MarketCap": "$61,191,183,730",
+        "Volume 1D": "$10,133,400,000",
+        "Change % (1D)": "<span class='label label-success'><i class='fa fa-chevron-up'></i> 66.26%</span>",
+        "Change % (1W)": "<span class='label label-danger'><i class='fa fa-chevron-down'></i> -16.48%</span>"
+    }, {
+        "#": "<span><a href='JavaScript: void(0);''><i class='display-7 cc STRAT'></i></a></span>",
+        "Currency": "<h6><a class='font-medium link' href='JavaScript: void(0);'> Stratis</a></h6><small class='text-muted'>STRAT</small>",
+        "Price": "$1.67",
+        "MarketCap": "$61,191,183,730",
+        "Volume 1D": "$10,133,400,000",
+        "Change % (1D)": "<span class='label label-success'><i class='fa fa-chevron-up'></i> 66.26%</span>",
+        "Change % (1W)": "<span class='label label-danger'><i class='fa fa-chevron-down'></i> -16.48%</span>"
+    }, {
+        "#": "<span><a href='JavaScript: void(0);''><i class='display-7 cc ARDR'></i></a></span>",
+        "Currency": "<h6><a class='font-medium link' href='JavaScript: void(0);'> Ardor</a></h6><small class='text-muted'>ARDR</small>",
+        "Price": "$1.67",
+        "MarketCap": "$61,191,183,730",
+        "Volume 1D": "$10,133,400,000",
+        "Change % (1D)": "<span class='label label-success'><i class='fa fa-chevron-up'></i> 66.26%</span>",
+        "Change % (1W)": "<span class='label label-danger'><i class='fa fa-chevron-down'></i> -16.48%</span>"
+    }, {
+        "#": "<span><a href='JavaScript: void(0);''><i class='display-7 cc BCN'></i></a></span>",
+        "Currency": "<h6><a class='font-medium link' href='JavaScript: void(0);'> Bytecoin</a></h6><small class='text-muted'>BCN</small>",
+        "Price": "$1.67",
+        "MarketCap": "$61,191,183,730",
+        "Volume 1D": "$10,133,400,000",
+        "Change % (1D)": "<span class='label label-success'><i class='fa fa-chevron-up'></i> 66.26%</span>",
+        "Change % (1W)": "<span class='label label-danger'><i class='fa fa-chevron-down'></i> -16.48%</span>"
+    }, {
+        "#": "<span><a href='JavaScript: void(0);''><i class='display-7 cc STEEM'></i></a></span>",
+        "Currency": "<h6><a class='font-medium link' href='JavaScript: void(0);'> Steem</a></h6><small class='text-muted'>STEEM</small>",
+        "Price": "$1.67",
+        "MarketCap": "$61,191,183,730",
+        "Volume 1D": "$10,133,400,000",
+        "Change % (1D)": "<span class='label label-success'><i class='fa fa-chevron-up'></i> 66.26%</span>",
+        "Change % (1W)": "<span class='label label-danger'><i class='fa fa-chevron-down'></i> -16.48%</span>"
+    }, {
+        "#": "<span><a href='JavaScript: void(0);''><i class='display-7 cc BTS'></i></a></span>",
+        "Currency": "<h6><a class='font-medium link' href='JavaScript: void(0);'> Bitshares</a></h6><small class='text-muted'>BTS</small>",
+        "Price": "$1.67",
+        "MarketCap": "$61,191,183,730",
+        "Volume 1D": "$10,133,400,000",
+        "Change % (1D)": "<span class='label label-success'><i class='fa fa-chevron-up'></i> 66.26%</span>",
+        "Change % (1W)": "<span class='label label-danger'><i class='fa fa-chevron-down'></i> -16.48%</span>"
+    }, {
+        "#": "<span><a href='JavaScript: void(0);''><i class='display-7 cc DOGE'></i></a></span>",
+        "Currency": "<h6><a class='font-medium link' href='JavaScript: void(0);'> Dogecoin</a></h6><small class='text-muted'>DOGE</small>",
+        "Price": "$1.67",
+        "MarketCap": "$61,191,183,730",
+        "Volume 1D": "$10,133,400,000",
+        "Change % (1D)": "<span class='label label-success'><i class='fa fa-chevron-up'></i> 66.26%</span>",
+        "Change % (1W)": "<span class='label label-danger'><i class='fa fa-chevron-down'></i> -16.48%</span>"
+    }, {
+        "#": "<span><a href='JavaScript: void(0);''><i class='display-7 cc WAVES'></i></a></span>",
+        "Currency": "<h6><a class='font-medium link' href='JavaScript: void(0);'> Waves</a></h6><small class='text-muted'>WAVES</small>",
+        "Price": "$1.67",
+        "MarketCap": "$61,191,183,730",
+        "Volume 1D": "$10,133,400,000",
+        "Change % (1D)": "<span class='label label-success'><i class='fa fa-chevron-up'></i> 66.26%</span>",
+        "Change % (1W)": "<span class='label label-danger'><i class='fa fa-chevron-down'></i> -16.48%</span>"
+    }, {
+        "#": "<span><a href='JavaScript: void(0);''><i class='display-7 cc REP'></i></a></span>",
+        "Currency": "<h6><a class='font-medium link' href='JavaScript: void(0);'> Ripple</a></h6><small class='text-muted'>REP</small>",
+        "Price": "$1.67",
+        "MarketCap": "$61,191,183,730",
+        "Volume 1D": "$10,133,400,000",
+        "Change % (1D)": "<span class='label label-success'><i class='fa fa-chevron-up'></i> 66.26%</span>",
+        "Change % (1W)": "<span class='label label-danger'><i class='fa fa-chevron-down'></i> -16.48%</span>"
+    }, {
+        "#": "<span><a href='JavaScript: void(0);''><i class='display-7 cc XRP'></i></a></span>",
+        "Currency": "<h6><a class='font-medium link' href='JavaScript: void(0);'> Augur</a></h6><small class='text-muted'>XRP</small>",
+        "Price": "$1.67",
+        "MarketCap": "$61,191,183,730",
+        "Volume 1D": "$10,133,400,000",
+        "Change % (1D)": "<span class='label label-success'><i class='fa fa-chevron-up'></i> 66.26%</span>",
+        "Change % (1W)": "<span class='label label-danger'><i class='fa fa-chevron-down'></i> -16.48%</span>"
+    }, {
+        "#": "<span><a href='JavaScript: void(0);''><i class='display-7 cc KMD'></i></a></span>",
+        "Currency": "<h6><a class='font-medium link' href='JavaScript: void(0);'> Komodo</a></h6><small class='text-muted'>KMD</small>",
+        "Price": "$1.67",
+        "MarketCap": "$61,191,183,730",
+        "Volume 1D": "$10,133,400,000",
+        "Change % (1D)": "<span class='label label-success'><i class='fa fa-chevron-up'></i> 66.26%</span>",
+        "Change % (1W)": "<span class='label label-danger'><i class='fa fa-chevron-down'></i> -16.48%</span>"
+    }, {
+        "#": "<span><a href='JavaScript: void(0);''><i class='display-7 cc DGB'></i></a></span>",
+        "Currency": "<h6><a class='font-medium link' href='JavaScript: void(0);'> DigiByte</a></h6><small class='text-muted'>DGB</small>",
+        "Price": "$1.67",
+        "MarketCap": "$61,191,183,730",
+        "Volume 1D": "$10,133,400,000",
+        "Change % (1D)": "<span class='label label-success'><i class='fa fa-chevron-up'></i> 66.26%</span>",
+        "Change % (1W)": "<span class='label label-danger'><i class='fa fa-chevron-down'></i> -16.48%</span>"
+    }, {
+        "#": "<span><a href='JavaScript: void(0);''><i class='display-7 cc ARK'></i></a></span>",
+        "Currency": "<h6><a class='font-medium link' href='JavaScript: void(0);'> Ark</a></h6><small class='text-muted'>ARK</small>",
+        "Price": "$1.67",
+        "MarketCap": "$61,191,183,730",
+        "Volume 1D": "$10,133,400,000",
+        "Change % (1D)": "<span class='label label-success'><i class='fa fa-chevron-up'></i> 66.26%</span>",
+        "Change % (1W)": "<span class='label label-danger'><i class='fa fa-chevron-down'></i> -16.48%</span>"
+    }
+
+]

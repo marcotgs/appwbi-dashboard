@@ -1,0 +1,23 @@
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title mb-3">With minimal configuration</h4>
+        <angular-file-uploader #afu1 [resetUpload]=resetUpload1 [config]="afuConfig1" class="afuc">
+        </angular-file-uploader>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title mb-3">With all available configuration</h4>
+        <angular-file-uploader #afu3 [config]="afuConfig3" [resetUpload]=resetUpload3 (ApiResponse)="DocUpload($event)">
+        </angular-file-uploader>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title mb-3">With all available configuration</h4>
+        <angular-file-uploader #afu2 [config]="afuConfig2" [resetUpload]=resetUpload2 (ApiResponse)="DocUpload($event)">
+        </angular-file-uploader>
+    </div>
+</div>

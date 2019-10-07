@@ -1,0 +1,63 @@
+<div class="row">
+    <!-- column -->
+    <div class="col-sm-12 col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Total Visits</h4>
+                <h4 class="font-bold m-t-20 m-b-10">3,25,346</h4>
+                <h5 class="card-subtitle m-b-0">Total Earnings of the Month</h5>
+            </div>
+            <div class="text-center" style="height: 62px;">
+                <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
+                    [colors]="barChartColors" [legend]="barChartLegend" [chartType]="barChartType">
+                </canvas>
+            </div>
+        </div>
+    </div>
+    <!-- column -->
+    <div class="col-sm-12 col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Sales Ratio</h4>
+                <h4 class="font-bold m-t-20 m-b-10">35,658</h4>
+                <h5 class="card-subtitle m-b-0">Total Earnings of the Month</h5>
+            </div>
+            <div class="earningsbox1"></div>
+        </div>
+    </div>
+    <!-- column -->
+    <div class="col-sm-12">
+        <div class="card order-widget">
+            <div class="card-body">
+                <div class="row">
+                    <!-- column -->
+                    <div class="col-sm-12 col-md-8">
+                        <h4 class="card-title">Order Status</h4>
+                        <h5 class="card-subtitle m-b-0">Total Earnings of the Month</h5>
+                        <div class="row m-t-20">
+                            <div class="col-4 border-right">
+                                <i class="fa fa-circle text-cyan"></i>
+                                <h3 class="m-b-0 font-medium">5489</h3>
+                                <span>Success</span>
+                            </div>
+                            <div class="col-4 border-right">
+                                <i class="fa fa-circle text-orange"></i>
+                                <h3 class="m-b-0 font-medium">954</h3>
+                                <span>Pending</span>
+                            </div>
+                            <div class="col-4">
+                                <i class="fa fa-circle text-info"></i>
+                                <h3 class="m-b-0 font-medium">736</h3>
+                                <span>Failed</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- column -->
+                    <div class="col-sm-12 col-md-4">
+                        <div id="visitor1" class="m-t-20"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

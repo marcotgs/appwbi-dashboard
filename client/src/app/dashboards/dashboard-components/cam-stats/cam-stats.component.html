@@ -1,0 +1,85 @@
+<div class="card">
+    <div class="card-body">
+        <!-- Sales Summery -->
+        <div class="p-t-20">
+            <div class="row">
+                <!-- column -->
+                <div class="col-md-12 col-lg-4">
+                    <ul class="list-style-none notifications m-b-0">
+                        <li class="m-b-40">
+                            <div class="d-flex align-items-center">
+                                <button class="btn btn-primary m-r-10">
+                                    <i class="mdi mdi-email-open"></i>
+                                </button>
+                                <div>
+                                    <h5 class="m-b-0">You have 3 new messages</h5>
+                                    <span class="text-muted">Daniel, Hannah, Jeffery</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="m-b-40">
+                            <div class="d-flex align-items-center">
+                                <button class="btn btn-cyan text-white m-r-10">
+                                    <i class="mdi mdi-rss"></i>
+                                </button>
+                                <div>
+                                    <h5 class="m-b-0">Newsfeed Available</h5>
+                                    <span class="text-muted">Breakdancing grandma proves...</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="m-b-40">
+                            <div class="d-flex align-items-center">
+                                <button class="btn btn-orange text-white m-r-10">
+                                    <i class="mdi mdi-message-processing"></i>
+                                </button>
+                                <div>
+                                    <h5 class="m-b-0">15 new comments</h5>
+                                    <span class="text-muted">Jony: hey, this stuff is awesome...</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="m-b-40">
+                            <div class="d-flex align-items-center">
+                                <button class="btn btn-success m-r-10">
+                                    <i class="mdi mdi-receipt"></i>
+                                </button>
+                                <div>
+                                    <h5 class="m-b-0">2 invoices to pay</h5>
+                                    <span class="text-muted">$3500 - Mark, $4000 - Bianca</span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <!-- column -->
+                <div class="col-md-12 col-lg-8">
+                    <div class="barchart m-t-30">
+                        <x-chartist class="net-income" [data]="barChart.data" [type]="barChart.type" [options]="barChart.options" [responsiveOptions]="barChart.responsiveOptions"
+                            [events]="barChart.events"> </x-chartist>
+                    </div>
+                    <div class="row m-b-0 m-t-20 text-center">
+                        <!-- col -->
+                        <div class="col-sm-12 col-md-4 m-b-10">
+                            <span>Wallet Balance</span>
+                            <h3 class="m-b-0">$3,567.56</h3>
+                        </div>
+                        <!-- col -->
+                        <!-- col -->
+                        <div class="col-sm-12 col-md-4 m-b-10">
+                            <span>Referral Earnings</span>
+                            <h3 class="m-b-0">$769.08</h3>
+                        </div>
+                        <!-- col -->
+                        <!-- col -->
+                        <div class="col-sm-12 col-md-4 m-b-10">
+                            <span>Estimated Sales</span>
+                            <h3 class="m-b-0">5489</h3>
+                        </div>
+                        <!-- col -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
