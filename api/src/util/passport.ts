@@ -1,7 +1,7 @@
-import passport from "passport";
-import { Strategy, ExtractJwt, StrategyOptions } from "passport-jwt";
-import Database from "@api/database";
-import { AcessoUsuariosRepository } from "@api/database/repositories/acesso-usuarios";
+import passport from 'passport';
+import { Strategy, ExtractJwt, StrategyOptions } from 'passport-jwt';
+import Database from '@api/database';
+import { AcessoUsuariosRepository } from '@api/database/repositories/acesso-usuarios';
 
 /**
  * Essa classe define estratégia de autenticação.
@@ -35,9 +35,9 @@ export default class Passaport {
      * @memberof Passaport
      */
     public constructor() {
-        this.acessoUsuariosRepository = new AcessoUsuariosRepository(Database.context);
+        this.acessoUsuariosRepository = new AcessoUsuariosRepository();
         this.params =  {
-            secretOrKey: process.env["JWT_SECRET"],
+            secretOrKey: process.env['JWT_SECRET'],
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
         };
     }
@@ -52,7 +52,7 @@ export default class Passaport {
             if (user) {
                 return done(null, { id: payload.id });
             } else {
-                return done(new Error("User não encontrado"), null);
+                return done(new Error('User não encontrado'), null);
             }
         });
         passport.use(strategy);
@@ -65,6 +65,6 @@ export default class Passaport {
      * @memberof Passaport
      */
     public authenticate(): void {
-        return passport.authenticate("jwt", { session: false });
+        return passport.authenticate('jwt', { session: false });
     }
 }

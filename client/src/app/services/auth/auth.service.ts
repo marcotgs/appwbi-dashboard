@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from "@auth0/angular-jwt";
-import { LoginResponse } from '@app/api/interfaces';
+import { LoginResponse } from '@shared/interfaces';
 
 @Injectable()
 export default class AuthService {

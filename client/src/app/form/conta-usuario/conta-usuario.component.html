@@ -19,7 +19,7 @@
                                     <label for="nome" class="control-label col-form-label">Nome</label>
                                 </div>
                             </div>
-                            <div class="col-sm-9">
+                            <div class="col-sm-6">
                                 <input type="text" class="form-control" id="nome" placeholder="Nome"
                                     formControlName="nome" [ngClass]="{'is-invalid': manageAccountForm.get('nome').invalid  && (manageAccountForm.get('nome').dirty || 
                                     manageAccountForm.get('nome').touched)}">
@@ -35,7 +35,7 @@
                                     <label for="sobrenome" class="control-label col-form-label">Sobrenome</label>
                                 </div>
                             </div>
-                            <div class="col-sm-9">
+                            <div class="col-sm-6">
                                 <input type="text" class="form-control" id="sobrenome" placeholder="Sobrenome"
                                     formControlName="sobrenome" [ngClass]="{'is-invalid': manageAccountForm.get('sobrenome').invalid  && (manageAccountForm.get('sobrenome').dirty || 
                                     manageAccountForm.get('sobrenome').touched)}">
@@ -48,12 +48,80 @@
                         <div class="form-group row">
                             <div class="col-sm-3">
                                 <div class="b-label">
+                                    <label for="cgc" class="control-label col-form-label">CPF/CNPJ</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="tel" class="form-control" id="cgc" placeholder="CPF/CNPJ"
+                                    [textMask]="{mask: getMaskCgc, guide: false}" formControlName="cgc" [ngClass]="{'is-invalid': manageAccountForm.get('cgc').invalid  && (manageAccountForm.get('cgc').dirty || 
+                                    manageAccountForm.get('cgc').touched)}">
+                                <div class="invalid-feedback" *ngFor="let validation of getMessagesError('cgc')">
+                                    <span *ngIf="manageAccountForm.get('cgc').hasError(validation.type) && (manageAccountForm.get('cgc').dirty || 
+                                            manageAccountForm.get('cgc').touched)">{{validation.message}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-3">
+                                <div class="b-label">
                                     <label for="email" class="control-label col-form-label">Email</label>
                                 </div>
                             </div>
-                            <div class="col-sm-9">
+                            <div class="col-sm-6">
                                 <input type="email" class="form-control" id="email" placeholder="Email"
                                     formControlName="email">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-3">
+                                <div class="b-label">
+                                    <label for="telefone" class="control-label col-form-label">Telefone</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="tel" class="form-control" id="telefone" placeholder="(31) 9 9999-9999"
+                                    formControlName="telefone" [textMask]="{mask: telMask, guide: false}" [ngClass]="{'is-invalid': manageAccountForm.get('telefone').invalid  && (manageAccountForm.get('telefone').dirty || 
+                                    manageAccountForm.get('telefone').touched)}">
+                                <div class="invalid-feedback" *ngFor="let validation of getMessagesError('telefone')">
+                                    <span *ngIf="manageAccountForm.get('telefone').hasError(validation.type) && (manageAccountForm.get('telefone').dirty || 
+                                            manageAccountForm.get('telefone').touched)">{{validation.message}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-3">
+                                <div class="b-label">
+                                    <label for="cargo" class="control-label col-form-label">Cargo</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" id="cargo" placeholder="Cargo"
+                                    formControlName="cargo" [ngClass]="{'is-invalid': manageAccountForm.get('cargo').invalid  && (manageAccountForm.get('cargo').dirty || 
+                                    manageAccountForm.get('cargo').touched)}">
+                                <div class="invalid-feedback" *ngFor="let validation of getMessagesError('cargo')">
+                                    <span *ngIf="manageAccountForm.get('cargo').hasError(validation.type) && (manageAccountForm.get('cargo').dirty || 
+                                            manageAccountForm.get('cargo').touched)">{{validation.message}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-3">
+                                <div class="b-label">
+                                    <label for="dataNascimento" class="control-label col-form-label">Data de
+                                        Nascimento</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="date" class="form-control" id="dataNascimento"
+                                    formControlName="dataNascimento" [ngClass]="{'is-invalid': manageAccountForm.get('dataNascimento').invalid  
+                                    && (manageAccountForm.get('dataNascimento').dirty || 
+                                    manageAccountForm.get('dataNascimento').touched)}">
+                                <div class="invalid-feedback"
+                                    *ngFor="let validation of getMessagesError('dataNascimento')">
+                                    <span
+                                        *ngIf="manageAccountForm.get('dataNascimento').hasError(validation.type) && (manageAccountForm.get('dataNascimento').dirty || 
+                                            manageAccountForm.get('dataNascimento').touched)">{{validation.message}}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -93,7 +161,7 @@
                                     <label for="endereco" class="control-label col-form-label">Endereço</label>
                                 </div>
                             </div>
-                            <div class="col-sm-9">
+                            <div class="col-sm-6">
                                 <input type="text" class="form-control" formControlName="endereco" id="endereco"
                                     placeholder="Endereço">
                             </div>
@@ -104,7 +172,7 @@
                                     <label for="numero" class="control-label col-form-label">Número</label>
                                 </div>
                             </div>
-                            <div class="col-sm-9">
+                            <div class="col-sm-6">
                                 <input type="number" class="form-control" formControlName="numero" id="numero"
                                     placeholder="Número" [ngClass]="{'is-invalid': manageAccountForm.get('numero').invalid  && (manageAccountForm.get('numero').dirty || 
                                     manageAccountForm.get('numero').touched)}">
@@ -121,7 +189,7 @@
                                     <label for="complemento" class="control-label col-form-label">Complemento</label>
                                 </div>
                             </div>
-                            <div class="col-sm-9">
+                            <div class="col-sm-6">
                                 <input type="text" class="form-control" formControlName="complemento" id="complemento"
                                     placeholder="Complemento">
                             </div>
@@ -132,7 +200,7 @@
                                     <label for="bairro" class="control-label col-form-label">Bairro</label>
                                 </div>
                             </div>
-                            <div class="col-sm-9">
+                            <div class="col-sm-6">
                                 <input type="text" class="form-control" formControlName="bairro" id="bairro"
                                     placeholder="Bairro">
                             </div>
@@ -143,7 +211,7 @@
                                     <label for="cidade" class="control-label col-form-label">Cidade</label>
                                 </div>
                             </div>
-                            <div class="col-sm-9">
+                            <div class="col-sm-6">
                                 <input type="text" class="form-control" id="cidade" formControlName="cidade"
                                     placeholder="Cidade">
                             </div>
@@ -154,7 +222,7 @@
                                     <label for="estado" class="control-label col-form-label">Estado</label>
                                 </div>
                             </div>
-                            <div class="col-sm-9">
+                            <div class="col-sm-6">
                                 <input type="text" class="form-control" id="estado" formControlName="estado"
                                     placeholder="Estado">
                             </div>
@@ -162,13 +230,72 @@
                     </div>
                     <hr>
                     <div class="card-body">
+                        <h4 class="card-title">Dados de Acesso</h4>
+                        <div class="form-group row">
+                            <div class="col-sm-3">
+                                <div class="b-label">
+                                    <label for="empresa" class="control-label col-form-label">Empresa</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" id="empresa" placeholder="empresa"
+                                    formControlName="empresa">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-3">
+                                <div class="b-label">
+                                    <label for="perfil" class="control-label col-form-label">Perfil</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" formControlName="perfil" id="perfil"
+                                    placeholder="perfil">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title">Alterar Senha</h4>
+                        <div class="form-group row">
+                            <div class="col-sm-3">
+                                <div class="b-label">
+                                    <label for="newPassword" class="control-label col-form-label">Nova Senha</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="password" class="form-control" formControlName="password" id="newPassword"
+                                    placeholder="**********" [ngClass]="{'is-invalid': manageAccountForm.get('password').invalid  && (manageAccountForm.get('password').dirty || 
+                                manageAccountForm.get('password').touched)}">
+                                <div class="invalid-feedback" *ngFor="let validation of getMessagesError('password')">
+                                    <span
+                                        *ngIf="manageAccountForm.get('password').hasError(validation.type) && (manageAccountForm.get('password').dirty || 
+                                                            manageAccountForm.get('password').touched)">{{validation.message}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-3">
+                                <div class="b-label">
+                                    <label for="confirmNewPassword" class="control-label col-form-label">Confirmar Nova
+                                        Senha</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="password" class="form-control" id="confirmNewPassword"
+                                    formControlName="confirmPassword" placeholder="**********" [ngClass]="{'is-invalid': manageAccountForm.get('confirmPassword').invalid  && (manageAccountForm.get('confirmPassword').dirty || 
+                                    manageAccountForm.get('confirmPassword').touched)}">
+                                <div class="invalid-feedback"
+                                    *ngFor="let validation of getMessagesError('confirmPassword')">
+                                    <span
+                                        *ngIf="manageAccountForm.get('confirmPassword').hasError(validation.type) && (manageAccountForm.get('confirmPassword').dirty || 
+                                                                manageAccountForm.get('confirmPassword').touched)">{{validation.message}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
                         <div class="form-group m-b-0 text-right">
-                            <button type="button" (click)="sendEmailChangePassword()" class="btn btn-secondary waves-effect waves-light">
-                                <span *ngIf="!isChangePasswordSpinnerShow">Alterar senha</span>
-                                <ngx-spinner [name]="changePasswordSpinner" bdColor="transparent" size="default"
-                                    color="#fff" type="ball-beat" [fullScreen]="false">
-                                </ngx-spinner>
-                            </button>
+                            <button type="button" class="btn btn-secondary waves-effect waves-light" (click)="resetForm()">Cancelar</button>
                             <button type="submit" class="btn btn-info waves-effect waves-light">
                                 <span *ngIf="!manageAccountForm.disabled">Salvar</span>
                                 <ngx-spinner [name]="saveSpinner" bdColor="transparent" size="default" color="#fff"

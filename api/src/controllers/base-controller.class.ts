@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Response } from "express";
-import { ApiPayload } from "@api/interfaces";
+import { ApiPayload } from "@shared/interfaces";
 
 
 /**

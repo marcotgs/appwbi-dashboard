@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { ofType, Actions } from '@ngrx/effects';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { UserState, changePasswordError, changePasswordSuccess, changePassword } from '@app/store/user';
-import { ApiResponseError, ChangePasswordBody } from '@app/api/interfaces';
+import { ApiResponseError, ChangePasswordBody } from '@shared/interfaces';
 import validationMessages from '@app/constants/form-validation/form-validation.constants';
 
 @Component({

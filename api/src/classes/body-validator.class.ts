@@ -1,7 +1,7 @@
 
 import { validate } from 'class-validator';
 import logger from '@api/util/logger';
-import { ApiResponseErrors, ApiResponseError } from '@api/interfaces';
+import { ApiResponseErrors, ApiResponseError } from '@shared/interfaces';
 
 /**
  * Classe responsável por validar os dados do body de uma requisição.

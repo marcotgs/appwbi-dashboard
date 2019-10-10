@@ -1,15 +1,16 @@
 import { Component, ViewChild } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Store } from '@ngrx/store';
 import { Actions, ofType } from '@ngrx/effects';
 import { NotifierService } from 'angular-notifier';
 import { conformToMask } from 'angular2-text-mask';
-import { UserState, updateProfile, getProfile, getProfileSuccess, loginSuccess, updateProfileError, sendEmailChangePassword, sendEmailChangePasswordSuccess } from '@app/store/user';
+import { UserState, updateProfile, getProfile, getProfileSuccess, loginSuccess, updateProfileError } from '@app/store/user';
 import validationMessages from '@app/constants/form-validation/form-validation.constants';
-import { acessoUsuariosModel } from '@app/api/interfaces';
+import { acessoUsuariosResponse } from '@shared/interfaces';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
+import MasksConstants from '@app/constants/mask/mask.contants';
 
 @Component({
   selector: 'app-form-conta-usuario',
@@ -20,14 +21,14 @@ export class FormContaUsuarioComponent {
   public manageAccountForm: FormGroup;
   public initialSpinner = 'initialSpinner';
   public saveSpinner = 'saveSpinner';
-  public changePasswordSpinner = 'changePasswordSpinner';
   public cepSpinner = 'cepSpinner';
   public isCepSpinnerShow = false;
   public isChangePasswordSpinnerShow = false;
-  public cepMask = [/\d/, /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/];
+  public cepMask = MasksConstants.CEP;
+  public telMask = MasksConstants.TEL;
   private codigoCompletoCidadeIbge = null;
   @ViewChild('successAlert', { static: false }) private successAlert: SwalComponent;
-  private userData: acessoUsuariosModel & { cidade?: string, estado?: string } = {};
+  private userData: acessoUsuariosResponse
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -40,19 +41,6 @@ export class FormContaUsuarioComponent {
   ngOnInit(): void {
     this.getProfileData();
     this.updateProfileHandle();
-    this._actions$.pipe(ofType(sendEmailChangePasswordSuccess)).subscribe(async () => {
-      this.isChangePasswordSpinnerShow = false;
-      await this.spinner.hide(this.changePasswordSpinner);
-      await this.successAlert.fire();
-    });
-  }
-
-  public async sendEmailChangePassword(): Promise<void> {
-    this.isChangePasswordSpinnerShow = true;
-    await this.spinner.show(this.changePasswordSpinner);
-    this.store.dispatch(sendEmailChangePassword({
-      email: this.userData.email,
-    }));
   }
 
   public getMessagesError(controlName: string): any {
@@ -64,8 +52,19 @@ export class FormContaUsuarioComponent {
     if (this.manageAccountForm.valid) {
       this.manageAccountForm.disable();
       await this.spinner.show(this.saveSpinner);
-      const payload = { ...this.manageAccountForm.value, codigoCompletoCidadeIbge: this.codigoCompletoCidadeIbge };
+      const [ddd, telefone] = this.manageAccountForm.get('telefone').value.split(' ');
+      const payload = {
+        ...this.manageAccountForm.value,
+        ddd: ddd.replace(/\(|\)/gi, ''),
+        telefone: telefone.replace(/\-/gi, ''),
+        cgc: this.manageAccountForm.get('cgc').value.replace(/(-|\/|\.)/gi, ''),
+        cep: this.manageAccountForm.get('cep').value.replace(/-/gi, ''),
+        codigoCompletoCidadeIbge: this.codigoCompletoCidadeIbge
+      };
+      delete payload.confirmPassword;
       this.store.dispatch(updateProfile(payload));
+    } else {
+      this.notifierService.notify('error', 'Dados inválidos!');
     }
   }
 
@@ -88,6 +87,24 @@ export class FormContaUsuarioComponent {
         this.isCepSpinnerShow = false;
         this.notifierService.notify('error', 'Erro ao buscar endereço!');
       });
+  }
+
+  public getMaskCgc(rawValue: string): (string | RegExp)[] {
+    if (rawValue.replace(/(-|\/|\.)/gi, '').length > 11) {
+      return MasksConstants.CNPJ;
+    }
+    return MasksConstants.CPF;
+  }
+
+  public resetForm(): void {
+    const { formattedCgc, formattedTel, formattedDate } = this.formatUserData();
+    const value = {
+      ...this.userData,
+      telefone: formattedTel,
+      cgc: formattedCgc,
+      dataNascimento: formattedDate,
+    }
+    this.manageAccountForm.reset(value);
   }
 
   private markFormFieldsAsTouched(): void {
@@ -128,15 +145,64 @@ export class FormContaUsuarioComponent {
     this.manageAccountForm.get('bairro').disable();
     this.manageAccountForm.get('cidade').disable();
     this.manageAccountForm.get('estado').disable();
+    this.manageAccountForm.get('perfil').disable();
+    this.manageAccountForm.get('empresa').disable();
+  }
+
+  private formatUserData(): any {
+    const formattedCgc = conformToMask(this.userData.cgc, this.getMaskCgc(this.userData.cgc), { guide: false }).conformedValue;
+    const formattedTel = conformToMask(this.userData.ddd.concat(this.userData.telefone), this.telMask, { guide: false }).conformedValue;
+    const birthdayDate = new Date(this.userData.dataNascimento);
+    const month = birthdayDate.getMonth() + 1;
+    const day = birthdayDate.getDate() + 1;
+    const formattedDate = `${birthdayDate.getFullYear()}-${(month > 9 ? '' : '0') + month}-${(day > 9 ? '' : '0') + day}`
+    return { formattedCgc, formattedTel, formattedDate };
+  }
+
+  private checkPasswords(control: AbstractControl): null {
+    const password = control.get('password');
+    const confirmPassword = control.get('confirmPassword');
+    if ((password && confirmPassword) && confirmPassword.valid && password.value !== confirmPassword.value) {
+      confirmPassword.setErrors({ mismatch: true });
+    } else if (confirmPassword.invalid && (password && !password.value)) {
+      confirmPassword.setErrors(null);
+    }
+    return null;
   }
 
   private initManageAccountForm(): void {
+    const { formattedCgc, formattedTel, formattedDate } = this.formatUserData();
+
     this.manageAccountForm = new FormGroup({
       email: new FormControl({ value: this.userData.email, disabled: true }),
       nome: new FormControl(this.userData.nome, {
         validators: Validators.required,
       }),
       sobrenome: new FormControl(this.userData.sobrenome, {
+        validators: Validators.required,
+      }),
+      cgc: new FormControl(formattedCgc, {
+        validators: Validators.compose([
+          Validators.required,
+          Validators.pattern('([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})')
+        ]),
+      }),
+      telefone: new FormControl(formattedTel, {
+        validators: Validators.compose([
+          Validators.required,
+          Validators.pattern('[(]?[1-9]{2}[)]? [9]{0,1}[6-9]{1}[0-9]{3}[-]?[0-9]{4}')
+        ]),
+      }),
+      cargo: new FormControl(this.userData.cargo, {
+        validators: Validators.required,
+      }),
+      dataNascimento: new FormControl(formattedDate, {
+        validators: Validators.required,
+      }),
+      perfil: new FormControl({ value: this.userData.perfil, disabled: true }, {
+        validators: Validators.required,
+      }),
+      empresa: new FormControl({ value: this.userData.empresa, disabled: true }, {
         validators: Validators.required,
       }),
       cep: new FormControl(conformToMask(this.userData.cep, this.cepMask, { guide: false }).conformedValue, {
@@ -171,6 +237,14 @@ export class FormContaUsuarioComponent {
           Validators.required,
         ]),
       }),
+      password: new FormControl(null, {
+        validators: Validators.minLength(8),
+      }),
+      confirmPassword: new FormControl(null, {
+        validators: Validators.minLength(8),
+      }),
+    }, {
+      validators: this.checkPasswords
     });
   }
 }

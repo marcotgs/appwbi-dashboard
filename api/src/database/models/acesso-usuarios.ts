@@ -30,8 +30,8 @@ const acessoUsuariosModelInit = (sequelize: Sequelize): acessoUsuariosModelStati
 			field: 'email'
 		},
 		'password': {
-			type: DataTypes.STRING(40),
-			allowNull: false,
+			type: DataTypes.STRING,
+			allowNull: true,
 			comment: "null",
 			field: 'password'
 		},

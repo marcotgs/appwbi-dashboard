@@ -1,17 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Response } from 'express';
 import sha256 from 'crypto-js/sha256';
 import jwt from 'jsonwebtoken';
 import SendGrid from '@sendgrid/mail';
 import { Post, Res, JsonController, Body, Put, Authorized, CurrentUser, Get } from 'routing-controllers';
-import Database from '@api/database';
 import { AcessoUsuariosRepository } from '@api/database/repositories/acesso-usuarios';
 import { LoginBody, ChangePasswordBody, SendEmailChangePasswordBody } from '@api/classes';
 import { BodyValidator } from '@api/classes';
 import BaseController from '@api/controllers/base-controller.class';
-import { ApiResponseErrors, LoginResponse } from '@api/interfaces';
+import { ApiResponseErrors, LoginResponse, acessoUsuariosResponse } from '@shared/interfaces';
 import logger from '@api/util/logger';
-import { acessoUsuariosModel, municipioModel, estadoModel } from '@api/database/models';
+import { acessoUsuariosModel, municipioModel, empresaModel, estadoModel, acessoNiveisPermissaoModel } from '@api/database/models';
 import { MunicipioRepository } from '@api/database/repositories/municipio';
+import Database from '@api/database';
 
 
 /**
@@ -50,8 +51,8 @@ export default class UserController extends BaseController {
      */
     public constructor() {
         super();
-        this.acessoUsuariosRepository = new AcessoUsuariosRepository(Database.context);
-        this.municipioRepository = new MunicipioRepository(Database.context);
+        this.acessoUsuariosRepository = new AcessoUsuariosRepository();
+        this.municipioRepository = new MunicipioRepository();
     }
 
     /**
@@ -75,7 +76,6 @@ export default class UserController extends BaseController {
             }
 
             try {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const payload: any = jwt.verify(body.resetPasswordToken, process.env.JWT_SECRET);
                 const userData = await this.acessoUsuariosRepository.findByEmail(payload.email);
                 if (!userData) {
@@ -233,27 +233,48 @@ export default class UserController extends BaseController {
         @CurrentUser() userId?: number,
     ): Promise<Response> {
         try {
-            const userData = await this.acessoUsuariosRepository.findById(userId);
-
-            let cityData: any = { estado: { sigla: null }, nome: null, codigoCompletoCidadeIbge: null };
-            if (userData.idMunicipio) {
-                cityData = await this.municipioRepository.findById(userData.idMunicipio);
-            }
-
-            const result: any = {
-                ...userData.toJSON(),
-                cidade: cityData.nome,
-                codigoCompletoCidadeIbge: cityData.codigoCompletoCidadeIbge,
-                estado: cityData.estado.sigla
+            const userData = await this.acessoUsuariosRepository.findById(
+                userId,
+                {
+                    attributes: [
+                        'nome', 'sobrenome', 'email', 'ddd', 'telefone',
+                        'endereco', 'numero', 'complemento', 'bairro', 'cep',
+                        'dataNascimento', 'cargo', 'cgc'
+                    ],
+                    include: [
+                        { model: Database.models.empresa },
+                        { model: Database.models.acessoNiveisPermissao },
+                        {
+                            model: Database.models.municipio,
+                            include: [
+                                {
+                                    model: Database.models.estado,
+                                }
+                            ],
+                        }
+                    ],
+                }
+            ) as acessoUsuariosModel & {
+                municipio: municipioModel & { estado: estadoModel };
+                acessoNiveisPermissao: acessoNiveisPermissaoModel;
+                empresa: empresaModel;
             };
 
-            delete result.password;
-            delete result.idNiveisPermissao;
-            delete result.id;
-            delete result.passwordSalt;
-            delete result.resetPasswordToken;
+            const userDataJSON = userData.toJSON() as any;
 
-            return this.sendResponse(res, 200, result);
+            const result: acessoUsuariosResponse = {
+                cidade: userData.municipio.nome,
+                codigoCompletoCidadeIbge: userData.municipio.codigoCompletoCidadeIbge,
+                estado: userData.municipio.estado.sigla,
+                perfil: userData.acessoNiveisPermissao.descricao,
+                empresa: userData.empresa.nome,
+            };
+
+            delete userDataJSON.municipio;
+            delete userDataJSON.acessoNiveisPermissao;
+            delete userDataJSON.empresa;
+
+            return this.sendResponse(res, 200, { ...result, ...userDataJSON });
         } catch (ex) {
             logger.error(`Erro na requisição de getUserProfile. Erro -> ${ex}`);
             return this.sendResponse(res, 500);
@@ -273,7 +294,7 @@ export default class UserController extends BaseController {
     @Authorized()
     @Post('/profile')
     public async updateProfile(
-        @Body() body: acessoUsuariosModel & municipioModel,
+        @Body() body: acessoUsuariosResponse,
         @Res() res: Response,
         @CurrentUser() userId?: number,
     ): Promise<Response> {
@@ -285,6 +306,10 @@ export default class UserController extends BaseController {
 
             if ((body.id && body.id !== userData.id) || body.email !== userData.email) {
                 return this.sendResponse(res, 400);
+            }
+
+            if (body.password) {
+                body.password =  sha256(`${userData.passwordSalt}${body.password}`).toString();
             }
 
             const mergeData = { ...userData.toJSON(), ...body };
@@ -302,7 +327,7 @@ export default class UserController extends BaseController {
         }
     }
 
-    private generateToken(userData: acessoUsuariosModel): { token: string; expirationDate: Date } {
+    private generateToken(userData: acessoUsuariosModel | acessoUsuariosResponse): { token: string; expirationDate: Date } {
         const token = jwt.sign({
             email: userData.email,
             nome: userData.nome,

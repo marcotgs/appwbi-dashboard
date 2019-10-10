@@ -6,7 +6,7 @@ import { Actions, ofType } from '@ngrx/effects';
 import validationMessages from '@app/constants/form-validation/form-validation.constants';
 import { Store } from '@ngrx/store';
 import { UserState, getUserState, loginError, login } from '@app/store/user';
-import { ApiResponseError } from '@app/api/interfaces';
+import { ApiResponseError } from '@shared/interfaces';
 import { AuthService } from '@app/services';
 
 @Component({

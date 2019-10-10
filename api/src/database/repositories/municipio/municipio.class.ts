@@ -1,9 +1,7 @@
-import { Sequelize } from 'sequelize/types';
-import { Repository } from '@api/database/repositories';
 import logger from '@api/util/logger';
-import { municipioModelStatic } from '@api/database/models';
-import municipioModelInit, { municipioModel } from '@api/database/models/municipio';
 import Database from '@api/database';
+import { municipioModelStatic } from '@api/database/models';
+import { municipioModel } from '@api/database/models/municipio';
 import estadoModelInit, { estadoModel } from '@api/database/models/estado';
 
 
@@ -12,9 +10,8 @@ import estadoModelInit, { estadoModel } from '@api/database/models/estado';
  *
  * @export
  * @class MunicipioRepository
- * @extends {Repository}
  */
-export default class MunicipioRepository extends Repository {
+export default class MunicipioRepository {
 
     /**
      * Dados do modelo da tabela.
@@ -27,12 +24,10 @@ export default class MunicipioRepository extends Repository {
 
     /**
      * Inicia a classe e model da tabela.
-     * @param {Sequelize} sequelize
      * @memberof MunicipioRepository
      */
-    public constructor(sequelize: Sequelize) {
-        super(sequelize);
-        this.municipioModel = this.addAssociations();
+    public constructor() {
+        this.municipioModel = Database.models.municipio;
     }
 
 
@@ -70,17 +65,4 @@ export default class MunicipioRepository extends Repository {
             throw ex;
         }
     };
-
-    private addAssociations(): municipioModelStatic {
-        const municipio = municipioModelInit(this.databaseContext);
-        const estado = estadoModelInit(this.databaseContext);
-        estado.hasMany(municipio, {
-            foreignKey: 'id_estado',
-        });
-        municipio.belongsTo(estado, {
-            foreignKey: 'id_estado',
-        });
-        return municipio;
-    }
-
 };

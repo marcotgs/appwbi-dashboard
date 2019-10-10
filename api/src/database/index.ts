@@ -1,9 +1,12 @@
 import { Sequelize } from 'sequelize';
 import logger from '@api/util/logger';
+import addAssociations from './associations';
 
 export default class Database {
 
     public static context: Sequelize;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    public static models: any;
 
     public static async  connect(): Promise<Sequelize> {
         const sequelize = new Sequelize(process.env['DB_SERVER_DATABASE'], process.env['DB_SERVER_USERNAME'], process.env['DB_SERVER_PASSWORD'], {
@@ -13,6 +16,7 @@ export default class Database {
         try {
             await sequelize.authenticate();
             this.context = sequelize;
+            this.models = addAssociations(sequelize);
             logger.debug('Conexão com o banco de dados estabelecida com sucesso.');
             return sequelize;
         } catch (err) {

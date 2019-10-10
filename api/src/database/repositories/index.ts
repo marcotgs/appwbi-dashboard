@@ -1,1 +1,2 @@
-export { default as Repository } from "./repository.class";
+export * from './acesso-usuarios';
+export * from './municipio';

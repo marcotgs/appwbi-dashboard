@@ -1,16 +1,16 @@
-import { Sequelize } from 'sequelize/types';
-import { Repository } from '@api/database/repositories';
-import acessoUsuariosModelInit, { acessoUsuariosModelStatic, acessoUsuariosModel } from '@api/database/models/acesso-usuarios';
+import { FindOptions } from 'sequelize/types';
+import { Sequelize } from 'sequelize';
+import { acessoUsuariosModelStatic, acessoUsuariosModel } from '@api/database/models/acesso-usuarios';
 import logger from '@api/util/logger';
+import Database from '@api/database';
 
 /**
  * Essa classe é um repositorio com os método que acessam a tabela `acesso_usuarios`.
  *
  * @export
  * @class AcessoUsuariosRepository
- * @extends {Repository}
  */
-export default class AcessoUsuariosRepository extends Repository {
+export default class AcessoUsuariosRepository {
 
     /**
      * Dados do modelo da tabela.
@@ -23,12 +23,10 @@ export default class AcessoUsuariosRepository extends Repository {
 
     /**
      * Inicia a classe e model da tabela.
-     * @param {Sequelize} sequelize
      * @memberof AcessoUsuariosRepository
      */
-    public constructor(sequelize: Sequelize) {
-        super(sequelize);
-        this.acessoUsuariosModel = acessoUsuariosModelInit(this.databaseContext);
+    public constructor() {
+        this.acessoUsuariosModel = Database.models.acessoUsuarios;
     }
 
     /**
@@ -38,9 +36,9 @@ export default class AcessoUsuariosRepository extends Repository {
      * @returns {Promise<acessoUsuariosModel>}
      * @memberof AcessoUsuariosRepository
      */
-    public async findById(id: number): Promise<acessoUsuariosModel> {
+    public async findById(id: number, options: Omit<FindOptions, 'where'> = {} ): Promise<acessoUsuariosModel> {
         try {
-            return await this.acessoUsuariosModel.findByPk(id);
+            return await this.acessoUsuariosModel.findByPk(id, options);
         } catch (ex) {
             logger.error(`Erro ao realizar consulta no repository :'AcessoUsuarios'-> 'findById'. Error: ${ex}`);
             throw ex;
@@ -145,9 +143,9 @@ export default class AcessoUsuariosRepository extends Repository {
       */
     public async updateUser(data: object): Promise<void> {
         try {
-            delete (data as acessoUsuariosModel).dataNascimento;
             await this.acessoUsuariosModel.update({
                 ...data,
+                dataNascimento: Sequelize.cast(new Date((data as acessoUsuariosModel).dataNascimento), 'DATETIMEOFFSET'),
             },
             {
                 where: {

@@ -1,5 +1,5 @@
-import { acessoUsuariosModel } from '@app/api/interfaces';
+import { acessoUsuariosResponse } from "@shared/interfaces";
 
 export interface UserState {
-    user?: acessoUsuariosModel
+    user?: acessoUsuariosResponse
 }

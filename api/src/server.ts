@@ -14,7 +14,6 @@ import { UserController } from '@api/controllers';
 import Passaport from '@api/util/passport';
 import express from 'express';
 
-
 Config.init();
 
 let server: any;
@@ -42,8 +41,7 @@ Database.connect().
                 return Number(payload.sub);
             }
         });
-
-        const root = './';
+        
         app.set('port', process.env.PORT || 3000); // porta
         app.use(express.static(path.join(__dirname, '../..', 'client/dist/dashboard')));
 

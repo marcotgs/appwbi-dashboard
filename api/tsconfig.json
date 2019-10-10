@@ -9,14 +9,18 @@
         "noImplicitAny": true,
         "sourceMap": true,
         "outDir": "./dist",
-        "baseUrl": "./src",
+        "baseUrl": ".",
         "paths": {
             "@api/*": [
-                "./*"
+                "./src/*"
+            ],
+            "@shared/*": [
+                "../shared/*"
             ]
         }
     },
     "include": [
-        "src/**/*"
+        "src/**/*",
+        "../shared/**/*"
     ]
 }

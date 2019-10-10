@@ -18,7 +18,7 @@ const auto = new SequelizeAuto(process.env['DB_SERVER_DATABASE'], process.env['D
         timestamps: false
     },
     typescript: true,
-    tables: ['acesso_empresas', 'acesso_filiais', 'acesso_niveis_permissao', 'acesso_usuarios', 'municipio', 'estado']
+    tables: ['empresa', 'acesso_niveis_permissao', 'acesso_usuarios', 'municipio', 'estado']
 });
 
 auto.run((err: string): void => {

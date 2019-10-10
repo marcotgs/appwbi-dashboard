@@ -10,6 +10,7 @@ const validationMessages: FormValidationMessages = {
         { type: 'minlength', message: 'A senha precisa ter no mínimo 8 caracteres.' },
     ],
     confirmPassword: [
+        { type: 'minlength', message: 'A senha precisa ter no mínimo 8 caracteres.' },
         { type: 'mismatch', message: 'As senhas não coincidem.' },
         { type: 'required', message: 'O campo confirmação de senha é obrigatório.' },
     ],

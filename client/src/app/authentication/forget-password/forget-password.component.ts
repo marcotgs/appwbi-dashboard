@@ -4,7 +4,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Actions, ofType } from '@ngrx/effects';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
-import { ApiResponseError } from '@app/api/interfaces';
+import { ApiResponseError } from '@shared/interfaces';
 import { NgxSpinnerService } from 'ngx-spinner';
 import validationMessages from '@app/constants/form-validation/form-validation.constants';
 import {
