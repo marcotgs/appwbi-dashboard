@@ -1,0 +1,76 @@
+<div class="card">
+    <div class="card-body">
+        <!-- title -->
+        <div class="d-md-flex align-items-center m-b-40">
+            <div>
+                <h4 class="card-title">Place your Order</h4>
+                <h5 class="card-subtitle">Buy and Sell Crypto as you Like</h5>
+            </div>
+            <div class="ml-auto d-flex align-items-center">
+                <div class="dl">
+                    <select class="custom-select">
+                        <option value="0" selected>Bitcoin</option>
+                        <option value="1">Ethereum</option>
+                        <option value="2">Ripple</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <ngb-tabset type="pills" class="custom-pills">
+            <ngb-tab title="Buy">
+                <ng-template ngbTabContent>
+                    <form class="m-t-20">
+                        <div class="form-group">
+                            <div class="input-group input-group-lg">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="cc BTC"></i>
+                                    </span>
+                                </div>
+                                <input type="text" class="form-control" placeholder="Amount">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group input-group-lg">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">$</span>
+                                </div>
+                                <input type="text" class="form-control" placeholder="Price">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn waves-effect waves-light btn-info">Buy Bitcoin</button>
+                        </div>
+                    </form>
+                </ng-template>
+            </ngb-tab>
+            <ngb-tab title="Sell">
+                <ng-template ngbTabContent>
+                    <form class="m-t-20">
+                        <div class="form-group">
+                            <div class="input-group input-group-lg">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="cc BTC"></i>
+                                    </span>
+                                </div>
+                                <input type="text" class="form-control" placeholder="Amount">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group input-group-lg">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">$</span>
+                                </div>
+                                <input type="text" class="form-control" placeholder="Price">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn waves-effect waves-light btn-success">Sell Bitcoin</button>
+                        </div>
+                    </form>
+                </ng-template>
+            </ngb-tab>
+        </ngb-tabset>
+    </div>
+</div>

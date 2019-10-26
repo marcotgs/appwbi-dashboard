@@ -1,0 +1,81 @@
+<div class="email-container pr-3 pl-3">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 bg-info">
+
+            <h3 class="mb-0 mt-3 text-white"> Mailbox <a class="text-white float-right custom-control-button" (click)="openClleft()" href="javascript:void(0)"><i class="ti-menu"></i></a> </h3>
+        </div>
+        <div class="col-sm-9 col-md-10 bg-info">
+            <div class="pb-3 pt-3 d-flex align-items-center">
+            <div class="b-btn mr-1" [style.display]="(id || !type) ? 'inline-block' : 'none'" data-toggle="tooltip" data-placement="top" data-animation="false" title="Back to {{type}}">               
+                <button (click)="getBack()" type="button" class="btn btn-dark btn-sm">
+                    <i class="fa fa-arrow-left"></i>
+                </button>
+            </div> 
+            
+            <div class="b-btn mr-1" *ngIf="id" data-toggle="tooltip" data-placement="top" data-animation="false" title="Delete">               
+                <button (click)="trash()" type="button" class="btn btn-dark btn-sm">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </div> 
+         
+            <div class="b-btn mr-1" [style.display]="(router.url == '/apps/email/mail-compose' || id) ? 'none' : 'inline-block'" data-toggle="tooltip" data-placement="top" data-animation="false" title="Refresh">
+                <button type="button" class="btn btn-dark btn-sm"><span class="fas fa-sync-alt"></span></button>
+            </div> 
+
+            <div ngbDropdown class="btn-group" [style.display]="(router.url == '/apps/email/mail-compose') ? 'none' : 'block'">                   
+                <button class="btn btn-warning btn-sm" type="button" ngbDropdownToggle aria-controls="dropdown-basic">
+                    More
+                </button>
+                <div class="" id="dropdown-basic" ngbDropdownMenu>
+                    <a class="dropdown-item" href="javascript:void(0);" (click)="setAsRead()">Mark as read</a>
+                    <a class="dropdown-item" href="javascript:void(0);" (click)="setAsUnRead()">Mark as unread</a>
+                    <a class="dropdown-item" href="javascript:void(0);" (click)="deleteCheckedMail()">Delete</a>
+                </div>
+            </div>
+            
+            <div class="ml-auto">
+                <span class="mr-1 text-white"><b>1</b>–<b>50</b> of <b>50</b></span>
+                <div class="btn-group btn-group-sm">
+                    <button type="button" class="btn btn-dark">
+                        <span class="fa fa-chevron-left"></span>
+                    </button>
+                    <button type="button" class="btn btn-dark">
+                        <span class="fa fa-chevron-right"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2 bg-white border-right">
+            <div class="inbox-panel" [ngClass]="status ? 'showlpanel' : ''">
+              
+            <a [routerLink]="['mail-compose']" class="btn btn-danger btn-sm btn-block mt-3" role="button">COMPOSE</a>
+            
+            <ul class="list-group mt-3 custom-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center"><a [routerLink]="['mail-list/inbox']"> Inbox </a><span class="badge badge-info badge-pill">3</span></li>
+                <li class="list-group-item"><a [routerLink]="['mail-list/starred']">Starred</a></li>                
+                <li class="list-group-item"><a [routerLink]="['mail-list/sent']">Sent Mail</a></li>
+                <li class="list-group-item d-flex justify-content-between align-items-center"><a [routerLink]="['mail-list/drafts']">Drafts</a><span class="badge badge-info badge-pill">2</span></li>           
+                <li class="list-group-item"><a [routerLink]="['mail-list/trash']">Trash</a></li>
+            </ul>
+            <hr/>
+            <ul class="list-group custom-group">
+                <li class="list-group-item"><span class="fa fa-circle text-danger mr-1"></span><a href="#">Notes</a></li>
+                <li class="list-group-item"><span class="fa fa-circle text-warning mr-1"></span><a href="#">Personal</a></li>
+                <li class="list-group-item"><span class="fa fa-circle text-info mr-1"></span><a href="#">Travel</a></li>                   
+                
+            </ul>
+            </div>          
+        </div>
+        <div class="col-md-10 bg-light">
+            <div class="inbox-right-panel">
+                <router-outlet></router-outlet>
+            </div>            
+        </div>
+    </div>
+
+
+</div>
+

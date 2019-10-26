@@ -1,0 +1,19 @@
+#visitor {
+	height:267px; 
+	width:100%;
+}
+
+.barchrt {
+	height: 257px;
+}
+
+#sales {
+	height:115px; 
+	width:115px;
+}
+
+#foo {
+	width: 150px; 
+	height: 80px; 
+	float: right;
+}

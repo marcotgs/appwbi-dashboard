@@ -1,0 +1,1 @@
+export { default as AcessoUsuariosRepository } from './acesso-usuarios.class';

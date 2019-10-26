@@ -1,0 +1,139 @@
+<!-- ============================================================== -->
+<!-- Left Part  -->
+<!-- ============================================================== -->
+<div class="left-part bg-white fixed-left-part" style="overflow: hidden" [ngClass]="{'show-panel': showSidebar}">
+    <!-- Mobile toggle button -->
+    <a [ngClass]="(showSidebar)?'ti-close':'ti-menu'" class="btn btn-success show-left-part d-block d-md-none" href="javascript:void(0)"
+        (click)="mobileSidebar()"></a>
+    <!-- Mobile toggle button -->
+    <div class="position-relative" style="height:100%;">
+        <div class="p-l-15 p-r-25 p-t-25 p-b-25 d-flex align-items-center">
+            <div>
+                <img src="assets/images/users/8.jpg" width="45" alt="user" class="rounded-circle">
+            </div>
+            <div class="text-dark m-b-0 m-l-15 font-18">
+                Bruce Banner
+                <p class="m-b-0 font-12">
+                    <i class="fa fa-circle text-success font-10 m-r-5"></i>
+                    <span>Online</span>
+                </p>
+            </div>
+        </div>
+        <hr class="m-t-0">
+        <ul class="mailbox list-style-none">
+            <li>
+                <div class="message-center" style="height: calc(100vh - 215px);" [perfectScrollbar]="config">
+                    <a (click)="onSelect(user)" *ngFor="let user of users" href="javascript:void(0)" class="message-item" id='chat_user_1'>
+                        <span class="user-img">
+                            <img src="{{user.avtar}}" alt="user" class="rounded-circle">
+                            <span class="profile-status {{user.status}} pull-right"></span>
+                        </span>
+                        <div class="mail-contnet">
+                            <h5 class="message-title">{{user.name}}</h5>
+                            <span class="mail-desc">{{user.lastmsg}}</span>
+                            <span class="time">{{user.time}}</span>
+                        </div>
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+<!-- ============================================================== -->
+<!-- End Left Part  -->
+<!-- ============================================================== -->
+<!-- ============================================================== -->
+<!-- Right Part  Mail Compose -->
+<!-- ============================================================== -->
+<div class="right-part">
+    <div class="card">
+        <div class="p-l-20 p-r-25 p-t-25 p-b-25 bg-info d-flex align-items-center">
+            <div>
+                <img src="{{selectedUser.avtar}}" width="45" alt="user" class="rounded-circle">
+            </div>
+            <div class="text-white m-b-0 m-l-15 font-18">{{selectedUser.name}}</div>
+            <div class="ml-auto">
+                <div ngbDropdown placement="bottom-right">
+                    <a ngbDropdownToggle class="text-white" href="javascript: void(0)" id="dropdownMenuLink">
+                        <i class="mdi mdi-dots-vertical font-20"></i>
+                    </a>
+                    <div ngbDropdownMenu>
+                        <a class="dropdown-item" href="#">Contact Info</a>
+                        <a class="dropdown-item" href="#">Mute Chat</a>
+                        <a class="dropdown-item" href="#">Delete Chat</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-t-0 p-r-0">
+            <div class="chat-box p-r-15" style="height:calc(100vh - 300px); position: relative;" [perfectScrollbar]="config">
+                <!--chat Row -->
+                <ul class="chat-list">
+                    <!--chat Row -->
+                    <li class="chat-item">
+                        <div class="chat-img">
+                            <img src="{{selectedUser.avtar}}" alt="user">
+                        </div>
+                        <div class="chat-content">
+                            <h6 class="font-medium">{{selectedUser.name}}</h6>
+                            <div class="box bg-light-info">Lorem Ipsum is simply dummy text of the printing &amp; type setting industry.</div>
+                        </div>
+                        <div class="chat-time">10:56 am</div>
+                    </li>
+                    <!--chat Row -->
+                    <li class="chat-item">
+                        <div class="chat-img">
+                            <img src="{{selectedUser.avtar}}" alt="user">
+                        </div>
+                        <div class="chat-content">
+                            <h6 class="font-medium">{{selectedUser.name}}</h6>
+                            <div class="box bg-light-info">It’s Great opportunity to work.</div>
+                        </div>
+                        <div class="chat-time">10:57 am</div>
+                    </li>
+                    <!--chat Row -->
+                    <li class="odd chat-item">
+                        <div class="chat-content">
+                            <div class="box bg-light-inverse">I would love to join the team.</div>
+                            <br>
+                        </div>
+                    </li>
+                    <!--chat Row -->
+                    <li class="odd chat-item">
+                        <div class="chat-content">
+                            <div class="box bg-light-inverse">Whats budget of the new project.</div>
+                            <br>
+                        </div>
+                        <div class="chat-time">10:59 am</div>
+                    </li>
+                    <!--chat Row -->
+                    <li class="chat-item">
+                        <div class="chat-img">
+                            <img src="{{selectedUser.avtar}}" alt="user">
+                        </div>
+                        <div class="chat-content">
+                            <h6 class="font-medium">{{selectedUser.name}}</h6>
+                            <div class="box bg-light-info">Well we have good budget for the project</div>
+                        </div>
+                        <div class="chat-time">11:00 am</div>
+                    </li>
+                    <!--chat Row -->
+                </ul>
+            </div>
+        </div>
+        <div class="card-body border-top">
+            <div class="row">
+                <div class="col-9">
+                    <div class="input-field m-t-0 m-b-0">
+                        <input id="textarea1" placeholder="Type and enter" class="form-control border-0" type="text">
+                    </div>
+                </div>
+                <div class="col-3">
+                    <a class="btn-circle btn-lg btn-cyan float-right text-white" href="javascript:void(0)">
+                        <i class="fas fa-paper-plane"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

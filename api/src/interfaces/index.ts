@@ -1,0 +1,1 @@
+export { default as ValidationMessage } from "./validation-message.interface";

@@ -1,0 +1,45 @@
+<div *ngIf="mail">  
+    <div class="card-body">
+        <h4 class="mb-3">{{mail.subject}}</h4>
+        
+        <div class="d-flex mt-4 mb-4">
+            <div class="round mr-2 flex-shrink-0">
+                <i class="fa fa-user" aria-hidden="true"></i>
+            </div>
+            <div class="">
+                <span class="font-bold">{{mail.sender}}</span>
+                <span *ngIf="mail.senderMail" class="email text-truncate d-block w-75">&lt;{{mail.senderMail}}&gt;</span>
+                <span class="receiver">to me</span>
+            </div>
+
+            <div class="ml-auto">
+                <span class="mail-date"> {{mail.date}} </span>
+                
+            </div>
+        </div>
+        <div [innerHTML]="mail.body" class="mailbox-body"></div>
+
+        <div class="mail-attachments" *ngIf="mail.attachments.length > 0">
+            <hr/>
+            <div class="row">
+                <div class="col-sm-6">                    
+                    <p>
+                        <strong>{{mail.attachments.length}} attachments</strong> &nbsp;-&nbsp; 
+                        <a href="#">Download all attachments</a>&nbsp;&nbsp;&nbsp;
+                        <a href="#">View all Images</a>
+                    </p>
+                    <section *ngFor="let attachment of mail.attachments; let i = index" class="attachment">
+                        <img src="{{attachment}}" alt="">
+                        <h5 class="title">image-{{i + 1}}.jpg</h5>
+                        <p>
+                            457K  &nbsp;&nbsp;
+                            <a href="#">View</a> &nbsp;&nbsp;
+                            <a href="#">Download</a>
+                        </p>
+                    </section>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

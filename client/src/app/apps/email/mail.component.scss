@@ -1,0 +1,63 @@
+.email-container{
+        overflow:hidden;
+
+.unread{
+   font-weight:800; 
+}
+.mail-star .fa-star{
+    color:#f9a913;
+}
+.inbox-right-panel, .inbox-panel {
+    min-height: calc(100vh - 300px);
+}
+.inbox-right-panel{
+    margin: 0 -10px;
+    .table tr{
+        cursor:pointer;
+    }
+}
+.subject, .sender{
+    max-width:350px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+.sender{
+    max-width:150px;
+}
+.custom-control-button{
+    display:none;
+}
+
+.width-50 {
+	width: 50px;
+}
+.custom-group{
+    .list-group-item{
+        border:0px;
+        padding:0.75rem 0.25rem;
+            a {
+                color: #3E556A;
+            }
+        }
+    }
+    @media (max-width: 767px) {
+            .inbox-panel{
+                position: absolute;
+                width: 200px;
+                min-height: 100%;
+                height: 100%;
+                background: white;
+                left: -202px;
+                z-index: 10;
+                box-shadow:0 2px 20px rgba(0, 0, 0, 0.1);
+                padding:0 10px;
+                &.showlpanel{
+                    left:0px;
+                }
+            }
+
+            .custom-control-button{
+                display:block;
+            }
+        }
+}

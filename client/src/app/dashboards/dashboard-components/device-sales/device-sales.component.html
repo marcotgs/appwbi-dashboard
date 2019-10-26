@@ -1,0 +1,70 @@
+<!-- ============================================================== -->
+<!-- Devices - Income - Sales -->
+<!-- ============================================================== -->
+<div class="row m-t-30">
+    <!-- col -->
+    <div class="col-sm-12 col-lg-4">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Device Variations</h4>
+                <div id="visitor" class="m-t-20"></div>
+                <ul class="list-inline text-center">
+                    <li class="list-inline-item">
+                        <i class="fa fa-circle text-info"></i> Mobiles</li>
+                    <li class="list-inline-item">
+                        <i class="fa fa-circle text-cyan"></i> Desktops</li>
+                    <li class="list-inline-item">
+                        <i class="fa fa-circle text-orange"></i> Tablets</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- col -->
+    <div class="col-sm-12 col-lg-4">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Net Income</h4>
+                <div class="barchrt m-t-30">
+                    <x-chartist class="net-income" [data]="barChart.data" [type]="barChart.type" [options]="barChart.options" [responsiveOptions]="barChart.responsiveOptions"
+                        [events]="barChart.events"> </x-chartist>
+                </div>
+                <ul class="list-inline text-center">
+                    <li class="list-inline-item">
+                        <i class="fa fa-circle text-info"></i> Net Income</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- col -->
+    <div class="col-sm-12 col-lg-4">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Sales Performance</h4>
+                <div class="row">
+                    <div class="col-6 m-t-40">
+                        <h2 class="m-b-5">$4316</h2>
+                        <span>(150-165 sales)</span>
+                    </div>
+                    <div class="col-6">
+                        <div id="sales" class="ml-auto">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Monthly Sales</h4>
+                <div class="row">
+                    <div class="col-6 m-t-40">
+                        <h2 class="m-b-5">$3528</h2>
+                        <span>(150-165 sales)</span>
+                    </div>
+                    <div class="col-6">
+                        <div id="foo"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,81 @@
+<div class="card poll-widget">
+    <div class="card-body">
+        <h4 class="card-title">Result of Poll</h4>
+        <h5 class="card-subtitle">Here is the result for the latest poll</h5>
+        <p class="font-bold text-muted">What is your mobile app usage daily?</p>
+        <ul class="list-style-none m-t-30">
+            <li>
+                <div class="d-flex align-items-center m-b-10">
+                    <div>
+                        <h6 class="m-b-0 font-bold">A
+                            <span class="font-light">30 Minutes</span>
+                        </h6>
+                    </div>
+                    <div class="ml-auto">
+                        <h6 class="m-b-0 font-bold">55%</h6>
+                    </div>
+                </div>
+                <ngb-progressbar type="info" [value]="25"></ngb-progressbar>
+            </li>
+            <li class="m-t-25">
+                <div class="d-flex align-items-center m-b-10">
+                    <div>
+                        <h6 class="m-b-0 font-bold">B
+                            <span class="font-light">More than 30 minutes</span>
+                        </h6>
+                    </div>
+                    <div class="ml-auto">
+                        <h6 class="m-b-0 font-bold">20%</h6>
+                    </div>
+                </div>
+                <ngb-progressbar type="cyan" [value]="25"></ngb-progressbar>
+            </li>
+            <li class="m-t-25">
+                <div class="d-flex align-items-center m-b-10">
+                    <div>
+                        <h6 class="m-b-0 font-bold">C
+                            <span class="font-light">1 Hour</span>
+                        </h6>
+                    </div>
+                    <div class="ml-auto">
+                        <h6 class="m-b-0 font-bold">15%</h6>
+                    </div>
+                </div>
+                <ngb-progressbar type="success" [value]="25"></ngb-progressbar>
+            </li>
+            <li class="m-t-25">
+                <div class="d-flex align-items-center m-b-10">
+                    <div>
+                        <h6 class="m-b-0 font-bold">D
+                            <span class="font-light">More than 1 hour</span>
+                        </h6>
+                    </div>
+                    <div class="ml-auto">
+                        <h6 class="m-b-0 font-bold">10%</h6>
+                    </div>
+                </div>
+                <ngb-progressbar type="danger" [value]="25"></ngb-progressbar>
+            </li>
+        </ul>
+        <div class="row center-align m-t-40">
+            <!-- column -->
+            <div class="col s6 l6">
+                <div id="poll" class="m-t-20"></div>
+            </div>
+            <!-- column -->
+            <div class="col s6 l6">
+                <ul class="list-style-none">
+                    <li class="m-t-20">
+                        <i class="fa fa-circle m-r-5 text-cyan font-12"></i> Ans A Here</li>
+                    <li class="m-t-20">
+                        <i class="fa fa-circle m-r-5 text-info font-12"></i> Ans B Here </li>
+                    <li class="m-t-20">
+                        <i class="fa fa-circle m-r-5 text-orange font-12"></i> Ans C Here </li>
+                    <li class="m-t-20">
+                        <i class="fa fa-circle m-r-5 text-success font-12"></i> Ans D Here</li>
+                </ul>
+            </div>
+            <!-- column -->
+        </div>
+    </div>
+</div>
