@@ -12,7 +12,7 @@
                 <form class="form-horizontal striped-rows b-form" (ngSubmit)="formSubmit()"
                     [formGroup]="manageAccountForm" id="manageAccountForm">
                     <div class="card-body">
-                        <h4 class="card-title">Informações Pessoais</h4>
+                        <h4 class="card-title">Informações</h4>
                         <div class="form-group row">
                             <div class="col-sm-3">
                                 <div class="b-label">
@@ -253,6 +253,17 @@
                                     placeholder="perfil">
                             </div>
                         </div>
+                        <div class="form-group row">
+                                <div class="col-sm-3">
+                                    <div class="b-label">
+                                        <label for="perfil" class="control-label col-form-label">Setor</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" id="setor"
+                                        placeholder="Setor">
+                                </div>
+                            </div>
                     </div>
                     <div class="card-body">
                         <h4 class="card-title">Alterar Senha</h4>
@@ -295,13 +306,13 @@
                     </div>
                     <div class="card-body">
                         <div class="form-group m-b-0 text-right">
-                            <button type="button" class="btn btn-secondary waves-effect waves-light" (click)="resetForm()">Cancelar</button>
                             <button type="submit" class="btn btn-info waves-effect waves-light">
                                 <span *ngIf="!manageAccountForm.disabled">Salvar</span>
                                 <ngx-spinner [name]="saveSpinner" bdColor="transparent" size="default" color="#fff"
                                     type="ball-beat" [fullScreen]="false">
                                 </ngx-spinner>
                             </button>
+                            <button type="button" class="btn btn-secondary waves-effect waves-light" (click)="resetForm()">Cancelar</button>
                         </div>
                     </div>
                 </form>

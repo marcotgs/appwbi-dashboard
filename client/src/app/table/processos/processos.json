@@ -1,0 +1,107 @@
+[
+  {
+    "descricao": "Metas X Faturamento",
+    "modulo": "Faturamento",
+    "rotina": "Gráficos",
+    "permissao": "Usuário",
+    "controles": "visualizar, alterar, excluir"
+  },
+  {
+    "descricao": "Metas X Rota",
+    "modulo": "Faturamento",
+    "rotina": "Gráficos",
+    "permissao": "Usuário",
+    "controles": "visualizar, alterar, excluir"
+  },
+  {
+    "descricao": "Metas X Vendedor",
+    "modulo": "Faturamento",
+    "rotina": "Gráficos",
+    "permissao": "Usuário",
+    "controles": "visualizar, alterar, excluir"
+  },
+  {
+    "descricao": "Faturamento X Devolução",
+    "modulo": "Faturamento",
+    "rotina": "Gráficos",
+    "permissao": "Usuário",
+    "controles": "visualizar, alterar, excluir"
+  },
+  {
+    "descricao": "Controle de Chamados",
+    "modulo": "Help Desk",
+    "rotina": "Suporte",
+    "permissao": "Usuário",
+    "controles": "visualizar, alterar, excluir"
+  },
+  {
+    "descricao": "Enviar Mensagem",
+    "modulo": "Funções",
+    "rotina": "Push",
+    "permissao": "Usuário",
+    "controles": "visualizar, alterar, excluir"
+  },
+  {
+    "descricao": "Conta",
+    "modulo": "Configurador",
+    "rotina": "Acessos",
+    "permissao": "Usuário",
+    "controles": "visualizar, alterar, excluir"
+  },
+  {
+    "descricao": "Usuários",
+    "modulo": "Configurador",
+    "rotina": "Acessos",
+    "permissao": "Gerente",
+    "controles": "visualizar, alterar, excluir"
+  },
+  {
+    "descricao": "Permissões",
+    "modulo": "Configurador",
+    "rotina": "Acessos",
+    "permissao": "Gerente",
+    "controles": "visualizar, alterar, excluir"
+  },
+  {
+    "descricao": "Empresas",
+    "modulo": "Configurador",
+    "rotina": "Administração",
+    "permissao": "Administrador",
+    "controles": "visualizar, alterar, excluir"
+  },
+  {
+    "descricao": "Filiais",
+    "modulo": "Configurador",
+    "rotina": "Administração",
+    "permissao": "Administrador",
+    "controles": "visualizar, alterar, excluir"
+  },
+  {
+    "descricao": "Setores",
+    "modulo": "Configurador",
+    "rotina": "Administração",
+    "permissao": "Administrador",
+    "controles": "visualizar, alterar, excluir"
+  },
+  {
+    "descricao": "Módulos",
+    "modulo": "Configurador",
+    "rotina": "Sistema",
+    "permissao": "Administrador",
+    "controles": "visualizar, alterar, excluir"
+  },
+  {
+    "descricao": "Rotinas",
+    "modulo": "Configurador",
+    "rotina": "Sistema",
+    "permissao": "Administrador",
+    "controles": "visualizar, alterar, excluir"
+  },
+  {
+    "descricao": "Processos",
+    "modulo": "Configurador",
+    "rotina": "Sistema",
+    "permissao": "Administrador",
+    "controles": "visualizar, alterar, excluir"
+  }
+]

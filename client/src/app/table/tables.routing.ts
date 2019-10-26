@@ -1,5 +1,13 @@
 import { Routes } from '@angular/router';
 import { DatatableComponent } from './data-table/data-table.component';
+import { ControleChamadosComponent } from './controle-chamados/controle-chamados.component';
+import { EmpresasComponent } from './empresas/empresas.component';
+import { FiliaisComponent } from './filiais/filiais.component';
+import { SetoresComponent } from './setores/setores.component';
+import { ModulosComponent } from './modulos/modulos.component';
+import { UsuariosComponent } from './usuarios/usuarios.component';
+import { RotinasComponent } from './rotinas/rotinas.component';
+import { ProcessosComponent } from './processos/processos.component';
 import { SmarttableComponent } from './smart-table/smart-table.component';
 import { AberturatableChamados } from './abertura-chamados/abertura-table.chamados';
 import { BasictableComponent } from './basic/basic.component';
@@ -20,6 +28,62 @@ export const TablesRoutes: Routes = [
             { title: 'Dashboard', url: '/dashboard' },
             { title: 'Data Table' }
           ]
+        }
+      },
+      {
+        path: 'controlechamados',
+        component: ControleChamadosComponent,
+        data: {
+          title: 'Controle de Chamados',
+        }
+      },
+      {
+        path: 'empresas',
+        component: EmpresasComponent,
+        data: {
+          title: 'Empresas',
+        }
+      },
+      {
+        path: 'filiais',
+        component: FiliaisComponent,
+        data: {
+          title: 'Filiais',
+        }
+      },
+      {
+        path: 'setores',
+        component: SetoresComponent,
+        data: {
+          title: 'Setores',
+        }
+      },
+      {
+        path: 'usuarios',
+        component: UsuariosComponent,
+        data: {
+          title: 'Usuários',
+        }
+      },
+      {
+        path: 'modulos',
+        component: ModulosComponent,
+        data: {
+          title: 'Módulos',
+        }
+      },
+      {
+        path: 'rotinas',
+        component: RotinasComponent,
+        data: {
+          title: 'Rotinas',
+        }
+      },
+      {
+        path: 'processos',
+        component: ProcessosComponent,
+        data: {
+          title: 'Processos',
         }
       },
       {

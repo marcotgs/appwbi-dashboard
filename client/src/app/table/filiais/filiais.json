@@ -1,0 +1,44 @@
+[
+  {
+    "codigo": "010101",
+    "descricao": "Matriz",
+    "empresa": "Astral Pães",
+    "controles": "visualizar, alterar, excluir"
+  },
+  {
+    "codigo": "010102",
+    "descricao": "Astro - Janaúba",
+    "empresa": "Astral Pães",
+    "controles": "visualizar, alterar, excluir"
+  },
+  {
+    "codigo": "010103",
+    "descricao": "Astro - Santa Rita",
+    "empresa": "Astral Pães",
+    "controles": "visualizar, alterar, excluir"
+  },
+  {
+    "codigo": "010104",
+    "descricao": "Astro - Major Prates",
+    "empresa": "Astral Pães",
+    "controles": "visualizar, alterar, excluir"
+  },
+  {
+    "codigo": "010105",
+    "descricao": "Astro - São João",
+    "empresa": "Astral Pães",
+    "controles": "visualizar, alterar, excluir"
+  },
+  {
+    "codigo": "010106",
+    "descricao": "Astro - Januária",
+    "empresa": "Astral Pães",
+    "controles": "visualizar, alterar, excluir"
+  },
+  {
+    "codigo": "99",
+    "descricao": "Geral",
+    "empresa": "UaiPC",
+    "controles": "visualizar, alterar, excluir"
+  }
+]

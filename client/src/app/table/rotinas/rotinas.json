@@ -1,0 +1,38 @@
+[
+  {
+    "descricao": "Gráficos",
+    "modulo": "Faturamento",
+    "permissao": "Usuário",
+    "controles": "visualizar, alterar, excluir"
+  },
+  {
+    "descricao": "Suporte",
+    "modulo": "Help Desk",
+    "permissao": "Usuário",
+    "controles": "visualizar, alterar, excluir"
+  },
+  {
+    "descricao": "Push",
+    "modulo": "Funções",
+    "permissao": "Gerente",
+    "controles": "visualizar, alterar, excluir"
+  },
+  {
+    "descricao": "Acessos",
+    "modulo": "Configurador",
+    "permissao": "Usuário",
+    "controles": "visualizar, alterar, excluir"
+  },
+  {
+    "descricao": "Administração",
+    "modulo": "Configurador",
+    "permissao": "Administrador",
+    "controles": "visualizar, alterar, excluir"
+  },
+  {
+    "descricao": "Sistema",
+    "modulo": "Configurador",
+    "permissao": "Administrador",
+    "controles": "visualizar, alterar, excluir"
+  }
+]

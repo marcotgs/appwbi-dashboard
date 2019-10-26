@@ -24,11 +24,15 @@ import { FormactionsComponent } from './form-actions/actions.component';
 import { FormrowsepComponent } from './form-row-separator/row-sep.component';
 import { FormstripedComponent } from './form-striped-row/striped.component';
 import { FormContaUsuarioComponent } from './conta-usuario/conta-usuario.component';
+import { FormModulosComponent } from './form-modulos/form-modulos.component';
+import { FormSetoresComponent } from './form-setores/form-setores.component';
+import { FormRotinasComponent } from './form-rotinas/form-rotinas.component';
+import { FormFiliaisComponent } from './form-filiais/form-filiais.component';
+import { FormProcessosComponent } from './form-processos/form-processos.component';
 import { FormdetailComponent } from './form-detail/detail.component';
 import { MultiselectComponent } from './multiselect/multiselect.component';
 import { UserEffects } from '@app/store/user';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
-
 
 @NgModule({
   imports: [
@@ -69,6 +73,11 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
     FormrowsepComponent,
     FormstripedComponent,
     FormContaUsuarioComponent,
+    FormFiliaisComponent,
+    FormModulosComponent,
+    FormSetoresComponent,
+    FormRotinasComponent,
+    FormProcessosComponent,
     MultiselectComponent,
     FormdetailComponent,
   ]

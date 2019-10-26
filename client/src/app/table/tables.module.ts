@@ -6,6 +6,14 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
 
 import { TablesRoutes } from './tables.routing';
 import { DatatableComponent } from './data-table/data-table.component';
+import { ControleChamadosComponent } from './controle-chamados/controle-chamados.component';
+import { EmpresasComponent } from './empresas/empresas.component';
+import { FiliaisComponent } from './filiais/filiais.component';
+import { SetoresComponent } from './setores/setores.component';
+import { ModulosComponent } from './modulos/modulos.component';
+import { UsuariosComponent } from './usuarios/usuarios.component';
+import { RotinasComponent } from './rotinas/rotinas.component';
+import { ProcessosComponent } from './processos/processos.component';
 import { SmarttableComponent } from './smart-table/smart-table.component';
 import { AberturatableChamados } from './abertura-chamados/abertura-table.chamados';
 import { BasictableComponent } from './basic/basic.component';
@@ -23,6 +31,14 @@ import { TablesizeComponent } from './sizing/size.component';
   declarations: [
     DatatableComponent,
     BasictableComponent,
+    ControleChamadosComponent,
+    EmpresasComponent,
+    FiliaisComponent,
+    SetoresComponent,
+    ModulosComponent,
+    UsuariosComponent,
+    RotinasComponent,
+    ProcessosComponent,
     DarktableComponent,
     ColortableComponent,
     TablesizeComponent,

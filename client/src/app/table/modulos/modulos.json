@@ -1,0 +1,22 @@
+[
+  {
+    "descricao": "Faturamento",
+    "permissao": "Usuário",
+    "controles": "visualizar, alterar, excluir"
+  },
+  {
+    "descricao": "Help Desk",
+    "permissao": "Usuário",
+    "controles": "visualizar, alterar, excluir"
+  },
+  {
+    "descricao": "Funções",
+    "permissao": "Administração",
+    "controles": "visualizar, alterar, excluir"
+  },
+  {
+    "descricao": "Configurador",
+    "permissao": "Usuário",
+    "controles": "visualizar, alterar, excluir"
+  }
+]

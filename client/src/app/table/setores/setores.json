@@ -1,0 +1,50 @@
+[
+  {
+    "codigo": "0001",
+    "descricao": "Diretoria",
+    "empresa": "Astral Pães",
+    "controles": "visualizar, alterar, excluir"
+  },
+  {
+    "codigo": "0002",
+    "descricao": "Comercial",
+    "empresa": "Astral Pães",
+    "controles": "visualizar, alterar, excluir"
+  },
+  {
+    "codigo": "0003",
+    "descricao": "Televendas",
+    "empresa": "Astral Pães",
+    "controles": "visualizar, alterar, excluir"
+  },
+  {
+    "codigo": "0004",
+    "descricao": "TI",
+    "empresa": "Astral Pães",
+    "controles": "visualizar, alterar, excluir"
+  },
+  {
+    "codigo": "0005",
+    "descricao": "Produção",
+    "empresa": "Astral Pães",
+    "controles": "visualizar, alterar, excluir"
+  },
+  {
+    "codigo": "0006",
+    "descricao": "Estoque",
+    "empresa": "Astral Pães",
+    "controles": "visualizar, alterar, excluir"
+  },
+  {
+    "codigo": "0007",
+    "descricao": "Financeiro",
+    "empresa": "Astral Pães",
+    "controles": "visualizar, alterar, excluir"
+  },
+  {
+    "codigo": "0001",
+    "descricao": "Comercial",
+    "empresa": "UaiPC",
+    "controles": "visualizar, alterar, excluir"
+  }
+]

@@ -1,0 +1,37 @@
+[
+  {
+    "codigo": "C561284962",
+    "nome": "Astral Indústria e Comércio de Pães e Massas LTDA",
+    "cgc": "04.209.501/0001-33",
+    "email": "app@astralpaes.com.br",
+    "controles": "visualizar, alterar, excluir"
+  },
+  {
+    "codigo": "DCV2584236",
+    "nome": "Empório da Poly",
+    "cgc": "087.664.296-25",
+    "email": "polyarafernandes@gmail.com",
+    "controles": "visualizar, alterar, excluir"
+  },
+  {
+    "codigo": "AXZ684GWF5",
+    "nome": "UaiPC",
+    "cgc": "21.228.322/0001-62",
+    "email": "daniel@uaipc.com.br",
+    "controles": "visualizar, alterar, excluir"
+  },
+  {
+    "codigo": "181DSHG6AB",
+    "nome": "Brasnica",
+    "cgc": "66.293.218/0001-90",
+    "email": "contato@appwork.com.br",
+    "controles": "visualizar, alterar, excluir"
+  },
+  {
+    "codigo": "SD2CV52ASF",
+    "nome": "Ideal Cosméticos",
+    "cgc": "17.226.994/0004-04",
+    "email": "contato@appwbi.com.br",
+    "controles": "visualizar, alterar, excluir"
+  }
+]
