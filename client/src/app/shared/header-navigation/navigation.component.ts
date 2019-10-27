@@ -3,7 +3,7 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { UserState, logout, getUserState } from '@app/store/user';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
-import { AuthService } from '@app/services';
+import { AuthTokenService } from '@app/services';
 declare var $: any;
 
 @Component({
@@ -21,7 +21,7 @@ export class NavigationComponent implements AfterViewInit {
   constructor(
     private store: Store<UserState>,
     private router: Router,
-    private authService: AuthService,
+    private authTokenService: AuthTokenService,
   ) {
     this.store.select(getUserState).subscribe((userState) => {
       this.userState = userState;
@@ -29,7 +29,7 @@ export class NavigationComponent implements AfterViewInit {
   }
 
   public logout(): void {
-    this.authService.logout();
+    this.authTokenService.logout();
     this.store.dispatch(logout());
     this.router.navigate(['/auth/login'], { replaceUrl: true });
   }

@@ -16,17 +16,19 @@ const acessoNiveisPermissaoModelInit = (sequelize: Sequelize): acessoNiveisPermi
 			comment: "null",
 			field: 'descricao'
 		},
-		'nivel': {
-			type: DataTypes.INTEGER,
-			allowNull: false,
-			comment: "null",
-			field: 'nivel'
-		},
 		'controlaAlcada': {
 			type: DataTypes.INTEGER,
 			allowNull: false,
+			defaultValue: '((0))',
 			comment: "null",
 			field: 'controla_alcada'
+		},
+		'nivel': {
+			type: DataTypes.INTEGER,
+			allowNull: false,
+			defaultValue: '((0))',
+			comment: "null",
+			field: 'nivel'
 		}
 	}, {
 		tableName: 'acesso_niveis_permissao',
@@ -37,8 +39,8 @@ const acessoNiveisPermissaoModelInit = (sequelize: Sequelize): acessoNiveisPermi
 export interface acessoNiveisPermissaoModel extends Model {
 	id:number;
 	descricao:string;
-	nivel:number;
 	controlaAlcada:number;
+	nivel:number;
 }
 
 export type acessoNiveisPermissaoModelStatic = typeof Model & {

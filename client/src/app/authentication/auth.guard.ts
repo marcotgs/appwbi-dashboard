@@ -3,7 +3,7 @@ import {
   CanActivate,
   Router
 } from '@angular/router';
-import { AuthService } from '@app/services';
+import { AuthTokenService } from '@app/services';
 import { Store } from '@ngrx/store';
 import { UserState, loginSuccess } from '@app/store/user';
 
@@ -17,15 +17,15 @@ export class AuthGuard implements CanActivate {
 
   constructor(
     private routes: Router,
-    private authService: AuthService,
+    private authToken: AuthTokenService,
     private store: Store<UserState>
   ) { }
 
   canActivate(
   ): boolean {
-    if (this.authService.isLoggedIn()) {
+    if (this.authToken.isLoggedIn()) {
       if (!this.dispatched) {
-        this.store.dispatch(loginSuccess(this.authService.decodeToken()));
+        this.store.dispatch(loginSuccess(this.authToken.decodeToken()));
         this.dispatched = true;
       }
       return true;

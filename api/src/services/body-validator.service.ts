@@ -4,12 +4,12 @@ import logger from '@api/util/logger';
 import { ApiResponseErrors, ApiResponseError } from '@shared/interfaces';
 
 /**
- * Classe responsável por validar os dados do body de uma requisição.
+ * Service responsável por validar os dados do body de uma requisição.
  *
  * @export
  * @class BodyValidator
  */
-export default class BodyValidator {
+export default class BodyValidatorService {
 
     /**
      * Método que valida os dados de uma requisição.

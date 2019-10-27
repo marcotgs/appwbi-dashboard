@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
-import AuthService from './auth/auth.service';
+import AuthTokenService from './auth/auth-token.service';
 
 @NgModule({
-    providers: [AuthService],
+    providers: [AuthTokenService],
 })
 export class ServicesModule { }

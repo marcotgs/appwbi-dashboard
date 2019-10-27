@@ -7,7 +7,7 @@ import validationMessages from '@app/constants/form-validation/form-validation.c
 import { Store } from '@ngrx/store';
 import { UserState, getUserState, loginError, login } from '@app/store/user';
 import { ApiResponseError } from '@shared/interfaces';
-import { AuthService } from '@app/services';
+import { AuthTokenService } from '@app/services';
 
 @Component({
   selector: 'app-login',
@@ -23,9 +23,9 @@ export class LoginComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private router: Router,
     private _actions$: Actions,
-    authService: AuthService,
+    authTokenService: AuthTokenService,
   ) {
-    if (authService.isLoggedIn()) {
+    if (authTokenService.isLoggedIn()) {
       this.router.navigate(['/'], { replaceUrl: true });
     }
   }

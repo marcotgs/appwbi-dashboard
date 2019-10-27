@@ -3,7 +3,7 @@ import { JwtHelperService } from "@auth0/angular-jwt";
 import { LoginResponse } from '@shared/interfaces';
 
 @Injectable()
-export default class AuthService {
+export default class AuthTokenService {
     private keyIdToken = 'id_token';
     private keyExpiresAt = 'expires_at';
 

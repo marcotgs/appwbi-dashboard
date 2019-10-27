@@ -1,0 +1,1 @@
+export { default as CadastroModulosRepository } from './cadastro-modulos.class';
