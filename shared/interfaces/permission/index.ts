@@ -1,0 +1,1 @@
+export { default as PermissionResponse } from './permission-response.interface';

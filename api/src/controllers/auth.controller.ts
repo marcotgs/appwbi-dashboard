@@ -25,7 +25,10 @@ export default class AuthController extends BaseController {
 
     // Repositorio de acesso_usuarios.
     private acessoUsuariosRepository: AcessoUsuariosRepository;
+
+    // Repositorio de cadastro_modulos.
     private cadastroModulosRepository: CadastroModulosRepository;
+
     // Service que gera o token jwt.
     private jwtTokenService: JwtTokenService;
 

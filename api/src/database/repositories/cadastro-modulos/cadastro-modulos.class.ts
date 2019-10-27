@@ -31,9 +31,9 @@ export default class CadastroModulosRepository {
     /**
      * Procura os registros de modulos, rotinas e processos de acordo com o nivel de permissão do usuário.
      *
-     * @param {number} id
-     * @returns {Promise<acessoUsuariosModel>}
-     * @memberof AcessoUsuariosRepository
+     * @param {number} idAcessoNiveisPermissao
+     * @returns {Promise<cadastroModulosModel[]>}
+     * @memberof CadastroModulosRepository
      */
     public async findModulosByIdAcessoPermissão(idAcessoNiveisPermissao: number): Promise<cadastroModulosModel[]> {
         try {
@@ -68,7 +68,29 @@ export default class CadastroModulosRepository {
                 ],
             });
         } catch (ex) {
-            logger.error(`Erro ao realizar consulta no repository :'AcessoUsuarios'-> 'findById'. Error: ${ex}`);
+            logger.error(`Erro ao realizar consulta no repository :'CadastroModulosRepository'-> 'findModulosByIdAcessoPermissão'. Error: ${ex}`);
+            throw ex;
+        }
+    };
+
+    /**
+     * Procura os registros de modulos paginados.
+     *
+     * @returns {Promise<cadastroModulosModel[]>}
+     * @memberof CadastroModulosRepository
+     */
+    public async findAll(): Promise<cadastroModulosModel[]> {
+        try {
+            return await this.cadastroModulosModel.findAll({
+                attributes: ['descricao', 'id'],
+                include: [
+                    {
+                        model: Database.models.acessoNiveisPermissao,
+                        attributes: ['descricao', 'id'],
+                    }]
+            });
+        } catch (ex) {
+            logger.error(`Erro ao realizar consulta no repository :'CadastroModulosRepository'-> 'findAll'. Error: ${ex}`);
             throw ex;
         }
     };

@@ -1,0 +1,1 @@
+export { default as ModuleResponse } from './module-response.interface';

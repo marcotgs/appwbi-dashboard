@@ -1,6 +1,5 @@
-import { Component, AfterViewInit, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { ROUTES } from './menu-items';
 import { AuthState, getAuthState } from '@app/store/auth';
 import { RouteInfo } from './sidebar.metadata';
 declare var $: any;
@@ -60,11 +59,10 @@ export class SidebarComponent implements OnInit {
                       submenu: []
                     }
                   })
-                } as RouteInfo;
+                };
               })
             } as RouteInfo;
           });
-          console.log(this.sidebarnavItems);
         }
       });
   }

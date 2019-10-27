@@ -1,8 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { NotifierModule } from 'angular-notifier';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { EffectsModule } from '@ngrx/effects';
 
 import { TablesRoutes } from './tables.routing';
 import { DatatableComponent } from './data-table/data-table.component';
@@ -20,13 +24,31 @@ import { BasictableComponent } from './basic/basic.component';
 import { DarktableComponent } from './dark-basic/dark.component';
 import { ColortableComponent } from './color-table/color.component';
 import { TablesizeComponent } from './sizing/size.component';
+import { ModuleEffects } from '@app/store/module';
+
 
 @NgModule({
   imports: [
+    EffectsModule.forRoot([ModuleEffects]),
     RouterModule.forChild(TablesRoutes),
     CommonModule,
     NgxDatatableModule,
-    Ng2SmartTableModule
+    Ng2SmartTableModule,
+    NgxSpinnerModule,
+    NotifierModule.withConfig({
+      position: {
+        vertical: {
+          position: 'top',
+        },
+        horizontal: {
+          position: 'right',
+        }
+      },
+      behaviour: {
+        autoHide: 2000,
+      }
+    }),
+    SweetAlert2Module
   ],
   declarations: [
     DatatableComponent,

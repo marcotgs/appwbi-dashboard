@@ -1,5 +1,10 @@
-import { Component, ViewEncapsulation, ViewChild } from '@angular/core';
+import { Component, ViewEncapsulation, ViewChild, TemplateRef, OnInit } from '@angular/core';
 import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NotifierService } from 'angular-notifier';
+import { Store } from '@ngrx/store';
+import { ModuleState, getModules, getModuleState } from '@app/store/module';
+
 
 declare var require: any;
 const data: any = require('./modulos.json');
@@ -24,48 +29,61 @@ const data: any = require('./modulos.json');
   ]
 })
 
-export class ModulosComponent {
+export class ModulosComponent implements OnInit {
+  public rows = [];
+  public columns = [];
+  public loading = false;
   editing = {};
-  rows = [];
+
   temp = [...data];
-
-  loadingIndicator = true;
-  reorderable = true;
-
-  columns = [{ prop: 'descricao' }, { name: 'Permissao' }, { name: 'Controles' }];
 
   closeResult: string;
 
-  @ViewChild(ModulosComponent, { static: false }) table: ModulosComponent;
-  constructor(private modalService: NgbModal, private modalService2: NgbModal) {
-    this.rows = data;
-    this.temp = [...data];
-    setTimeout(() => {
-      this.loadingIndicator = false;
-    }, 1500);
+  constructor(
+    private modalService: NgbModal,
+    private modalService2: NgbModal,
+    private store: Store<ModuleState>,
+    private notifierService: NotifierService,
+  ) {
+    this.getModules();
+    this.store.select(getModuleState)
+      .subscribe(async (data) => {
+        if (data.modules) {
+          this.loading = false;
+          this.rows = data.modules.map((m) => {
+            return {
+              id: m.id,
+              [this.columns[0].name.toLowerCase()]: m.descricao,
+              [this.columns[1].name.toLowerCase()]: m.acessoNiveisPermissao.descricao,
+            };
+          });
+        }
+      });
+  }
+
+  ngOnInit(): void {
+    this.columns = [{ name: 'Descricao' }, { name: 'Permissao' }];
+
+  }
+
+  private getModules(pageNumber = 1) {
+    this.loading = true;
+    this.store.dispatch(getModules({ pageNumber }));
   }
 
   updateFilter(event) {
     const val = event.target.value.toLowerCase();
 
     // filter our data
-    const temp = this.temp.filter(function(d) {
+    const temp = this.temp.filter(function (d) {
       return d.name.toLowerCase().indexOf(val) !== -1 || !val;
     });
 
     // update the rows
     this.rows = temp;
     // Whenever the filter changes, always go back to the first page
-    this.table = data;
   }
-  
-  updateValue(event, cell, rowIndex) {
-    console.log('inline editing rowIndex', rowIndex);
-    this.editing[rowIndex + '-' + cell] = false;
-    this.rows[rowIndex][cell] = event.target.value;
-    this.rows = [...this.rows];
-    console.log('UPDATED!', this.rows[rowIndex][cell]);
-  }
+
 
   open2(content) {
     this.modalService.open(content).result.then(
@@ -78,7 +96,8 @@ export class ModulosComponent {
     );
   }
   open(content) {
-    this.modalService2.open(content, { windowClass: 'dark-modal' });
+    console.log(content);
+    // this.modalService2.open(content, { windowClass: 'dark-modal' });
   }
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
@@ -91,7 +110,7 @@ export class ModulosComponent {
   }
 
   openBackDropCustomClass(content) {
-    this.modalService.open(content, {backdropClass: 'light-blue-backdrop'});
+    this.modalService.open(content, { backdropClass: 'light-blue-backdrop' });
   }
 
   openWindowCustomClass(content) {

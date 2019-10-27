@@ -1,0 +1,1 @@
+export { default as acessoUsuariosResponse } from './acesso-usuarios-response.interface';

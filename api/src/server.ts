@@ -10,7 +10,7 @@ import { createExpressServer, Action } from 'routing-controllers';
 import bodyParser from 'body-parser';
 import Config from '@api/util/config';
 import Database from '@api/database';
-import { UserController, AuthController } from '@api/controllers';
+import { UserController, AuthController, ModuleController } from '@api/controllers';
 import Passaport from '@api/util/passport';
 import express from 'express';
 Config.init();
@@ -24,7 +24,7 @@ Database.connect().
         const app = createExpressServer({
             routePrefix: '/api',
             cors: true,
-            controllers: [UserController, AuthController],
+            controllers: [UserController, AuthController, ModuleController],
             authorizationChecker: async (action: Action): Promise<boolean> => {
                 if (!action.request.headers.authorization) {
                     return false;

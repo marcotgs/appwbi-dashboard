@@ -5,7 +5,7 @@ import {
 } from '@shared/interfaces';
 
 export const getPermissions = createAction(
-    authTypes.GET_PERMISSIONS
+    authTypes.GET_PERMISSIONS,
 );
 
 export const getPermissionsSuccess = createAction(
