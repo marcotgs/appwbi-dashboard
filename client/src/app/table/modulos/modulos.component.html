@@ -26,16 +26,16 @@
         <ngx-datatable class="material" [rows]="rows" [columns]="columns" [columnMode]="'force'" [headerHeight]="50"
           [footerHeight]="50" [rowHeight]="'auto'" [columnMode]="'force'" [loadingIndicator]="loading">
           <ngx-datatable-column *ngFor="let col of columns" [name]="col.name">
-              <ng-template let-row="data" let-value="value" ngx-datatable-cell-template>
-                {{value}}  
-              </ng-template>
+            <ng-template let-row="data" let-value="value" ngx-datatable-cell-template>
+              {{value}}
+            </ng-template>
           </ngx-datatable-column>
           <ngx-datatable-column name="Controles" sortable="false" prop="id">
             <ng-template let-row="data" let-value="value" ngx-datatable-cell-template>
               <div class="ml-auto">
                 <div class="btn-group">
-                  <button (click)="open(value)" type="button" class="btn btn-warning" data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false">
+                  <button (click)="viewModule(value)" type="button" class="btn btn-warning" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-search-plus"></i>
                   </button>
                 </div>
@@ -73,5 +73,78 @@
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-light" (click)="c('Close click')">Fechar</button>
+  </div>
+</ng-template>
+
+<ng-template #modal>
+  <div class="modal-header">
+    <h4 class="card-title" *ngIf="isCreating">Cadastro</h4>
+    <h4 class="card-title" *ngIf="!isCreating">Dados do Módulo</h4>
+    <button type="button" class="close" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <form class="form-horizontal striped-rows b-form">
+          <div class="card-body">
+            <div class="form-group row">
+              <div class="col-sm-3">
+                <div class="b-label">
+                  <label for="inputEmail3" class="control-label col-form-label">Descrição</label>
+                </div>
+              </div>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" id="inputEmail3" *ngIf="isEditing || isCreating">
+                <div class="b-label b-label--start" *ngIf="!isEditing && !isCreating">
+                  <span class="control-label col-form-label">
+                    {{selectedModule.descricao}}
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-3">
+                <div class="b-label">
+                  <label for="inputEmail3" class="control-label col-form-label">Permissão</label>
+                </div>
+              </div>
+              <div class="col-sm-9">
+                <input id="typeahead-focus" type="text" class="form-control" [ngbTypeahead]="search2"
+                  (click)="click$.next($event.target.value)" #instance="ngbTypeahead" *ngIf="isEditing || isCreating" />
+                <div class="b-label b-label--start" *ngIf="!isEditing && !isCreating">
+                  <span class="control-label col-form-label">
+                    {{selectedModule.acessoNiveisPermissao.descricao}}
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-3">
+                <div class="b-label">
+                  <label for="inputEmail3" class="control-label col-form-label">Ícone</label>
+                </div>
+              </div>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" id="inputEmail3" *ngIf="isEditing || isCreating">
+                <div class="b-label b-label--start" *ngIf="!isEditing && !isCreating">
+                  <span class="control-label col-form-label">
+                    {{selectedModule.icone}}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr *ngIf="isEditing || isCreating">
+          <div class="card-body" *ngIf="isEditing || isCreating">
+            <div class="form-group m-b-0 text-right">
+              <button type="submit" class="btn btn-info waves-effect waves-light">Salvar</button>
+              <button type="button" class="btn btn-dark waves-effect waves-light">Cancelar</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 </ng-template>

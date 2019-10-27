@@ -3,14 +3,13 @@ import { Response } from 'express';
 import sha256 from 'crypto-js/sha256';
 import jwt from 'jsonwebtoken';
 import SendGrid from '@sendgrid/mail';
-import { Post, Res, JsonController, Body, Put, Get, CurrentUser, Authorized } from 'routing-controllers';
+import { Post, Res, JsonController, Body, Put } from 'routing-controllers';
 import { LoginBody, ChangePasswordBody, SendEmailChangePasswordBody } from '@api/DTO';
 import { BodyValidator, JwtTokenService } from '@api/services';
 import BaseController from '@api/controllers/base-controller.class';
-import { ApiResponseErrors, LoginResponse, MenuPermissionsResponse } from '@shared/interfaces';
+import { ApiResponseErrors, LoginResponse } from '@shared/interfaces';
 import logger from '@api/util/logger';
 import { AcessoUsuariosRepository } from '@api/database/repositories';
-import CadastroModulosRepository from '@api/database/repositories/cadastro-modulos/cadastro-modulos.class';
 
 
 /**
@@ -26,9 +25,6 @@ export default class AuthController extends BaseController {
     // Repositorio de acesso_usuarios.
     private acessoUsuariosRepository: AcessoUsuariosRepository;
 
-    // Repositorio de cadastro_modulos.
-    private cadastroModulosRepository: CadastroModulosRepository;
-
     // Service que gera o token jwt.
     private jwtTokenService: JwtTokenService;
 
@@ -41,7 +37,6 @@ export default class AuthController extends BaseController {
         super();
         this.jwtTokenService = new JwtTokenService();
         this.acessoUsuariosRepository = new AcessoUsuariosRepository();
-        this.cadastroModulosRepository = new CadastroModulosRepository();
     }
 
     /**
@@ -208,36 +203,6 @@ export default class AuthController extends BaseController {
             return this.sendResponse(res, 200, result);
         } catch (ex) {
             logger.error(`Erro na requisição de login. Erro -> ${ex}`);
-            return this.sendResponse(res, 500);
-        }
-    }
-
-
-    /**
-     * Esse método realiza a validação dos dados do login.
-     * E quando sucesso retorna os dados de autenticação.
-     * 
-     * POST: /api/auth/permissions
-     * @param {Request} req
-     * @param {Response} res
-     * @memberof UserController
-     */
-    @Authorized()
-    @Get('/menu-permissions')
-    public async getMenuPermissions(
-        @Res() res: Response,
-        @CurrentUser() userId?: number
-    ): Promise<Response> {
-        try {
-            const userData = await this.acessoUsuariosRepository.findById(userId, {
-                attributes: ['idAcessoNiveisPermissao']
-            });
-            const results: MenuPermissionsResponse[] = await this.cadastroModulosRepository.findModulosByIdAcessoPermissão(
-                userData.idAcessoNiveisPermissao
-            );
-            return this.sendResponse(res, 200, results);
-        } catch (ex) {
-            logger.error(`Erro na requisição de permissions. Erro -> ${ex}`);
             return this.sendResponse(res, 500);
         }
     }

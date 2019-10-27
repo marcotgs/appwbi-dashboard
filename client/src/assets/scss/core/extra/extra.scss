@@ -258,6 +258,11 @@ label {
   justify-content: flex-end;
 }
 
+*.b-label--start {
+  justify-content: flex-start;
+}
+
+
 // Custom validation Classes
 .error {
   .form-control {
@@ -849,4 +854,8 @@ button.toast-close-button {
 }
 .toast-warning {
   background-color: $warning !important;
+}
+
+.modal-header h4{
+  margin: 0;
 }

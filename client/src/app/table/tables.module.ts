@@ -7,6 +7,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { NotifierModule } from 'angular-notifier';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { EffectsModule } from '@ngrx/effects';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { TablesRoutes } from './tables.routing';
 import { DatatableComponent } from './data-table/data-table.component';
@@ -32,6 +33,7 @@ import { ModuleEffects } from '@app/store/module';
     EffectsModule.forRoot([ModuleEffects]),
     RouterModule.forChild(TablesRoutes),
     CommonModule,
+    NgbModule,
     NgxDatatableModule,
     Ng2SmartTableModule,
     NgxSpinnerModule,

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AuthState, getPermissions, getAuthState } from '@app/store/auth';
+import { AccessPermissionState, getMenuPermissions, getAccessPermissionState } from '@app/store/access-permission';
 
 @Component({
   selector: 'app-root',
@@ -12,14 +12,14 @@ export class AppComponent implements OnInit {
   title = 'app';
 
   constructor(
-    private store: Store<AuthState>,
+    private store: Store<AccessPermissionState>,
   ) { /* */ }
 
   ngOnInit() {
-    this.store.dispatch(getPermissions());
-    this.store.select(getAuthState)
+    this.store.dispatch(getMenuPermissions());
+    this.store.select(getAccessPermissionState)
       .subscribe((data) => {
-        if (data.permissions) {
+        if (data.menuPermissions) {
           this.loading = false;
         }
       });

@@ -9,27 +9,27 @@ import { LoginBody } from '../interfaces';
 @Injectable()
 export default class AuthService {
 
-    private controllerUser: string;
+    private controllerPath: string;
     constructor(private http: HttpClient, private authToken: AuthTokenService) {
-        this.controllerUser = '/auth';
+        this.controllerPath = '/auth';
     }
 
     public login(loginForm: LoginBody): Observable<ApiPayload<LoginResponse>> {
         const hashPassword = sha1(loginForm.password).toString();
-        return this.http.post<ApiPayload<LoginResponse>>(`${this.controllerUser}/login`, { ...loginForm, password: hashPassword });
+        return this.http.post<ApiPayload<LoginResponse>>(`${this.controllerPath}/login`, { ...loginForm, password: hashPassword });
     }
 
     public sendEmailChangePassword(body: SendEmailChangePasswordBody): Observable<ApiPayload<void>> {
-        return this.http.post<ApiPayload<void>>(`${this.controllerUser}/sendEmailChangePassword`, body);
+        return this.http.post<ApiPayload<void>>(`${this.controllerPath}/sendEmailChangePassword`, body);
     }
 
     public changePassword(body: ChangePasswordBody): Observable<ApiPayload<void>> {
         const hashNewPassword = sha1(body.newPassword).toString();
-        return this.http.put<ApiPayload<void>>(`${this.controllerUser}/changePassword`, { ...body, newPassword: hashNewPassword });
+        return this.http.put<ApiPayload<void>>(`${this.controllerPath}/changePassword`, { ...body, newPassword: hashNewPassword });
     }
 
     public getMenuPermissions(): Observable<ApiPayload<MenuPermissionsResponse[]>> {
         const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authToken.getToken()}`);
-        return this.http.get<ApiPayload<MenuPermissionsResponse[]>>(`${this.controllerUser}/menu-permissions`, { headers });
+        return this.http.get<ApiPayload<MenuPermissionsResponse[]>>(`${this.controllerPath}/menu-permissions`, { headers });
     }
 }

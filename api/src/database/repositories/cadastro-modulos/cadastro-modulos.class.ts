@@ -35,7 +35,7 @@ export default class CadastroModulosRepository {
      * @returns {Promise<cadastroModulosModel[]>}
      * @memberof CadastroModulosRepository
      */
-    public async findModulosByIdAcessoPermissão(idAcessoNiveisPermissao: number): Promise<cadastroModulosModel[]> {
+    public async findModulesByAccessLevel(idAcessoNiveisPermissao: number): Promise<cadastroModulosModel[]> {
         try {
             return await this.cadastroModulosModel.findAll({
                 where: {
@@ -74,7 +74,7 @@ export default class CadastroModulosRepository {
     };
 
     /**
-     * Procura os registros de modulos paginados.
+     * Procura os registros de modulos.
      *
      * @returns {Promise<cadastroModulosModel[]>}
      * @memberof CadastroModulosRepository
@@ -82,7 +82,7 @@ export default class CadastroModulosRepository {
     public async findAll(): Promise<cadastroModulosModel[]> {
         try {
             return await this.cadastroModulosModel.findAll({
-                attributes: ['descricao', 'id'],
+                attributes: ['descricao', 'id', 'icone'],
                 include: [
                     {
                         model: Database.models.acessoNiveisPermissao,

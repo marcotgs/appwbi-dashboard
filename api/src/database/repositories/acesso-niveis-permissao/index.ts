@@ -1,0 +1,1 @@
+export { default as AcessoNiveisPermissaoRepository } from './acesso-niveis-permissao.class';

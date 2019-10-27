@@ -1,7 +1,7 @@
-import { UserState, AuthState, ModuleState } from '@app/store/states';
+import { UserState, AccessPermissionState, ModuleState } from '@app/store/states';
 
 export interface AppState {
     userState?: UserState;
-    authState?: AuthState;
+    accessPermissionState?: AccessPermissionState;
     moduleState?: ModuleState;
 }

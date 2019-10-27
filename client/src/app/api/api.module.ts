@@ -1,6 +1,6 @@
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { UserService, AuthService, ModuleService } from './services';
+import { UserService, AuthService, ModuleService, AccessPermissionService } from './services';
 import { ApiHttpInterceptor } from './interceptors/http.interceptor';
 
 @NgModule({
@@ -11,6 +11,7 @@ import { ApiHttpInterceptor } from './interceptors/http.interceptor';
         UserService,
         AuthService,
         ModuleService,
+        AccessPermissionService,
         {
             provide: HTTP_INTERCEPTORS,
             useClass: ApiHttpInterceptor,

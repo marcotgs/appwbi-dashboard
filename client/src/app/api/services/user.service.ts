@@ -3,19 +3,18 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import sha1 from "crypto-js/sha1";
 import { AuthTokenService } from '@app/services';
-import { ApiPayload, acessoUsuariosResponse, LoginResponse, SendEmailChangePasswordBody, ChangePasswordBody } from '@shared/interfaces';
-import { LoginBody } from '../interfaces';
+import { ApiPayload, acessoUsuariosResponse, LoginResponse } from '@shared/interfaces';
 
 @Injectable()
 export default class UserService {
-    private controllerUser: string;
+    private controllerPath: string;
     constructor(private http: HttpClient, private authToken: AuthTokenService) {
-        this.controllerUser = '/user';
+        this.controllerPath = '/user';
     }
 
     public getUserProfile(): Observable<ApiPayload<acessoUsuariosResponse>> {
         const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authToken.getToken()}`);
-        return this.http.get<ApiPayload<acessoUsuariosResponse>>(`${this.controllerUser}/profile`, { headers });
+        return this.http.get<ApiPayload<acessoUsuariosResponse>>(`${this.controllerPath}/profile`, { headers });
     }
 
     public updateUserProfile(newUserData: acessoUsuariosResponse): Observable<ApiPayload<LoginResponse>> {
@@ -24,7 +23,7 @@ export default class UserService {
         if (payload.password) {
             payload.password = sha1(payload.password).toString();
         }
-        return this.http.post<ApiPayload<LoginResponse>>(`${this.controllerUser}/profile`,
+        return this.http.post<ApiPayload<LoginResponse>>(`${this.controllerPath}/profile`,
             payload, { headers });
     }
 }

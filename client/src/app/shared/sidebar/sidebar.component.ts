@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AuthState, getAuthState } from '@app/store/auth';
+import { AccessPermissionState, getAccessPermissionState } from '@app/store/access-permission';
 import { RouteInfo } from './sidebar.metadata';
 declare var $: any;
 
@@ -29,15 +29,15 @@ export class SidebarComponent implements OnInit {
   }
 
   constructor(
-    private store: Store<AuthState>,
+    private store: Store<AccessPermissionState>,
   ) { }
 
   // End open close
   ngOnInit() {
-    this.store.select(getAuthState)
+    this.store.select(getAccessPermissionState)
       .subscribe((data) => {
-        if (data.permissions) {
-          this.sidebarnavItems = data.permissions.map(m => {
+        if (data.menuPermissions) {
+          this.sidebarnavItems = data.menuPermissions.map(m => {
             return {
               title: m.descricao,
               icon: m.icone,
