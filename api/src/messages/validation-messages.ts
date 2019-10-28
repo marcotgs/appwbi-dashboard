@@ -15,6 +15,9 @@ const validationMessages: ValidationMessage = {
     resetPasswordToken: {
         [ValidationMessagesTypes.REQUIRED]: 'Token inválido!',
     },
+    default: {
+        [ValidationMessagesTypes.REQUIRED]: 'Esse campo é obrigatório!',
+    },
 };
 
 export default validationMessages;

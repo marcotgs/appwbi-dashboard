@@ -15,6 +15,9 @@ export const moduleReducer = createReducer(
             return array;
         }, [])
     })),
+    on(moduleActions.postModuleSuccess, (state, res) => ({
+        ...state, modules: [...state.modules, res]
+    })),
 );
 
 export const getModuleState = createFeatureSelector<ModuleState>('moduleState');

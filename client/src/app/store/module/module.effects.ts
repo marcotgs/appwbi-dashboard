@@ -27,4 +27,21 @@ export class ModuleEffects {
                     })
                 )
         )));
+
+    public postModule$ = createEffect(() => this.actions$.pipe(
+        ofType(moduleActions.postModule),
+        switchMap((action) => {
+            const body = { ...action };
+            delete body.type;
+            return this.moduleService.postModule(body)
+                .pipe(
+                    map(res => {
+                        console.log(res);
+                        return moduleActions.postModuleSuccess(res.data);
+                    }),
+                    catchError(res => {
+                        return of(moduleActions.getModulesError(((res.error && res.error.data) || { errors: [ApiConstants.UNEXPECTED_ERROR] })));
+                    })
+                )
+        })));
 }

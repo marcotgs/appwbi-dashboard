@@ -859,3 +859,13 @@ button.toast-close-button {
 .modal-header h4{
   margin: 0;
 }
+
+input.ng-valid{
+  border: 1px solid #e9ecef;
+  border-color: #e9ecef !important;
+}
+
+.btn-submit{
+  min-width: 4rem;
+  min-height: 2rem;
+}

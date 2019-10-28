@@ -7,7 +7,7 @@
           <div class="row">
             <div class="col-md-1">
               <div class="form-group">
-                <a type="button" class="btn btn-info" href="forms/form-modulos">Incluir</a>
+                <button type="button" class="btn btn-info" (click)="addNewItem()">Incluir</button>
               </div>
             </div>
             <div class="col-md-2">
@@ -24,7 +24,7 @@
           </div>
         </div>
         <ngx-datatable class="material" [rows]="rows" [columns]="columns" [columnMode]="'force'" [headerHeight]="50"
-          [footerHeight]="50" [rowHeight]="'auto'" [columnMode]="'force'" [loadingIndicator]="loading">
+          [footerHeight]="50" [rowHeight]="'auto'" [columnMode]="'force'" [loadingIndicator]="loading"  [limit]="10">
           <ngx-datatable-column *ngFor="let col of columns" [name]="col.name">
             <ng-template let-row="data" let-value="value" ngx-datatable-cell-template>
               {{value}}
@@ -34,7 +34,7 @@
             <ng-template let-row="data" let-value="value" ngx-datatable-cell-template>
               <div class="ml-auto">
                 <div class="btn-group">
-                  <button (click)="viewModule(value)" type="button" class="btn btn-warning" data-toggle="dropdown"
+                  <button (click)="viewItem(value)" type="button" class="btn btn-warning" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-search-plus"></i>
                   </button>
@@ -61,6 +61,11 @@
   </div>
 </div>
 
+<swal #alertDeleteWarning title="Sucesso!"
+  [text]="'Tem certeza que deseja excluir o modulo ' + selectedModule?.descricao " type="warning" [focusCancel]="true"
+  confirmButtonColor="#39afdb">
+</swal>
+
 <ng-template #content let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4 class="modal-title">Filtrar</h4>
@@ -76,18 +81,18 @@
   </div>
 </ng-template>
 
-<ng-template #modal>
+<ng-template #modal let-modal>
   <div class="modal-header">
-    <h4 class="card-title" *ngIf="isCreating">Cadastro</h4>
+    <h4 class="card-title" *ngIf="isCreating">Cadastrar novo módulo</h4>
     <h4 class="card-title" *ngIf="!isCreating">Dados do Módulo</h4>
-    <button type="button" class="close" aria-label="Close" (click)="closeModal()">
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss(); form.reset()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="row">
     <div class="col-12">
       <div class="card">
-        <form class="form-horizontal striped-rows b-form">
+        <form class="form-horizontal striped-rows b-form" [formGroup]="form" (ngSubmit)="formSubmit()">
           <div class="card-body">
             <div class="form-group row">
               <div class="col-sm-3">
@@ -95,9 +100,17 @@
                   <label for="inputEmail3" class="control-label col-form-label">Descrição</label>
                 </div>
               </div>
-              <div class="col-sm-9">
-                <input type="text" class="form-control" id="inputEmail3" *ngIf="isEditing || isCreating">
-                <div class="b-label b-label--start" *ngIf="!isEditing && !isCreating">
+              <div class="col-sm-9" *ngIf="isEditing || isCreating">
+                <input type="text" formControlName="descricao" class="form-control" id="inputEmail3" 
+                  [ngClass]="{'is-invalid': form.get('descricao').invalid  && (form.get('descricao').dirty || 
+                  form.get('descricao').touched)}">
+                  <div class="invalid-feedback" *ngFor="let validation of getMessagesError('descricao')">
+                      <span *ngIf="form.get('descricao').hasError(validation.type) && (form.get('descricao').dirty || 
+                      form.get('descricao').touched)">{{validation.message}}</span>
+                  </div>
+              </div>
+              <div class="col-sm-9" *ngIf="!isEditing && !isCreating">
+                <div class="b-label b-label--start">
                   <span class="control-label col-form-label">
                     {{selectedModule.descricao}}
                   </span>
@@ -110,10 +123,26 @@
                   <label for="inputEmail3" class="control-label col-form-label">Permissão</label>
                 </div>
               </div>
-              <div class="col-sm-9">
-                <input id="typeahead-focus" type="text" class="form-control" [ngbTypeahead]="search2"
-                  (click)="click$.next($event.target.value)" #instance="ngbTypeahead" *ngIf="isEditing || isCreating" />
-                <div class="b-label b-label--start" *ngIf="!isEditing && !isCreating">
+              <div class="col-sm-9" *ngIf="isEditing || isCreating">
+                  <input
+                  id="typeahead-focus"
+                  type="text"
+                  class="form-control"
+                  formControlName="accessPermission"
+                  [ngbTypeahead]="search"
+                  (focus)="focus$.next($event.target.value)"
+                  (click)="click$.next($event.target.value)"
+                  #instance="ngbTypeahead"
+                  [ngClass]="{'is-invalid': form.get('accessPermission').invalid  && (form.get('accessPermission').dirty || 
+                  form.get('accessPermission').touched)}"
+                />
+                    <div class="invalid-feedback" *ngFor="let validation of getMessagesError('accessPermission')">
+                        <span *ngIf="form.get('accessPermission').hasError(validation.type) && (form.get('accessPermission').dirty || 
+                        form.get('accessPermission').touched)">{{validation.message}}</span>
+                    </div>
+                </div>
+              <div class="col-sm-9" *ngIf="!isEditing && !isCreating">
+                <div class="b-label b-label--start" >
                   <span class="control-label col-form-label">
                     {{selectedModule.acessoNiveisPermissao.descricao}}
                   </span>
@@ -126,21 +155,34 @@
                   <label for="inputEmail3" class="control-label col-form-label">Ícone</label>
                 </div>
               </div>
-              <div class="col-sm-9">
-                <input type="text" class="form-control" id="inputEmail3" *ngIf="isEditing || isCreating">
-                <div class="b-label b-label--start" *ngIf="!isEditing && !isCreating">
-                  <span class="control-label col-form-label">
-                    {{selectedModule.icone}}
-                  </span>
+              <div class="col-sm-9" *ngIf="isEditing || isCreating">
+                  <input type="text" formControlName="icone" class="form-control" id="inputEmail3" 
+                    [ngClass]="{'is-invalid': form.get('icone').invalid  && (form.get('icone').dirty || 
+                    form.get('icone').touched)}">
+                    <div class="invalid-feedback" *ngFor="let validation of getMessagesError('icone')">
+                        <span *ngIf="form.get('icone').hasError(validation.type) && (form.get('icone').dirty || 
+                        form.get('icone').touched)">{{validation.message}}</span>
+                    </div>
                 </div>
-              </div>
+                <div class="col-sm-9" *ngIf="!isEditing && !isCreating">
+                  <div class="b-label b-label--start">
+                    <span class="control-label col-form-label">
+                      {{selectedModule.icone}}
+                    </span>
+                  </div>
+                </div>
             </div>
           </div>
           <hr *ngIf="isEditing || isCreating">
           <div class="card-body" *ngIf="isEditing || isCreating">
             <div class="form-group m-b-0 text-right">
-              <button type="submit" class="btn btn-info waves-effect waves-light">Salvar</button>
-              <button type="button" class="btn btn-dark waves-effect waves-light">Cancelar</button>
+                <button class="btn btn-info waves-effect waves-light btn-submit" type="submit">
+                    <span *ngIf="!form.disabled">Salvar</span>
+                    <ngx-spinner bdColor="transparent" size="default" color="#fff" type="ball-beat"
+                        [fullScreen]="false">
+                    </ngx-spinner>
+                </button>
+              <button type="button" (click)="modal.dismiss(); form.reset()" class="btn btn-dark waves-effect waves-light">Cancelar</button>
             </div>
           </div>
         </form>

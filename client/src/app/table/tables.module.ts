@@ -8,6 +8,7 @@ import { NotifierModule } from 'angular-notifier';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { EffectsModule } from '@ngrx/effects';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { TablesRoutes } from './tables.routing';
 import { DatatableComponent } from './data-table/data-table.component';
@@ -33,6 +34,8 @@ import { ModuleEffects } from '@app/store/module';
     EffectsModule.forRoot([ModuleEffects]),
     RouterModule.forChild(TablesRoutes),
     CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
     NgbModule,
     NgxDatatableModule,
     Ng2SmartTableModule,
@@ -68,6 +71,6 @@ import { ModuleEffects } from '@app/store/module';
     TablesizeComponent,
     SmarttableComponent,
     AberturatableChamados,
-  ]
+  ],
 })
 export class TablesModule {}

@@ -94,4 +94,43 @@ export default class CadastroModulosRepository {
             throw ex;
         }
     };
+
+    /**
+     * Procura um modulo pelo id.
+     *
+     * @param {number} id
+     * @returns {Promise<cadastroModulosModel>}
+     * @memberof CadastroModulosRepository
+     */
+    public async findById(id: number): Promise<cadastroModulosModel> {
+        try {
+            return await this.cadastroModulosModel.findByPk(id, {
+                attributes: ['descricao', 'id', 'icone'],
+                include: [
+                    {
+                        model: Database.models.acessoNiveisPermissao,
+                        attributes: ['descricao', 'id'],
+                    }]
+            });
+        } catch (ex) {
+            logger.error(`Erro ao realizar consulta no repository :'CadastroModulosRepository'-> 'findById'. Error: ${ex}`);
+            throw ex;
+        }
+    };
+
+    /**
+     * Insere um novo módulo.
+     *
+     * @param {object} data
+     * @returns {Promise<cadastroModulosModel>}
+     * @memberof CadastroModulosRepository
+     */
+    public async insert(data: object): Promise<cadastroModulosModel> {
+        try {
+            return await this.cadastroModulosModel.create(data);
+        } catch (ex) {
+            logger.error(`Erro ao realizar consulta no repository :'CadastroModulosRepository'-> 'insert'. Error: ${ex}`);
+            throw ex;
+        }
+    };
 };
