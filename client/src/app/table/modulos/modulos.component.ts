@@ -30,10 +30,11 @@ export class ModulosComponent implements OnInit {
   public isEditing = false;
   public isCreating = false;
   public isSubmiting = false;
-  public selectedModule: ModuleResponse = null;
+  public isDeleting = false;
+  public selectedItem: ModuleResponse = null;
   public form: FormGroup;
   public formErrors: ApiResponseError[] | string[] = [];
-  public alertTitle = `Tem certeza que deseja excluir o modulo '${(this.selectedModule || {}).descricao}'`;
+  public alertTitle = `Tem certeza que deseja excluir o modulo '${(this.selectedItem || {}).descricao}'`;
   private data: ModuleResponse[] = [];
   private permissions: PermissionResponse[] = [];
   @ViewChild('alertDeleteWarning', { static: false }) private alertDeleteWarning: SwalComponent;
@@ -59,7 +60,16 @@ export class ModulosComponent implements OnInit {
           this.permissions = data.permissions;
         }
       });
+  }
 
+  public filterTable(event) {
+    const val = event.target.value.toLowerCase();
+
+    const temp = this.data.filter(function (d) {
+      return d.descricao.toLowerCase().indexOf(val) !== -1 || !val;
+    });
+
+    this.rows = temp;
   }
 
   public async formSubmit(): Promise<void> {
@@ -71,6 +81,10 @@ export class ModulosComponent implements OnInit {
         ...this.form.value,
         idAcessoNiveisPermissao: this.permissions.find(p => p.descricao === this.form.get('accessPermission').value).id
       }
+      if (this.isEditing) {
+        payload.id = this.selectedItem.id;
+      }
+      delete payload.accessPermission;
       this.isSubmiting = true;
       this.storeModule.dispatch(postModule(payload));
     }
@@ -93,23 +107,39 @@ export class ModulosComponent implements OnInit {
   public viewItem(id: number) {
     this.isCreating = false;
     this.isEditing = false;
-    this.selectedModule = this.data.find(m => m.id === id);
-    this.modalService.open(this.modal, { centered: true });
+    this.selectedItem = this.data.find(m => m.id === id);
+    this.openModal();
+  }
+
+  public editItem(id: number) {
+    this.isCreating = false;
+    this.isEditing = true;
+    this.form.reset();
+    this.selectedItem = this.data.find(m => m.id === id);
+    this.form.patchValue({
+      ...this.selectedItem,
+      accessPermission: this.selectedItem.acessoNiveisPermissao.descricao
+    });
+    this.openModal();
   }
 
   public showAlertDelete(id: number) {
-    this.selectedModule = this.data.find(m => m.id === id);
+    this.selectedItem = this.data.find(m => m.id === id);
     this.alertDeleteWarning.fire();
   }
 
   public deleteItem() {
-    this.storeModule.dispatch(deleteModule({ id: this.selectedModule.id }));
+    this.isDeleting = true;
+    this.storeModule.dispatch(deleteModule({ id: this.selectedItem.id }));
   }
 
   public addNewItem() {
+    if (this.editItem) {
+      this.form.reset();
+    }
     this.isCreating = true;
     this.isEditing = false;
-    this.modalService.open(this.modal, { centered: true });
+    this.openModal();
   }
 
   public openVerticallyCentered(content) {
@@ -118,6 +148,16 @@ export class ModulosComponent implements OnInit {
 
   public getMessagesError(controlName: string): any {
     return (validationMessages[controlName] || validationMessages['default']);
+  }
+
+  private openModal() {
+    this.modalService.open(this.modal, { centered: true });
+  }
+
+  private clearModalData() {
+    this.isCreating = false;
+    this.isEditing = false;
+    this.isSubmiting = false;
   }
 
   private initRows() {
@@ -134,13 +174,17 @@ export class ModulosComponent implements OnInit {
             };
           });
           if (this.isSubmiting) {
-            this.isSubmiting = false;
-            this.isEditing = false;
-            this.isCreating = false;
+            this.notifierService.notify('success', 'Salvo!');
             this.form.reset();
             this.form.enable();
             await this.spinner.hide();
             this.modalService.dismissAll();
+            this.isSubmiting = false;
+            this.isEditing = false;
+            this.isCreating = false;
+          } else if (this.isDeleting) {
+            this.isDeleting = false;
+            this.notifierService.notify('success', 'Salvo!');
           }
         }
       });

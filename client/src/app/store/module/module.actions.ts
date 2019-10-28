@@ -28,6 +28,11 @@ export const postModuleSuccess = createAction(
     props<ModuleResponse>()
 );
 
+export const postModuleEditSuccess = createAction(
+    moduleTypes.POST_EDIT_MODULE_SUCCESS,
+    props<ModuleResponse>()
+);
+
 export const postModuleError = createAction(
     moduleTypes.POST_MODULE_ERROR,
     props<ApiResponseErrors>()

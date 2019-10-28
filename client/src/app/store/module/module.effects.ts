@@ -36,6 +36,9 @@ export class ModuleEffects {
             return this.moduleService.postModule(body)
                 .pipe(
                     map(res => {
+                        if(action.id){
+                            return moduleActions.postModuleEditSuccess(res.data);
+                        }
                         return moduleActions.postModuleSuccess(res.data);
                     }),
                     catchError(res => {

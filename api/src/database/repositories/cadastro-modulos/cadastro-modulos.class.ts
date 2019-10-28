@@ -153,4 +153,27 @@ export default class CadastroModulosRepository {
             throw ex;
         }
     };
+
+    /**
+     * Atualiza um modulo.
+     *
+     * @param {object} data
+     * @returns {Promise<cadastroModulosModel>}
+     * @memberof CadastroModulosRepository
+     */
+    public async update(id: number, data: object): Promise<void> {
+        try {
+            await this.cadastroModulosModel.update({
+                ...data,
+            },
+            {
+                where: {
+                    id,
+                },
+            });
+        } catch (ex) {
+            logger.error(`Erro ao realizar consulta no repository :'CadastroModulosRepository'-> 'insert'. Error: ${ex}`);
+            throw ex;
+        }
+    };
 };

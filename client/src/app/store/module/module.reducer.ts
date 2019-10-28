@@ -18,9 +18,17 @@ export const moduleReducer = createReducer(
     on(moduleActions.postModuleSuccess, (state, res) => ({
         ...state, modules: [...state.modules, res]
     })),
+    on(moduleActions.postModuleEditSuccess, (state, res) => {
+        const modules = [...state.modules];
+        const index = modules.findIndex(m => m.id == res.id);
+        modules[index] = res;
+        return ({
+            ...state, modules
+        });
+    }),
     on(moduleActions.deleteModuleSuccess, (state, res) => {
         const modules = [...state.modules];
-        const index = modules.findIndex(m=>m.id == res.id);
+        const index = modules.findIndex(m => m.id == res.id);
         modules.splice(index, 1);
         return ({
             ...state, modules

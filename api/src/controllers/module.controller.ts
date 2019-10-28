@@ -4,6 +4,7 @@ import { CadastroModulosRepository } from '@api/database/repositories';
 import logger from '@api/util/logger';
 import BaseController from './base-controller.class';
 import { ModuleBody } from '@api/DTO';
+import { ModuleResponse } from '@shared/interfaces';
 
 /**
  * Controller que contém os métodos de CRUD da tabela cadastro_modulos
@@ -50,6 +51,10 @@ export default class ModuleController extends BaseController {
             if (!body.id) {
                 const results = await this.cadastroModulosRepository.insert(body);
                 body.id = results.id;
+            } else {
+                const moduleData = await this.cadastroModulosRepository.findById(body.id);
+                const newValue = { ...moduleData, ...body };
+                await this.cadastroModulosRepository.update(body.id, newValue);
             }
             const response = await this.cadastroModulosRepository.findById(body.id);
             return this.sendResponse(res, 200, response);
