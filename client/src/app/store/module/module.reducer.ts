@@ -18,6 +18,14 @@ export const moduleReducer = createReducer(
     on(moduleActions.postModuleSuccess, (state, res) => ({
         ...state, modules: [...state.modules, res]
     })),
+    on(moduleActions.deleteModuleSuccess, (state, res) => {
+        const modules = [...state.modules];
+        const index = modules.findIndex(m=>m.id == res.id);
+        modules.splice(index, 1);
+        return ({
+            ...state, modules
+        });
+    }),
 );
 
 export const getModuleState = createFeatureSelector<ModuleState>('moduleState');

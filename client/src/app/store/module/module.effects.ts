@@ -36,12 +36,25 @@ export class ModuleEffects {
             return this.moduleService.postModule(body)
                 .pipe(
                     map(res => {
-                        console.log(res);
                         return moduleActions.postModuleSuccess(res.data);
                     }),
                     catchError(res => {
-                        return of(moduleActions.getModulesError(((res.error && res.error.data) || { errors: [ApiConstants.UNEXPECTED_ERROR] })));
+                        return of(moduleActions.postModuleError(((res.error && res.error.data) || { errors: [ApiConstants.UNEXPECTED_ERROR] })));
                     })
                 )
         })));
+
+    public deleteModules$ = createEffect(() => this.actions$.pipe(
+        ofType(moduleActions.deleteModule),
+        switchMap((action) =>
+            this.moduleService.deleteModule(action.id)
+                .pipe(
+                    map(() => {
+                        return moduleActions.deleteModuleSuccess(action);
+                    }),
+                    catchError(res => {
+                        return of(moduleActions.deleteModuleError(((res.error && res.error.data) || { errors: [ApiConstants.UNEXPECTED_ERROR] })));
+                    })
+                )
+        )));
 }

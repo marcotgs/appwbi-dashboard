@@ -4,13 +4,14 @@ import { Subject, Observable, merge } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, filter } from 'rxjs/operators';
 import { NotifierService } from 'angular-notifier';
 import { Store } from '@ngrx/store';
-import { ModuleState, getModules, getModuleState, postModule } from '@app/store/module';
+import { ModuleState, getModules, getModuleState, postModule, deleteModule } from '@app/store/module';
 import { AccessPermissionState } from '@app/store/states';
 import { getPermissions, getAccessPermissionState } from '@app/store/access-permission';
 import { ModuleResponse, ApiResponseError, PermissionResponse } from '@shared/interfaces';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import validationMessages from '@app/constants/form-validation/form-validation.constants';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 
 @Component({
   selector: 'app-modulos',
@@ -20,6 +21,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
 
 export class ModulosComponent implements OnInit {
   @ViewChild('modal', { static: true }) private modal: TemplateRef<any>;
+  @ViewChild('instance', { static: true }) instance;
+  public focus$ = new Subject<string>();
+  public click$ = new Subject<string>();
   public rows = [];
   public columns = [];
   public loading = false;
@@ -29,11 +33,10 @@ export class ModulosComponent implements OnInit {
   public selectedModule: ModuleResponse = null;
   public form: FormGroup;
   public formErrors: ApiResponseError[] | string[] = [];
+  public alertTitle = `Tem certeza que deseja excluir o modulo '${(this.selectedModule || {}).descricao}'`;
   private data: ModuleResponse[] = [];
   private permissions: PermissionResponse[] = [];
-  @ViewChild('instance', { static: true }) instance;
-  public focus$ = new Subject<string>();
-  public click$ = new Subject<string>();
+  @ViewChild('alertDeleteWarning', { static: false }) private alertDeleteWarning: SwalComponent;
 
   constructor(
     private modalService: NgbModal,
@@ -92,6 +95,15 @@ export class ModulosComponent implements OnInit {
     this.isEditing = false;
     this.selectedModule = this.data.find(m => m.id === id);
     this.modalService.open(this.modal, { centered: true });
+  }
+
+  public showAlertDelete(id: number) {
+    this.selectedModule = this.data.find(m => m.id === id);
+    this.alertDeleteWarning.fire();
+  }
+
+  public deleteItem() {
+    this.storeModule.dispatch(deleteModule({ id: this.selectedModule.id }));
   }
 
   public addNewItem() {

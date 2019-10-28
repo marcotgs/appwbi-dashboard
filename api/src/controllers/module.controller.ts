@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import { JsonController, Authorized, Get, Res, Post, Body } from 'routing-controllers';
+import { JsonController, Authorized, Get, Res, Post, Body, Delete, Param } from 'routing-controllers';
 import { CadastroModulosRepository } from '@api/database/repositories';
 import logger from '@api/util/logger';
 import BaseController from './base-controller.class';
@@ -43,16 +43,31 @@ export default class ModuleController extends BaseController {
     @Authorized()
     @Post('/')
     public async postModule(
-        @Body() body: ModuleBody ,
+        @Body() body: ModuleBody,
         @Res() res: Response,
     ): Promise<Response> {
         try {
-            if(!body.id){
+            if (!body.id) {
                 const results = await this.cadastroModulosRepository.insert(body);
                 body.id = results.id;
             }
             const response = await this.cadastroModulosRepository.findById(body.id);
             return this.sendResponse(res, 200, response);
+        } catch (ex) {
+            logger.error(`Erro na requisição de 'getModules' no controller 'ModulesController'. Erro -> ${ex}`);
+            return this.sendResponse(res, 500);
+        }
+    }
+
+    @Authorized()
+    @Delete('/:id')
+    public async deleteModule(
+        @Param('id') id: number,
+        @Res() res: Response,
+    ): Promise<Response> {
+        try {
+            await this.cadastroModulosRepository.delete(id);
+            return this.sendResponse(res, 200);
         } catch (ex) {
             logger.error(`Erro na requisição de 'getModules' no controller 'ModulesController'. Erro -> ${ex}`);
             return this.sendResponse(res, 500);

@@ -119,6 +119,26 @@ export default class CadastroModulosRepository {
     };
 
     /**
+     * Deleta um módulo.
+     *
+     * @param {number} id
+     * @returns {Promise<number>}
+     * @memberof CadastroModulosRepository
+     */
+    public async delete(id: number): Promise<number> {
+        try {
+            return await this.cadastroModulosModel.destroy({
+                where: {
+                    id,
+                },
+            });
+        } catch (ex) {
+            logger.error(`Erro ao realizar consulta no repository :'CadastroModulosRepository'-> 'delete'. Error: ${ex}`);
+            throw ex;
+        }
+    };
+
+    /**
      * Insere um novo módulo.
      *
      * @param {object} data

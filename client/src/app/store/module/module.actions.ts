@@ -32,3 +32,18 @@ export const postModuleError = createAction(
     moduleTypes.POST_MODULE_ERROR,
     props<ApiResponseErrors>()
 );
+
+export const deleteModule = createAction(
+    moduleTypes.DELETE_MODULE,
+    props<{ id: number }>(),
+);
+
+export const deleteModuleSuccess = createAction(
+    moduleTypes.DELETE_MODULE_SUCCESS,
+    props<{ id: number }>(),
+);
+
+export const deleteModuleError = createAction(
+    moduleTypes.DELETE_MODULE_ERROR,
+    props<ApiResponseErrors>()
+);

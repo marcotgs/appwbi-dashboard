@@ -21,4 +21,9 @@ export default class ModuleService {
         const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authToken.getToken()}`);
         return this.http.post<ApiPayload<ModuleResponse>>(`${this.controllerPath}/`, body, { headers });
     }
+
+    public deleteModule(id: number): Observable<ApiPayload<ModuleResponse>> {
+        const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authToken.getToken()}`);
+        return this.http.delete<ApiPayload<ModuleResponse>>(`${this.controllerPath}/${id}`, { headers });
+    }
 }
