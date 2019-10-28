@@ -3,4 +3,5 @@ export * from './api-response-error.interface';
 export * from './auth';
 export * from './user';
 export * from './module';
+export * from './routine';
 export * from './permission';
