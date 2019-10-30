@@ -1,18 +1,18 @@
 import { Component, ViewEncapsulation, ViewChild, TemplateRef, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { Subject, Observable, merge } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, filter } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { NotifierService } from 'angular-notifier';
 import { Store } from '@ngrx/store';
-import { ModuleState, getModules, getModuleState, postModule, deleteModule } from '@app/store/module';
 import { AccessPermissionState, RoutineState } from '@app/store/states';
 import { getPermissions, getAccessPermissionState } from '@app/store/access-permission';
 import { RoutineResponse, ApiResponseError, PermissionResponse, ModuleResponse } from '@shared/interfaces';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import validationMessages from '@app/constants/form-validation/form-validation.constants';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
-import { getRoutineState, getRoutines } from '@app/store/routine';
+import { getRoutineState, getRoutines, postRoutine, deleteRoutine } from '@app/store/routine';
+import { ModuleState, getModules, getModuleState } from '@app/store/module';
 
 @Component({
   selector: 'app-rotinas',
@@ -23,8 +23,10 @@ import { getRoutineState, getRoutines } from '@app/store/routine';
 export class RotinasComponent implements OnInit {
   @ViewChild('modal', { static: true }) private modal: TemplateRef<any>;
   @ViewChild('instance', { static: true }) instance;
-  public focus$ = new Subject<string>();
-  public click$ = new Subject<string>();
+  public focusPermission$ = new Subject<string>();
+  public clickPermission$ = new Subject<string>();
+  public focusModule$ = new Subject<string>();
+  public clickModule$ = new Subject<string>();
   public rows = [];
   public columns = [];
   public loading = false;
@@ -75,7 +77,7 @@ export class RotinasComponent implements OnInit {
   public filterTable(event) {
     const val = event.target.value.toLowerCase();
 
-    const temp = this.data.filter(function (d) {
+    const temp = this.rows.filter((d) => {
       return d.descricao.toLowerCase().indexOf(val) !== -1 || !val;
     });
 
@@ -90,14 +92,15 @@ export class RotinasComponent implements OnInit {
       const payload = {
         ...this.form.value,
         idAcessoNiveisPermissao: this.permissions.find(p => p.descricao === this.form.get('accessPermission').value).id,
-        idCadastroModulos: this.permissions.find(p => p.descricao === this.form.get('module').value).id,
+        idCadastroModulos: this.modules.find(p => p.descricao === this.form.get('module').value).id,
       }
       if (this.isEditing) {
         payload.id = this.selectedItem.id;
       }
       delete payload.accessPermission;
+      delete payload.module;
       this.isSubmiting = true;
-      this.storeModule.dispatch(postModule(payload));
+      this.storeModule.dispatch(postRoutine(payload));
     }
   }
 
@@ -106,11 +109,24 @@ export class RotinasComponent implements OnInit {
       debounceTime(200),
       distinctUntilChanged()
     );
-    const inputFocus$ = this.focus$;
+    const inputFocus$ = this.focusPermission$;
 
     return merge(debouncedText$, inputFocus$).pipe(
       map(term => (term === '' ? this.permissions.map(v => v.descricao) :
         this.permissions.map(v => v.descricao).filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1)).slice(0, 10))
+    );
+    // tslint:disable-next-line:semicolon
+  }
+  public searchModule = (text$: Observable<string>) => {
+    const debouncedText$ = text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged()
+    );
+    const inputFocus$ = this.focusModule$;
+
+    return merge(debouncedText$, inputFocus$).pipe(
+      map(term => (term === '' ? this.modules.map(v => v.descricao) :
+        this.modules.map(v => v.descricao).filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1)).slice(0, 10))
     );
     // tslint:disable-next-line:semicolon
   }
@@ -129,7 +145,8 @@ export class RotinasComponent implements OnInit {
     this.selectedItem = this.data.find(m => m.id === id);
     this.form.patchValue({
       ...this.selectedItem,
-      accessPermission: this.selectedItem.accessPermission.descricao
+      accessPermission: this.selectedItem.acessoNiveisPermissao.descricao,
+      module: this.selectedItem.cadastroModulo.descricao
     });
     this.openModal();
   }
@@ -141,7 +158,7 @@ export class RotinasComponent implements OnInit {
 
   public deleteItem() {
     this.isDeleting = true;
-    this.storeModule.dispatch(deleteModule({ id: this.selectedItem.id }));
+    this.storeModule.dispatch(deleteRoutine({ id: this.selectedItem.id }));
   }
 
   public addNewItem() {
@@ -165,17 +182,10 @@ export class RotinasComponent implements OnInit {
     this.modalService.open(this.modal, { centered: true });
   }
 
-  private clearModalData() {
-    this.isCreating = false;
-    this.isEditing = false;
-    this.isSubmiting = false;
-  }
-
   private initRows() {
     this.storeRoutine.select(getRoutineState)
       .subscribe(async (data) => {
         if (data.routines) {
-          console.log(data.routines);
           this.loading = false;
           this.data = data.routines;
           this.rows = data.routines.map((r) => {
