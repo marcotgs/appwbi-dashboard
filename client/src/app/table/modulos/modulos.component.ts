@@ -65,7 +65,7 @@ export class ModulosComponent implements OnInit {
   public filterTable(event) {
     const val = event.target.value.toLowerCase();
 
-    const temp = this.data.filter(function (d) {
+    const temp = this.rows.filter(function (d) {
       return d.descricao.toLowerCase().indexOf(val) !== -1 || !val;
     });
 
