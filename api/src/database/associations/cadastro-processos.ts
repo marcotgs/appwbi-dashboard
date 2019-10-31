@@ -8,11 +8,6 @@ const addCadastroProcessosAssociation = (models: any): void => {
         }
     );
     (models.cadastroProcessos as cadastroProcessosModelStatic).belongsTo(
-        models.cadastroModulos, {
-            foreignKey: 'id_cadastro_modulos',
-        }
-    );
-    (models.cadastroProcessos as cadastroProcessosModelStatic).belongsTo(
         models.acessoNiveisPermissao, {
             foreignKey: 'id_acesso_niveis_permissao',
         }

@@ -28,11 +28,12 @@ import { ColortableComponent } from './color-table/color.component';
 import { TablesizeComponent } from './sizing/size.component';
 import { ModuleEffects } from '@app/store/module';
 import { RoutineEffects } from '@app/store/routine';
+import { ProcessEffects } from '@app/store/process';
 
 
 @NgModule({
   imports: [
-    EffectsModule.forRoot([ModuleEffects, RoutineEffects]),
+    EffectsModule.forRoot([ModuleEffects, RoutineEffects, ProcessEffects]),
     RouterModule.forChild(TablesRoutes),
     CommonModule,
     ReactiveFormsModule,

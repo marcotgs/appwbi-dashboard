@@ -24,7 +24,7 @@ export default class CadastroProcessosRepository {
      * @memberof CadastroProcessosRepository
      */
     public constructor() {
-        this.cadastroProcessosModel = Database.models.cadastroRotinas;
+        this.cadastroProcessosModel = Database.models.cadastroProcessos;
     }
 
     /**
@@ -43,12 +43,14 @@ export default class CadastroProcessosRepository {
                         attributes: ['descricao', 'id'],
                     },
                     {
-                        model: Database.models.cadastroModulos,
-                        attributes: ['descricao', 'id'],
-                    },
-                    {
                         model: Database.models.cadastroRotinas,
                         attributes: ['descricao', 'id'],
+                        include: [
+                            {
+                                model: Database.models.cadastroModulos,
+                                attributes: ['descricao', 'id'],
+                            }
+                        ]
                     }
                 ]
             });
@@ -75,12 +77,14 @@ export default class CadastroProcessosRepository {
                         attributes: ['descricao', 'id'],
                     },
                     {
-                        model: Database.models.cadastroModulos,
-                        attributes: ['descricao', 'id'],
-                    },
-                    {
                         model: Database.models.cadastroRotinas,
                         attributes: ['descricao', 'id'],
+                        include: [
+                            {
+                                model: Database.models.cadastroModulos,
+                                attributes: ['descricao', 'id'],
+                            }
+                        ]
                     }
                 ]
             });

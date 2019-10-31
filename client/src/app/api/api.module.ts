@@ -1,6 +1,9 @@
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { UserService, AuthService, ModuleService, AccessPermissionService, RoutineService } from './services';
+import {
+    UserService, AuthService, ModuleService,
+    AccessPermissionService, RoutineService, ProcessService
+} from './services';
 import { ApiHttpInterceptor } from './interceptors/http.interceptor';
 
 @NgModule({
@@ -12,6 +15,7 @@ import { ApiHttpInterceptor } from './interceptors/http.interceptor';
         AuthService,
         ModuleService,
         RoutineService,
+        ProcessService,
         AccessPermissionService,
         {
             provide: HTTP_INTERCEPTORS,

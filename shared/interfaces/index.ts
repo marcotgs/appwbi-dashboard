@@ -4,4 +4,5 @@ export * from './auth';
 export * from './user';
 export * from './module';
 export * from './routine';
+export * from './process';
 export * from './permission';

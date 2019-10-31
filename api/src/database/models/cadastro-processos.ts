@@ -17,16 +17,6 @@ const cadastroProcessosModelInit = (sequelize: Sequelize): cadastroProcessosMode
 			comment: "null",
 			field: 'descricao'
 		},
-		'idCadastroModulos': {
-			type: DataTypes.INTEGER,
-			allowNull: false,
-			comment: "null",
-			references: {
-				model: 'cadastro_modulos',
-				key: 'id'
-			},
-			field: 'id_cadastro_modulos'
-		},
 		'idCadastroRotinas': {
 			type: DataTypes.INTEGER,
 			allowNull: false,
@@ -68,7 +58,6 @@ const cadastroProcessosModelInit = (sequelize: Sequelize): cadastroProcessosMode
 export interface cadastroProcessosModel extends Model {
 	id:number;
 	descricao:any;
-	idCadastroModulos:number;
 	idCadastroRotinas:number;
 	idAcessoNiveisPermissao:number;
 	funcao:string;
