@@ -13,7 +13,8 @@ import Database from '@api/database';
 import {
     UserController, AuthController,
     ModuleController, AccessPermissionController,
-    RoutineController
+    RoutineController,
+    ProcessController
 } from '@api/controllers';
 import Passaport from '@api/util/passport';
 import express from 'express';
@@ -29,7 +30,8 @@ Database.connect().
         const app = createExpressServer({
             routePrefix: '/api',
             cors: true,
-            controllers: [UserController, AuthController, ModuleController, RoutineController, AccessPermissionController],
+            controllers: [UserController, AuthController, ModuleController,
+                RoutineController, AccessPermissionController, ProcessController],
             authorizationChecker: async (action: Action): Promise<boolean> => {
                 if (!action.request.headers.authorization) {
                     return false;
