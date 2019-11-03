@@ -10,6 +10,7 @@ import addCadastroProcessosAssociation from './cadastro-processos';
 import addCadastroRotinasAssociation from './cadastro-rotinas';
 import addCadastroSetoresAssociation from './cadastro-setores';
 import addEmpresaAssociation from './empresa';
+import addCadastroFiliaisAssociation from './cadastro-filiais';
 
 const readModels = (sequelize: Sequelize): void => {
     const models: any = {};
@@ -32,6 +33,7 @@ const addAssociations = (sequelize: Sequelize): any => {
     addCadastroRotinasAssociation(models);
     addCadastroSetoresAssociation(models);
     addEmpresaAssociation(models);
+    addCadastroFiliaisAssociation(models);
     return models;
 };
 

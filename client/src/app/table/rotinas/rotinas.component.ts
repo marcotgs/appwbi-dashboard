@@ -28,6 +28,7 @@ export class RotinasComponent implements OnInit {
   public focusModule$ = new Subject<string>();
   public clickModule$ = new Subject<string>();
   public rows = [];
+  public temp = [];
   public columns = [];
   public loading = false;
   public isEditing = false;
@@ -76,7 +77,7 @@ export class RotinasComponent implements OnInit {
   public filterTable(event) {
     const val = event.target.value.toLowerCase();
 
-    const temp = this.rows.filter((d) => {
+    const temp = this.temp.filter((d) => {
       return d.descricao.toLowerCase().indexOf(val) !== -1 || !val;
     });
 
@@ -195,6 +196,7 @@ export class RotinasComponent implements OnInit {
               [this.columns[2].name.toLowerCase()]: r.acessoNiveisPermissao.descricao,
             };
           });
+          this.temp = [...this.rows];
           if (this.isSubmiting) {
             this.notifierService.notify('success', 'Salvo!');
             this.form.reset();

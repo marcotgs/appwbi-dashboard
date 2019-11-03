@@ -1,7 +1,7 @@
 import { Component, ViewEncapsulation, ViewChild, TemplateRef, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject, Observable, merge } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, filter } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { NotifierService } from 'angular-notifier';
 import { Store } from '@ngrx/store';
 import { ModuleState, getModules, getModuleState, postModule, deleteModule } from '@app/store/module';
@@ -25,6 +25,7 @@ export class ModulosComponent implements OnInit {
   public focus$ = new Subject<string>();
   public click$ = new Subject<string>();
   public rows = [];
+  public temp = [];
   public columns = [];
   public loading = false;
   public isEditing = false;
@@ -64,7 +65,7 @@ export class ModulosComponent implements OnInit {
   public filterTable(event) {
     const val = event.target.value.toLowerCase();
 
-    const temp = this.rows.filter(function (d) {
+    const temp = this.temp.filter(function (d) {
       return d.descricao.toLowerCase().indexOf(val) !== -1 || !val;
     });
 
@@ -172,6 +173,7 @@ export class ModulosComponent implements OnInit {
               [this.columns[1].name.toLowerCase()]: m.acessoNiveisPermissao.descricao,
             };
           });
+          this.temp = [...this.rows];
           if (this.isSubmiting) {
             this.notifierService.notify('success', 'Salvo!');
             this.form.reset();

@@ -1,0 +1,1 @@
+export { default as CadastroFiliaisRepository } from './cadastro-filiais.class';

@@ -6,3 +6,4 @@ export { default as RoutineController } from './routine.controller';
 export { default as ProcessController } from './process.controller';
 export { default as SectorController } from './sector.controller';
 export { default as CompanyController } from './company.controller';
+export { default as CompanyBranchController } from './company-branch.controller';

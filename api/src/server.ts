@@ -14,7 +14,8 @@ import {
     UserController, AuthController,
     ModuleController, AccessPermissionController,
     RoutineController, ProcessController,
-    SectorController, CompanyController
+    SectorController, CompanyController, 
+    CompanyBranchController
 } from '@api/controllers';
 import Passaport from '@api/util/passport';
 import express from 'express';
@@ -32,7 +33,7 @@ Database.connect().
             cors: true,
             controllers: [UserController, AuthController, ModuleController,
                 RoutineController, AccessPermissionController, ProcessController,
-                SectorController, CompanyController],
+                SectorController, CompanyController, CompanyBranchController],
             authorizationChecker: async (action: Action): Promise<boolean> => {
                 if (!action.request.headers.authorization) {
                     return false;
