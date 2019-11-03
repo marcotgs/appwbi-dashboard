@@ -5,4 +5,6 @@ export * from './user';
 export * from './module';
 export * from './routine';
 export * from './process';
+export * from './sector';
 export * from './permission';
+export * from './company';

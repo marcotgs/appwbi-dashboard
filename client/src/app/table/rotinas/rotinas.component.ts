@@ -37,7 +37,6 @@ export class RotinasComponent implements OnInit {
   public selectedItem: RoutineResponse = null;
   public form: FormGroup;
   public formErrors: ApiResponseError[] | string[] = [];
-  public alertTitle = `Tem certeza que deseja excluir o modulo '${(this.selectedItem || {}).descricao}'`;
   private data: RoutineResponse[] = [];
   private permissions: PermissionResponse[] = [];
   private modules: ModuleResponse[] = [];

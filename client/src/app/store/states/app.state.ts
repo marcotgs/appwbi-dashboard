@@ -1,6 +1,6 @@
 import {
     UserState, AccessPermissionState, ModuleState,
-    RoutineState, ProcessState
+    RoutineState, ProcessState, SectorState, CompanyState
 } from '@app/store/states';
 
 export interface AppState {
@@ -9,4 +9,6 @@ export interface AppState {
     moduleState?: ModuleState;
     routineState?: RoutineState;
     processState?: ProcessState;
+    sectorState?: SectorState;
+    companyState?: CompanyState;
 }

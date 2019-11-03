@@ -66,8 +66,8 @@ export default class RoutineController extends BaseController {
                 const results = await this.cadastroRotinasRepository.insert(body);
                 body.id = results.id;
             } else {
-                const moduleData = await this.cadastroRotinasRepository.findById(body.id);
-                const newValue = { ...moduleData, ...body };
+                const routineData = await this.cadastroRotinasRepository.findById(body.id);
+                const newValue = { ...routineData, ...body };
                 await this.cadastroRotinasRepository.update(body.id, newValue);
             }
             const response = await this.cadastroRotinasRepository.findById(body.id);

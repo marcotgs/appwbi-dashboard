@@ -66,8 +66,8 @@ export default class ProcessController extends BaseController {
                 const results = await this.cadastroProcessosRepository.insert(body);
                 body.id = results.id;
             } else {
-                const moduleData = await this.cadastroProcessosRepository.findById(body.id);
-                const newValue = { ...moduleData, ...body };
+                const processData = await this.cadastroProcessosRepository.findById(body.id);
+                const newValue = { ...processData, ...body };
                 await this.cadastroProcessosRepository.update(body.id, newValue);
             }
             const response = await this.cadastroProcessosRepository.findById(body.id);

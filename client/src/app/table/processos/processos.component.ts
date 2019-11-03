@@ -37,7 +37,6 @@ export class ProcessosComponent implements OnInit {
   public selectedItem: ProcessResponse = null;
   public form: FormGroup;
   public formErrors: ApiResponseError[] | string[] = [];
-  public alertTitle = `Tem certeza que deseja excluir o modulo '${(this.selectedItem || {}).descricao}'`;
   private data: ProcessResponse[] = [];
   private permissions: PermissionResponse[] = [];
   private routines: RoutineResponse[] = [];

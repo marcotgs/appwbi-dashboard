@@ -7,6 +7,8 @@ import { accessPermissionReducer } from '@app/store/access-permission';
 import { moduleReducer } from '@app/store/module';
 import { routineReducer } from '@app/store/routine';
 import { processReducer } from '@app/store/process';
+import { sectorReducer } from '@app/store/sector';
+import { companyReducer } from '@app/store/company';
 
 
 export const reducers: ActionReducerMap<AppState> = {
@@ -15,4 +17,6 @@ export const reducers: ActionReducerMap<AppState> = {
   moduleState: moduleReducer,
   routineState: routineReducer,
   processState: processReducer,
+  sectorState: sectorReducer,
+  companyState: companyReducer
 };

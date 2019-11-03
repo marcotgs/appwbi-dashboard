@@ -34,7 +34,6 @@ export class ModulosComponent implements OnInit {
   public selectedItem: ModuleResponse = null;
   public form: FormGroup;
   public formErrors: ApiResponseError[] | string[] = [];
-  public alertTitle = `Tem certeza que deseja excluir o modulo '${(this.selectedItem || {}).descricao}'`;
   private data: ModuleResponse[] = [];
   private permissions: PermissionResponse[] = [];
   @ViewChild('alertDeleteWarning', { static: false }) private alertDeleteWarning: SwalComponent;

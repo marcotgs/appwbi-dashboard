@@ -1,112 +1,216 @@
-import { Component, ViewEncapsulation, ViewChild } from '@angular/core';
-import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-
-declare var require: any;
-const data: any = require('./setores.json');
+import { Component, ViewEncapsulation, ViewChild, TemplateRef, OnInit } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
+import { Subject, Observable, merge } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import { NotifierService } from 'angular-notifier';
+import { Store } from '@ngrx/store';
+import { SectorState, CompanyState } from '@app/store/states';
+import { getCompanies, getCompanyState } from '@app/store/company';
+import { CompanyResponse, ApiResponseError, SectorResponse } from '@shared/interfaces';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import validationMessages from '@app/constants/form-validation/form-validation.constants';
+import { postSector, deleteSector, getSector, getSectorState } from '@app/store/sector';
 
 @Component({
   selector: 'app-setores',
   templateUrl: './setores.component.html',
   encapsulation: ViewEncapsulation.None,
-  styles: [
-    `
-      .dark-modal .modal-content {
-        background-color: #009efb;
-        color: white;
-      }
-      .dark-modal .close {
-        color: white;
-      }
-      .light-blue-backdrop {
-        background-color: #5cb3fd;
-      }
-    `
-  ]
 })
 
-export class SetoresComponent {
-  editing = {};
-  rows = [];
-  temp = [...data];
+export class SetoresComponent implements OnInit {
+  @ViewChild('modal', { static: true }) private modal: TemplateRef<any>;
+  @ViewChild('instance', { static: true }) instance;
+  public focusCompany$ = new Subject<string>();
+  public clickCompany$ = new Subject<string>();
+  public rows = [];
+  public temp = [];
+  public columns = [];
+  public loading = false;
+  public isEditing = false;
+  public isCreating = false;
+  public isSubmiting = false;
+  public isDeleting = false;
+  public selectedItem: SectorResponse = null;
+  public form: FormGroup;
+  public formErrors: ApiResponseError[] | string[] = [];
+  private data: SectorResponse[] = [];
+  private companies: CompanyResponse[] = [];
+  @ViewChild('alertDeleteWarning', { static: false }) private alertDeleteWarning: SwalComponent;
 
-  loadingIndicator = true;
-  reorderable = true;
-
-  columns = [{ prop: 'codigo' }, { name: 'Descricao' }, { name: 'Empresa' }, { name: 'Controles' }];
-
-  closeResult: string;
-
-  @ViewChild(SetoresComponent, { static: false }) table: SetoresComponent;
-  constructor(private modalService: NgbModal, private modalService2: NgbModal) {
-    this.rows = data;
-    this.temp = [...data];
-    setTimeout(() => {
-      this.loadingIndicator = false;
-    }, 1500);
+  constructor(
+    private modalService: NgbModal,
+    private spinner: NgxSpinnerService,
+    private storeSector: Store<SectorState>,
+    private storeCompany: Store<CompanyState>,
+    private notifierService: NotifierService,
+  ) {
+    this.initForm();
+    this.getSectores();
+    this.initRows();
   }
 
-  updateFilter(event) {
+  ngOnInit(): void {
+    this.columns = [{ name: 'Codigo' }, { name: 'Descricao' }, { name: 'Empresa' }];
+    this.storeCompany.dispatch(getCompanies());
+    this.storeCompany.select(getCompanyState)
+      .subscribe(async (data) => {
+        if (data.companies) {
+          this.companies = data.companies;
+        }
+      });
+  }
+
+  public filterTable(event) {
     const val = event.target.value.toLowerCase();
 
-    // filter our data
-    const temp = this.temp.filter(function(d) {
-      return d.name.toLowerCase().indexOf(val) !== -1 || !val;
+    const temp = this.temp.filter((d) => {
+      return d.descricao.toLowerCase().indexOf(val) !== -1 || !val;
     });
-
-    // update the rows
     this.rows = temp;
-    // Whenever the filter changes, always go back to the first page
-    this.table = data;
-  }
-  
-  updateValue(event, cell, rowIndex) {
-    console.log('inline editing rowIndex', rowIndex);
-    this.editing[rowIndex + '-' + cell] = false;
-    this.rows[rowIndex][cell] = event.target.value;
-    this.rows = [...this.rows];
-    console.log('UPDATED!', this.rows[rowIndex][cell]);
   }
 
-  open2(content) {
-    this.modalService.open(content).result.then(
-      result => {
-        this.closeResult = `Closed with: ${result}`;
-      },
-      reason => {
-        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+  public async formSubmit(): Promise<void> {
+    this.markFormFieldsAsTouched();
+    if (this.form.valid) {
+      this.form.disable();
+      await this.spinner.show();
+      const payload = {
+        ...this.form.value,
+        idEmpresa: this.companies.find(p => p.nome === this.form.get('company').value).id,
       }
-    );
-  }
-  open(content) {
-    this.modalService2.open(content, { windowClass: 'dark-modal' });
-  }
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
+      if (this.isEditing) {
+        payload.id = this.selectedItem.id;
+      }
+      delete payload.company;
+      this.isSubmiting = true;
+      this.storeSector.dispatch(postSector(payload));
     }
   }
 
-  openBackDropCustomClass(content) {
-    this.modalService.open(content, {backdropClass: 'light-blue-backdrop'});
+  public search = (text$: Observable<string>) => {
+    const debouncedText$ = text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged()
+    );
+    const inputFocus$ = this.focusCompany$;
+
+    return merge(debouncedText$, inputFocus$).pipe(
+      map(term => (term === '' ? this.companies.map(v => v.nome) :
+        this.companies.map(v => v.nome).filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1)).slice(0, 10))
+    );
+    // tslint:disable-next-line:semicolon
   }
 
-  openWindowCustomClass(content) {
-    this.modalService.open(content, { windowClass: 'dark-modal' });
+  public viewItem(id: number) {
+    this.isCreating = false;
+    this.isEditing = false;
+    this.selectedItem = this.data.find(m => m.id === id);
+    this.openModal();
   }
 
-  openSm(content) {
-    this.modalService.open(content, { size: 'sm' });
+  public editItem(id: number) {
+    this.isCreating = false;
+    this.isEditing = true;
+    this.form.reset();
+    this.selectedItem = this.data.find(m => m.id === id);
+    this.form.patchValue({
+      ...this.selectedItem,
+      company: this.selectedItem.empresa.nome,
+    });
+    this.openModal();
   }
 
-  openLg(content) {
-    this.modalService.open(content, { size: 'lg' });
+  public showAlertDelete(id: number) {
+    this.selectedItem = this.data.find(m => m.id === id);
+    this.alertDeleteWarning.fire();
   }
 
-  openVerticallyCentered(content) {
+  public deleteItem() {
+    this.isDeleting = true;
+    this.storeSector.dispatch(deleteSector({ id: this.selectedItem.id }));
+  }
+
+  public addNewItem() {
+    if (this.editItem) {
+      this.form.reset();
+    }
+    this.isCreating = true;
+    this.isEditing = false;
+    this.openModal();
+  }
+
+  public openVerticallyCentered(content) {
     this.modalService.open(content, { centered: true });
+  }
+
+  public getMessagesError(controlName: string): any {
+    return (validationMessages[controlName] || validationMessages['default']);
+  }
+
+  private openModal() {
+    this.modalService.open(this.modal, { centered: true });
+  }
+
+  private initRows() {
+    this.storeSector.select(getSectorState)
+      .subscribe(async (data) => {
+        if (data.sectors) {
+          this.loading = false;
+          this.data = data.sectors;
+          this.rows = data.sectors.map((r) => {
+            return {
+              id: r.id,
+              [this.columns[0].name.toLowerCase()]: r.codigo,
+              [this.columns[1].name.toLowerCase()]: r.descricao,
+              [this.columns[2].name.toLowerCase()]: r.empresa.nome,
+            };
+          });
+          this.temp = [...this.rows];
+          if (this.isSubmiting) {
+            this.notifierService.notify('success', 'Salvo!');
+            this.form.reset();
+            this.form.enable();
+            await this.spinner.hide();
+            this.modalService.dismissAll();
+            this.isSubmiting = false;
+            this.isEditing = false;
+            this.isCreating = false;
+          } else if (this.isDeleting) {
+            this.isDeleting = false;
+            this.notifierService.notify('success', 'Salvo!');
+          }
+        }
+      });
+  }
+
+  private getSectores() {
+    this.loading = true;
+    this.storeSector.dispatch(getSector());
+  }
+
+  private markFormFieldsAsTouched(): void {
+    Object.keys(this.form.controls).forEach(field => {
+      const control = this.form.get(field);
+      control.markAsTouched({ onlySelf: true });
+    });
+  }
+
+  private initForm(): void {
+    this.form = new FormGroup({
+      descricao: new FormControl('', {
+        validators: Validators.required,
+      }),
+      company: new FormControl('', {
+        validators: Validators.required,
+      }),
+      codigo: new FormControl('', {
+        validators: Validators.compose([
+          Validators.required,
+          Validators.maxLength(4),
+        ]),
+      }),
+    });
   }
 }

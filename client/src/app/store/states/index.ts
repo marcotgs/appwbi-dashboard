@@ -4,3 +4,5 @@ export * from "../access-permission/access-permission.state";
 export * from "../module/module.state";
 export * from "../routine/routine.state";
 export * from "../process/process.state";
+export * from "../sector/sector.state";
+export * from "../company/company.state";

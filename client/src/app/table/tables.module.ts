@@ -29,11 +29,13 @@ import { TablesizeComponent } from './sizing/size.component';
 import { ModuleEffects } from '@app/store/module';
 import { RoutineEffects } from '@app/store/routine';
 import { ProcessEffects } from '@app/store/process';
+import { SectorEffects } from '@app/store/sector';
+import { CompanyEffects } from '@app/store/company';
 
 
 @NgModule({
   imports: [
-    EffectsModule.forRoot([ModuleEffects, RoutineEffects, ProcessEffects]),
+    EffectsModule.forRoot([ModuleEffects, RoutineEffects, ProcessEffects, SectorEffects, CompanyEffects]),
     RouterModule.forChild(TablesRoutes),
     CommonModule,
     ReactiveFormsModule,
