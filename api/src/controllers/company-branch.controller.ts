@@ -1,6 +1,6 @@
 import { Response } from 'express';
 import { JsonController, Authorized, Get, Res, Post, Body, Delete, Param } from 'routing-controllers';
-import { EmpresaRepository } from '@api/database/repositories';
+import { CadastroFiliaisRepository } from '@api/database/repositories';
 import logger from '@api/util/logger';
 import BaseController from './base-controller.class';
 import { CompanyBranchBody } from '@api/DTO';
@@ -12,9 +12,9 @@ import { CompanyBranchBody } from '@api/DTO';
  * @class CompanyBranchController
  * @extends {BaseController}
  */
-@JsonController('/company-banch')
+@JsonController('/company-branch')
 export default class CompanyBranchController extends BaseController {
-    private empresaRepository: EmpresaRepository;
+    private filiailRepository: CadastroFiliaisRepository;
 
     /**
      * Cria uma nova instância CompanyBranchController.
@@ -23,7 +23,7 @@ export default class CompanyBranchController extends BaseController {
      */
     public constructor() {
         super();
-        this.empresaRepository = new EmpresaRepository();
+        this.filiailRepository = new CadastroFiliaisRepository();
     }
 
     /**
@@ -39,7 +39,7 @@ export default class CompanyBranchController extends BaseController {
         @Res() res: Response,
     ): Promise<Response> {
         try {
-            const results = await this.empresaRepository.findAll();
+            const results = await this.filiailRepository.findAll();
             return this.sendResponse(res, 200, results);
         } catch (ex) {
             logger.error(`Erro na requisição de 'getCompaniesBranchs' no controller 'CompanyBranchController'. Erro -> ${ex}`);
@@ -63,14 +63,14 @@ export default class CompanyBranchController extends BaseController {
     ): Promise<Response> {
         try {
             if (!body.id) {
-                const results = await this.empresaRepository.insert(body);
+                const results = await this.filiailRepository.insert(body);
                 body.id = results.id;
             } else {
-                const companyData = await this.empresaRepository.findById(body.id);
+                const companyData = await this.filiailRepository.findById(body.id);
                 const newValue = { ...companyData, ...body };
-                await this.empresaRepository.update(body.id, newValue);
+                await this.filiailRepository.update(body.id, newValue);
             }
-            const response = await this.empresaRepository.findById(body.id);
+            const response = await this.filiailRepository.findById(body.id);
             return this.sendResponse(res, 200, response);
         } catch (ex) {
             logger.error(`Erro na requisição de 'postCompanyBranch' no controller 'CompanyBranchController'. Erro -> ${ex}`);
@@ -93,7 +93,7 @@ export default class CompanyBranchController extends BaseController {
         @Res() res: Response,
     ): Promise<Response> {
         try {
-            await this.empresaRepository.delete(id);
+            await this.filiailRepository.delete(id);
             return this.sendResponse(res, 200);
         } catch (ex) {
             logger.error(`Erro na requisição de 'deleteCompanyBranch' no controller 'CompanyBranchController'. Erro -> ${ex}`);

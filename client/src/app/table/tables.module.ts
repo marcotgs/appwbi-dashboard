@@ -31,11 +31,14 @@ import { RoutineEffects } from '@app/store/routine';
 import { ProcessEffects } from '@app/store/process';
 import { SectorEffects } from '@app/store/sector';
 import { CompanyEffects } from '@app/store/company';
+import { CompanyBranchEffects } from '@app/store/company-branch';
 
 
 @NgModule({
   imports: [
-    EffectsModule.forRoot([ModuleEffects, RoutineEffects, ProcessEffects, SectorEffects, CompanyEffects]),
+    EffectsModule.forRoot([
+      ModuleEffects, RoutineEffects, ProcessEffects,
+      SectorEffects, CompanyEffects, CompanyBranchEffects]),
     RouterModule.forChild(TablesRoutes),
     CommonModule,
     ReactiveFormsModule,
@@ -77,4 +80,4 @@ import { CompanyEffects } from '@app/store/company';
     AberturatableChamados,
   ],
 })
-export class TablesModule {}
+export class TablesModule { }

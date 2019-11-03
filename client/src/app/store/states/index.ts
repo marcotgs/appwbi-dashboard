@@ -6,3 +6,4 @@ export * from "../routine/routine.state";
 export * from "../process/process.state";
 export * from "../sector/sector.state";
 export * from "../company/company.state";
+export * from "../company-branch/company-branch.state";

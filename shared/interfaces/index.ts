@@ -8,3 +8,4 @@ export * from './process';
 export * from './sector';
 export * from './permission';
 export * from './company';
+export * from './company-branch';

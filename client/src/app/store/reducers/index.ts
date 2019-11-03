@@ -9,6 +9,7 @@ import { routineReducer } from '@app/store/routine';
 import { processReducer } from '@app/store/process';
 import { sectorReducer } from '@app/store/sector';
 import { companyReducer } from '@app/store/company';
+import { companyBranchReducer } from '@app/store/company-branch';
 
 
 export const reducers: ActionReducerMap<AppState> = {
@@ -18,5 +19,6 @@ export const reducers: ActionReducerMap<AppState> = {
   routineState: routineReducer,
   processState: processReducer,
   sectorState: sectorReducer,
-  companyState: companyReducer
+  companyState: companyReducer,
+  companyBranchState: companyBranchReducer
 };

@@ -3,7 +3,8 @@ import { NgModule } from '@angular/core';
 import {
     UserService, AuthService, ModuleService,
     AccessPermissionService, RoutineService, 
-    ProcessService, SectorService, CompanyService,
+    ProcessService, SectorService, CompanyService, 
+    CompanyBranchService,
 } from './services';
 import { ApiHttpInterceptor } from './interceptors/http.interceptor';
 
@@ -19,6 +20,7 @@ import { ApiHttpInterceptor } from './interceptors/http.interceptor';
         ProcessService,
         SectorService,
         CompanyService,
+        CompanyBranchService,
         AccessPermissionService,
         {
             provide: HTTP_INTERCEPTORS,
