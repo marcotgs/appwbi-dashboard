@@ -25,6 +25,7 @@ import { AberturatableChamados } from './abertura-chamados/abertura-table.chamad
 import { BasictableComponent } from './basic/basic.component';
 import { DarktableComponent } from './dark-basic/dark.component';
 import { ColortableComponent } from './color-table/color.component';
+import { PermissoesComponent } from './permissoes/permissoes.component';
 import { TablesizeComponent } from './sizing/size.component';
 import { ModuleEffects } from '@app/store/module';
 import { RoutineEffects } from '@app/store/routine';
@@ -73,6 +74,7 @@ import { CompanyBranchEffects } from '@app/store/company-branch';
     UsuariosComponent,
     RotinasComponent,
     ProcessosComponent,
+    PermissoesComponent,
     DarktableComponent,
     ColortableComponent,
     TablesizeComponent,

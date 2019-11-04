@@ -41,4 +41,37 @@ export class AccessPermissionEffects {
                     })
                 )
         )));
+
+    public postPermission$ = createEffect(() => this.actions$.pipe(
+        ofType(accessPermissionActions.postPermission),
+        switchMap((action) => {
+            const body = { ...action };
+            delete body.type;
+            return this.accessPermissionService.postPermission(body)
+                .pipe(
+                    map(res => {
+                        if (action.update) {
+                            return accessPermissionActions.postPermissionEditSuccess(res.data);
+                        }
+                        return accessPermissionActions.postPermissionSuccess(res.data);
+                    }),
+                    catchError(res => {
+                        return of(accessPermissionActions.postPermissionError(((res.error && res.error.data) || { errors: [ApiConstants.UNEXPECTED_ERROR] })));
+                    })
+                )
+        })));
+
+    public delettPermission$ = createEffect(() => this.actions$.pipe(
+        ofType(accessPermissionActions.deletePermission),
+        switchMap((action) =>
+            this.accessPermissionService.deletePermission(action.id)
+                .pipe(
+                    map(() => {
+                        return accessPermissionActions.deletePermissionSuccess(action);
+                    }),
+                    catchError(res => {
+                        return of(accessPermissionActions.deletePermissionError(((res.error && res.error.data) || { errors: [ApiConstants.UNEXPECTED_ERROR] })));
+                    })
+                )
+        )));
 }

@@ -14,6 +14,7 @@ import { BasictableComponent } from './basic/basic.component';
 import { DarktableComponent } from './dark-basic/dark.component';
 import { ColortableComponent } from './color-table/color.component';
 import { TablesizeComponent } from './sizing/size.component';
+import { PermissoesComponent } from './permissoes/permissoes.component';
 
 export const TablesRoutes: Routes = [
   {
@@ -84,6 +85,13 @@ export const TablesRoutes: Routes = [
         component: ProcessosComponent,
         data: {
           title: 'Processos',
+        }
+      },
+      {
+        path: 'permissoes',
+        component: PermissoesComponent,
+        data: {
+          title: 'Permissões',
         }
       },
       {

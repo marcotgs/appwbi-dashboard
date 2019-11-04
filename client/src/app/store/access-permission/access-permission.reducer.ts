@@ -23,6 +23,25 @@ export const accessPermissionReducer = createReducer(
             return array;
         }, [])
     })),
+    on(accessPermissionActions.postPermissionSuccess, (state, res) => ({
+        ...state, permissions: [...state.permissions, res]
+    })),
+    on(accessPermissionActions.postPermissionEditSuccess, (state, res) => {
+        const permissions = [...state.permissions];
+        const index = permissions.findIndex(m => m.id == res.id);
+        permissions[index] = res;
+        return ({
+            ...state, permissions
+        });
+    }),
+    on(accessPermissionActions.deletePermissionSuccess, (state, res) => {
+        const permissions = [...state.permissions];
+        const index = permissions.findIndex(m => m.id == res.id);
+        permissions.splice(index, 1);
+        return ({
+            ...state, permissions
+        });
+    }),
 );
 
 export const getAccessPermissionState = createFeatureSelector<AccessPermissionState>('accessPermissionState');
