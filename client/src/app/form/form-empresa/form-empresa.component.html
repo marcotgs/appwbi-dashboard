@@ -1,0 +1,316 @@
+<div class="modal-header">
+    <h4 class="card-title" *ngIf="isCreating">Cadastrar nova empresa</h4>
+    <h4 class="card-title" *ngIf="!isCreating">Dados da empresa</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss(); form.reset()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <hr class="m-t-0">
+            <form class="form-horizontal striped-rows b-form" (ngSubmit)="formSubmit()" [formGroup]="form" id="form">
+                <div class="card-body" style="padding-top: 0;">
+                    <h4 class="card-title">Informações</h4>
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <div class="b-label">
+                                <label for="nome" class="control-label col-form-label">Nome</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-9" *ngIf="isEditing || isCreating">
+                            <input type="text" class="form-control" id="nome" placeholder="Nome" formControlName="nome"
+                                [ngClass]="{'is-invalid': form.get('nome').invalid  && (form.get('nome').dirty || 
+                                form.get('nome').touched)}">
+                            <div class="invalid-feedback" *ngFor="let validation of getMessagesError('nome')">
+                                <span *ngIf="form.get('nome').hasError(validation.type) && (form.get('nome').dirty || 
+                                form.get('nome').touched)">{{validation.message}}</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-9" *ngIf="!isEditing && !isCreating">
+                            <div class="b-label b-label--start">
+                                <span class="control-label col-form-label">
+                                    {{companyData.nome}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <div class="b-label">
+                                <label for="razao" class="control-label col-form-label">Razão</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-9" *ngIf="isEditing || isCreating">
+                            <input type="text" class="form-control" id="razao" placeholder="Razão"
+                                formControlName="razao" [ngClass]="{'is-invalid': form.get('razao').invalid  && (form.get('razao').dirty || 
+                                form.get('razao').touched)}">
+                            <div class="invalid-feedback" *ngFor="let validation of getMessagesError('razao')">
+                                <span *ngIf="form.get('razao').hasError(validation.type) && (form.get('razao').dirty || 
+                                        form.get('razao').touched)">{{validation.message}}</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-9" *ngIf="!isEditing && !isCreating">
+                            <div class="b-label b-label--start">
+                                <span class="control-label col-form-label">
+                                    {{companyData.razao}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <div class="b-label">
+                                <label for="cgc" class="control-label col-form-label">CPF/CNPJ</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-9" *ngIf="isEditing || isCreating">
+                            <input type="tel" class="form-control" id="cgc" placeholder="CPF/CNPJ"
+                                [textMask]="{mask: getMaskCgc, guide: false}" formControlName="cgc" [ngClass]="{'is-invalid': form.get('cgc').invalid  && (form.get('cgc').dirty || 
+                                form.get('cgc').touched)}">
+                            <div class="invalid-feedback" *ngFor="let validation of getMessagesError('cgc')">
+                                <span *ngIf="form.get('cgc').hasError(validation.type) && (form.get('cgc').dirty || 
+                                        form.get('cgc').touched)">{{validation.message}}</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-9" *ngIf="!isEditing && !isCreating">
+                            <div class="b-label b-label--start">
+                                <span class="control-label col-form-label">
+                                    {{companyData.cgc}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <div class="b-label">
+                                <label for="email" class="control-label col-form-label">Email</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-9" *ngIf="isEditing || isCreating">
+                            <input type="email" class="form-control" id="email" placeholder="Email"
+                                formControlName="email">
+                        </div>
+                        <div class="col-sm-9" *ngIf="!isEditing && !isCreating">
+                            <div class="b-label b-label--start">
+                                <span class="control-label col-form-label">
+                                    {{companyData.email}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <div class="b-label">
+                                <label for="telefone" class="control-label col-form-label">Telefone</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-9" *ngIf="isEditing || isCreating">
+                            <input type="tel" class="form-control" id="telefone" placeholder="(31) 9 9999-9999"
+                                formControlName="telefone" [textMask]="{mask: telMask, guide: false}" [ngClass]="{'is-invalid': form.get('telefone').invalid  && (form.get('telefone').dirty || 
+                                form.get('telefone').touched)}">
+                            <div class="invalid-feedback" *ngFor="let validation of getMessagesError('telefone')">
+                                <span *ngIf="form.get('telefone').hasError(validation.type) && (form.get('telefone').dirty || 
+                                        form.get('telefone').touched)">{{validation.message}}</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-9" *ngIf="!isEditing && !isCreating">
+                            <div class="b-label b-label--start">
+                                <span class="control-label col-form-label">
+                                    {{companyData.telefone}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <div class="b-label">
+                                <label for="ativo" class="control-label col-form-label">Ativo</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-9" *ngIf="isEditing || isCreating">
+                            <input type="text" class="form-control" id="ativo" placeholder="Cargo"
+                                formControlName="ativo" [ngClass]="{'is-invalid': form.get('ativo').invalid  && (form.get('ativo').dirty || 
+                                form.get('ativo').touched)}">
+                            <div class="invalid-feedback" *ngFor="let validation of getMessagesError('ativo')">
+                                <span *ngIf="form.get('ativo').hasError(validation.type) && (form.get('ativo').dirty || 
+                                        form.get('ativo').touched)">{{validation.message}}</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-9" *ngIf="!isEditing && !isCreating">
+                            <div class="b-label b-label--start">
+                                <span class="control-label col-form-label">
+                                    {{(companyData.ativo)?'Sim':'Não'}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="card-body">
+                    <h4 class="card-title">Endereço</h4>
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <div class="b-label">
+                                <label for="CEP" class="control-label col-form-label">CEP</label>
+                            </div>
+                        </div>
+                        <div *ngIf="isEditing || isCreating">
+                            <div class="col-sm-auto">
+                                <input type="text" class="form-control" id="CEP" placeholder="CEP" formControlName="cep"
+                                    [textMask]="{mask: cepMask, guide: false}" [ngClass]="{'is-invalid': form.get('cep').invalid  && (form.get('cep').dirty || 
+                                            form.get('cep').touched)}">
+                                <div class="invalid-feedback" *ngFor="let validation of getMessagesError('cep')">
+                                    <span *ngIf="form.get('cep').hasError(validation.type) && (form.get('cep').dirty || 
+                                                            form.get('cep').touched)">{{validation.message}}</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-auto">
+                                <button type="button" [disabled]="form.get('cep').invalid || form.disabled"
+                                    (click)="getAddressData()" class="btn btn-dark waves-effect waves-light">
+                                    <span *ngIf="!isCepSpinnerShow">Buscar</span>
+                                    <ngx-spinner [name]="cepSpinner" bdColor="transparent" size="default" color="#fff"
+                                        type="ball-beat" [fullScreen]="false">
+                                    </ngx-spinner>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-sm-9" *ngIf="!isEditing && !isCreating">
+                            <div class="b-label b-label--start">
+                                <span class="control-label col-form-label">
+                                    {{companyData.cep}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <div class="b-label">
+                                <label for="endereco" class="control-label col-form-label">Endereço</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-9" *ngIf="isEditing || isCreating">
+                            <input type="text" class="form-control" formControlName="endereco" id="endereco"
+                                placeholder="Endereço">
+                        </div>
+                        <div class="col-sm-9" *ngIf="!isEditing && !isCreating">
+                            <div class="b-label b-label--start">
+                                <span class="control-label col-form-label">
+                                    {{companyData.endereco}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <div class="b-label">
+                                <label for="numero" class="control-label col-form-label">Número</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-9" *ngIf="isEditing || isCreating">
+                            <input type="number" class="form-control" formControlName="numero" id="numero"
+                                placeholder="Número" [ngClass]="{'is-invalid': form.get('numero').invalid  && (form.get('numero').dirty || 
+                                form.get('numero').touched)}">
+                            <div class="invalid-feedback" *ngFor="let validation of getMessagesError('numero')">
+                                <span *ngIf="form.get('numero').hasError(validation.type) && (form.get('numero').dirty || 
+                                                        form.get('numero').touched)">{{validation.message}}</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-9" *ngIf="!isEditing && !isCreating">
+                            <div class="b-label b-label--start">
+                                <span class="control-label col-form-label">
+                                    {{companyData.numero}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <div class="b-label">
+                                <label for="complemento" class="control-label col-form-label">Complemento</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-9" *ngIf="isEditing || isCreating">
+                            <input type="text" class="form-control" formControlName="complemento" id="complemento"
+                                placeholder="Complemento">
+                        </div>
+                        <div class="col-sm-9" *ngIf="!isEditing && !isCreating">
+                            <div class="b-label b-label--start">
+                                <span class="control-label col-form-label">
+                                    {{companyData.complemento}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <div class="b-label">
+                                <label for="bairro" class="control-label col-form-label">Bairro</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-9" *ngIf="isEditing || isCreating">
+                            <input type="text" class="form-control" formControlName="bairro" id="bairro"
+                                placeholder="Bairro">
+                        </div>
+                        <div class="col-sm-9" *ngIf="!isEditing && !isCreating">
+                            <div class="b-label b-label--start">
+                                <span class="control-label col-form-label">
+                                    {{companyData.bairro}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <div class="b-label">
+                                <label for="cidade" class="control-label col-form-label">Cidade</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-9" *ngIf="isEditing || isCreating">
+                            <input type="text" class="form-control" id="cidade" formControlName="cidade"
+                                placeholder="Cidade">
+                        </div>
+                        <div class="col-sm-9" *ngIf="!isEditing && !isCreating">
+                            <div class="b-label b-label--start">
+                                <span class="control-label col-form-label">
+                                    {{companyData.cidade}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <div class="b-label">
+                                <label for="estado" class="control-label col-form-label">Estado</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-9" *ngIf="isEditing || isCreating">
+                            <input type="text" class="form-control" id="estado" formControlName="estado"
+                                placeholder="Estado">
+                        </div>
+                        <div class="col-sm-9" *ngIf="!isEditing && !isCreating">
+                            <div class="b-label b-label--start">
+                                <span class="control-label col-form-label">
+                                    {{companyData.estado}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr *ngIf="isEditing || isCreating">
+                <div class="card-body" *ngIf="isEditing || isCreating">
+                    <div class="form-group m-b-0 text-right">
+                        <button type="submit" class="btn btn-info waves-effect waves-light">
+                            <span *ngIf="!form.disabled">Salvar</span>
+                            <ngx-spinner [name]="saveSpinner" bdColor="transparent" size="default" color="#fff"
+                                type="ball-beat" [fullScreen]="false">
+                            </ngx-spinner>
+                        </button>
+                        <button type="button" class="btn btn-secondary waves-effect waves-light"
+                            (click)="resetForm()">Cancelar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -7,8 +7,7 @@ import { NotifierService } from 'angular-notifier';
 import { Store } from '@ngrx/store';
 import { CompanyState } from '@app/store/states';
 import { ApiResponseError, CompanyResponse } from '@shared/interfaces';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import validationMessages from '@app/constants/form-validation/form-validation.constants';
+import { FormGroup } from '@angular/forms';
 import { postCompany, deleteCompany, getCompanies, getCompanyState } from '@app/store/company';
 import { conformToMask } from 'angular2-text-mask';
 import MasksConstants from '@app/constants/mask/mask.contants';
@@ -44,7 +43,6 @@ export class EmpresasComponent implements OnInit {
     private storeCompany: Store<CompanyState>,
     private notifierService: NotifierService,
   ) {
-    this.initForm();
     this.getCompanies();
     this.initRows();
   }
@@ -95,7 +93,7 @@ export class EmpresasComponent implements OnInit {
   public viewItem(id: number) {
     this.isCreating = false;
     this.isEditing = false;
-    this.selectedItem = this.data.find(m => m.id === id);
+    this.getSelectedItem(id);
     this.openModal();
   }
 
@@ -103,10 +101,7 @@ export class EmpresasComponent implements OnInit {
     this.isCreating = false;
     this.isEditing = true;
     this.form.reset();
-    this.selectedItem = this.data.find(m => m.id === id);
-    this.form.patchValue({
-      ...this.selectedItem,
-    });
+    this.getSelectedItem(id);
     this.openModal();
   }
 
@@ -133,15 +128,33 @@ export class EmpresasComponent implements OnInit {
     this.modalService.open(content, { centered: true });
   }
 
-  public getMessagesError(controlName: string): any {
-    return (validationMessages[controlName] || validationMessages['default']);
-  }
-
   public getMaskCgc(rawValue: string): (string | RegExp)[] {
     if (rawValue.replace(/(-|\/|\.)/gi, '').length > 11) {
       return MasksConstants.CNPJ;
     }
     return MasksConstants.CPF;
+  }
+
+  private getSelectedItem(id: number) {
+    this.selectedItem = this.data.find(m => m.id === id);
+    const { formattedCgc, formattedTel, formattedCep } = this.formatCompanyData();
+    this.selectedItem = {
+      ...this.selectedItem,
+      telefone: formattedTel,
+      cgc: formattedCgc,
+      cep: formattedCep
+    };
+  }
+
+  private formatCompanyData(): any {
+    const formattedCgc = conformToMask(this.selectedItem.cgc, this.getMaskCgc(this.selectedItem.cgc), { guide: false }).conformedValue;
+    const formattedTel = conformToMask(
+      this.selectedItem.ddd.concat(this.selectedItem.telefone), MasksConstants.TEL, { guide: false }
+    ).conformedValue;
+    const formattedCep = conformToMask(
+      this.selectedItem.cep, MasksConstants.CEP, { guide: false }
+    ).conformedValue;
+    return { formattedCgc, formattedTel, formattedCep };
   }
 
   private openModal() {
@@ -190,75 +203,6 @@ export class EmpresasComponent implements OnInit {
     Object.keys(this.form.controls).forEach(field => {
       const control = this.form.get(field);
       control.markAsTouched({ onlySelf: true });
-    });
-  }
-
-  private initForm(): void {
-    this.form = new FormGroup({
-      cod_empresa: new FormControl('', {
-        validators: Validators.required,
-      }),
-      nome: new FormControl('', {
-        validators: Validators.required,
-      }),
-      razao: new FormControl('', {
-        validators: Validators.required,
-      }),
-      email: new FormControl('', {
-        validators: Validators.compose([
-          Validators.required,
-          Validators.pattern('^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$')
-        ]),
-      }),
-      telefone: new FormControl('', {
-        validators: Validators.compose([
-          Validators.required,
-          Validators.pattern('[(]?[1-9]{2}[)]? [9]{0,1}[6-9]{1}[0-9]{3}[-]?[0-9]{4}')
-        ]),
-      }),
-      cgc: new FormControl('', {
-        validators: Validators.compose([
-          Validators.required,
-          Validators.pattern('([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})')
-        ]),
-      }),
-      cep: new FormControl('', {
-        validators: Validators.compose([
-          Validators.required,
-          Validators.pattern('^\\d{5}[-]\\d{3}$')
-        ]),
-      }),
-      endereco: new FormControl({ value: '', disabled: true }, {
-        validators: Validators.compose([
-          Validators.required,
-        ]),
-      }),
-      numero: new FormControl('', {
-        validators: Validators.compose([
-          Validators.required,
-        ]),
-      }),
-      complemento: new FormControl(''),
-      bairro: new FormControl({ value: '', disabled: true }, {
-        validators: Validators.compose([
-          Validators.required,
-        ]),
-      }),
-      cidade: new FormControl({ value: '', disabled: true }, {
-        validators: Validators.compose([
-          Validators.required,
-        ]),
-      }),
-      estado: new FormControl({ value: '', disabled: true }, {
-        validators: Validators.compose([
-          Validators.required,
-        ]),
-      }),
-      ativo: new FormControl(true, {
-        validators: Validators.compose([
-          Validators.required,
-        ]),
-      }),
     });
   }
 }

@@ -33,6 +33,7 @@ import { ProcessEffects } from '@app/store/process';
 import { SectorEffects } from '@app/store/sector';
 import { CompanyEffects } from '@app/store/company';
 import { CompanyBranchEffects } from '@app/store/company-branch';
+import { FormModule } from '@app/form/forms.module';
 
 
 @NgModule({
@@ -44,6 +45,7 @@ import { CompanyBranchEffects } from '@app/store/company-branch';
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
+    FormModule,
     NgbModule,
     NgxDatatableModule,
     Ng2SmartTableModule,

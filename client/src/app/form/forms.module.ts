@@ -12,6 +12,8 @@ import { NGXFormWizardModule } from "./ngx-wizard/ngx-wizard.module";
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { EffectsModule } from '@ngrx/effects';
 import { TextMaskModule } from 'angular2-text-mask';
+import { UserEffects } from '@app/store/user';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
 import { FormBasicComponent } from './form-basic/basic.component';
 import { FormvalComponent } from './form-validation/form-validation.component';
@@ -31,8 +33,7 @@ import { FormFiliaisComponent } from './form-filiais/form-filiais.component';
 import { FormProcessosComponent } from './form-processos/form-processos.component';
 import { FormdetailComponent } from './form-detail/detail.component';
 import { MultiselectComponent } from './multiselect/multiselect.component';
-import { UserEffects } from '@app/store/user';
-import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { FormEmpresaComponent } from './form-empresa/form-empresa.component';
 
 @NgModule({
   imports: [
@@ -80,6 +81,10 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
     FormProcessosComponent,
     MultiselectComponent,
     FormdetailComponent,
+    FormEmpresaComponent,
+  ],
+  exports: [
+    FormEmpresaComponent
   ]
 })
 export class FormModule { }

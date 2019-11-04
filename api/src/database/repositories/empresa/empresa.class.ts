@@ -41,6 +41,16 @@ export default class EmpresaRepository {
                     'telefone', 'endereco', 'numero', 'complemento', 'bairro',
                     'cep', 'cgc', 'ativo'
                 ],
+                include: [
+                    {
+                        model: Database.models.municipio,
+                        include: [
+                            {
+                                model: Database.models.estado,
+                            }
+                        ],
+                    }
+                ],
             });
         } catch (ex) {
             logger.error(`Erro ao realizar consulta no repository :'EmpresaRepository'-> 'findAll'. Error: ${ex}`);
@@ -62,6 +72,16 @@ export default class EmpresaRepository {
                     'nome', 'id', 'cod_empresa', 'email', 'razao', 'ddd',
                     'telefone', 'endereco', 'numero', 'complemento', 'bairro',
                     'cep', 'cgc', 'ativo'
+                ],
+                include: [
+                    {
+                        model: Database.models.municipio,
+                        include: [
+                            {
+                                model: Database.models.estado,
+                            }
+                        ],
+                    }
                 ],
             });
         } catch (ex) {

@@ -12,6 +12,11 @@ const addEmpresaAssociation = (models: any): void => {
             foreignKey: 'id_empresa',
         }
     );
+    (models.empresa as empresaModelStatic).belongsTo(
+        models.municipio, {
+            foreignKey: 'id_municipio',
+        }
+    );
 };
 
 export default addEmpresaAssociation;
