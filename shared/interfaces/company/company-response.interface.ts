@@ -1,3 +1,4 @@
+import { SegmentResponse } from "../segment";
 
 interface CompanyResponse {
     id?: number;
@@ -17,6 +18,7 @@ interface CompanyResponse {
     codigoCompletoCidadeIbge?: number;
     cgc?: string;
     ativo?: boolean;
+    segmento?: SegmentResponse;
 }
 
 export default CompanyResponse;

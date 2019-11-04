@@ -28,6 +28,20 @@ export class CompanyEffects {
                 )
         )));
 
+    public getSegment$ = createEffect(() => this.actions$.pipe(
+        ofType(companyActions.getSegments),
+        switchMap(() =>
+            this.companyService.getSegments()
+                .pipe(
+                    map(res => {
+                        return companyActions.getSegmentsSuccess(res.data);
+                    }),
+                    catchError(res => {
+                        return of(companyActions.getSegmentsError(((res.error && res.error.data) || { errors: [ApiConstants.UNEXPECTED_ERROR] })));
+                    })
+                )
+        )));
+
     public postCompany$ = createEffect(() => this.actions$.pipe(
         ofType(companyActions.postCompany),
         switchMap((action) => {
@@ -36,7 +50,7 @@ export class CompanyEffects {
             return this.companyService.postCompany(body)
                 .pipe(
                     map(res => {
-                        if(action.id){
+                        if (action.id) {
                             return companyActions.postCompanyEditSuccess(res.data);
                         }
                         return companyActions.postCompanySuccess(res.data);

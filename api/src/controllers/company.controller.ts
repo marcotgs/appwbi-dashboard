@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Response } from 'express';
 import { JsonController, Authorized, Get, Res, Post, Body, Delete, Param } from 'routing-controllers';
-import { EmpresaRepository } from '@api/database/repositories';
+import { EmpresaRepository, SegmentoRepository, MunicipioRepository } from '@api/database/repositories';
 import logger from '@api/util/logger';
 import BaseController from './base-controller.class';
 import { CompanyBody } from '@api/DTO';
@@ -17,6 +17,8 @@ import { municipioModel, estadoModel, empresaModel } from '@api/database/models'
 @JsonController('/company')
 export default class CompanyController extends BaseController {
     private empresaRepository: EmpresaRepository;
+    private segmentoRepository: SegmentoRepository;
+    private municipioRepository: MunicipioRepository;
 
     /**
      * Cria uma nova instância CompanyController.
@@ -26,6 +28,8 @@ export default class CompanyController extends BaseController {
     public constructor() {
         super();
         this.empresaRepository = new EmpresaRepository();
+        this.segmentoRepository = new SegmentoRepository();
+        this.municipioRepository = new MunicipioRepository();
     }
 
     /**
@@ -61,6 +65,27 @@ export default class CompanyController extends BaseController {
     }
 
     /**
+     * Recupera uma lista de segmentos.
+     *
+     * @param {Response} res
+     * @returns {Promise<Response>}
+     * @memberof CompanyController
+     */
+    @Authorized()
+    @Get('/segments')
+    public async getCompanySegments(
+        @Res() res: Response,
+    ): Promise<Response> {
+        try {
+            const results = await this.segmentoRepository.findAll();
+            return this.sendResponse(res, 200, results);
+        } catch (ex) {
+            logger.error(`Erro na requisição de 'getCompanySegments' no controller 'CompanyController'. Erro -> ${ex}`);
+            return this.sendResponse(res, 500);
+        }
+    }
+
+    /**
      * Adiciona ou edita uma empresa.
      *
      * @param {CompanyBody} body
@@ -76,20 +101,26 @@ export default class CompanyController extends BaseController {
     ): Promise<Response> {
         try {
             if (!body.id) {
-                const results = await this.empresaRepository.insert(body);
+                const municipio = await this.municipioRepository.findByIbgeCode(body.codigoCompletoCidadeIbge);
+                const results = await this.empresaRepository.insert({ ...body, idMunicipio: municipio.id });
                 body.id = results.id;
             } else {
                 const companyData = await this.empresaRepository.findById(body.id) as empresaModel & {
                     municipio: municipioModel & { estado: estadoModel };
                 };
-                const newValue = { ...companyData, ...body };
+
+                const newValue = { ...companyData.toJSON(), ...body } as any;
+                if (body.codigoCompletoCidadeIbge !== companyData.municipio.codigoCompletoCidadeIbge) {
+                    const municipio = await this.municipioRepository.findByIbgeCode(body.codigoCompletoCidadeIbge);
+                    newValue.idMunicipio = municipio.id;
+                }
                 await this.empresaRepository.update(body.id, newValue);
             }
             const response = await this.empresaRepository.findById(body.id) as empresaModel & {
                 municipio: municipioModel & { estado: estadoModel };
             };;
             return this.sendResponse(res, 200, {
-                ...response,
+                ...response.toJSON(),
                 cidade: response.municipio.nome,
                 codigoCompletoCidadeIbge: response.municipio.codigoCompletoCidadeIbge,
                 estado: response.municipio.estado.sigla,

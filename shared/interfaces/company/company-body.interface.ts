@@ -2,7 +2,7 @@
 interface CompanyBody {
     id?: number;
     nome?: string;
-    cod_empresa?: string;
+    codEmpresa?: string;
     razao?: string;
     email?: string;
     ddd?: string;
@@ -15,6 +15,7 @@ interface CompanyBody {
     cidade?: string;
     estado?: string;
     codigoCompletoCidadeIbge?: number;
+    idSegmento?: number;
     cgc?: string;
     ativo?: boolean;
 }

@@ -1,3 +1,4 @@
+<notifier-container></notifier-container>
 <div class="modal-header">
     <h4 class="card-title" *ngIf="isCreating">Cadastrar nova empresa</h4>
     <h4 class="card-title" *ngIf="!isCreating">Dados da empresa</h4>
@@ -10,8 +11,31 @@
         <div class="card">
             <hr class="m-t-0">
             <form class="form-horizontal striped-rows b-form" (ngSubmit)="formSubmit()" [formGroup]="form" id="form">
-                <div class="card-body" style="padding-top: 0;">
+                <div class="card-body p-t-0">
                     <h4 class="card-title">Informações</h4>
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <div class="b-label">
+                                <label for="codEmpresa" class="control-label col-form-label">Código</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-9" *ngIf="isEditing || isCreating">
+                            <input type="text" class="form-control" id="codEmpresa" placeholder="Código da empresa"
+                                formControlName="codEmpresa" [ngClass]="{'is-invalid': form.get('codEmpresa').invalid  && (form.get('codEmpresa').dirty || 
+                                    form.get('codEmpresa').touched)}">
+                            <div class="invalid-feedback" *ngFor="let validation of getMessagesError('codEmpresa')">
+                                <span *ngIf="form.get('codEmpresa').hasError(validation.type) && (form.get('codEmpresa').dirty || 
+                                    form.get('codEmpresa').touched)">{{validation.message}}</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-9" *ngIf="!isEditing && !isCreating">
+                            <div class="b-label b-label--start">
+                                <span class="control-label col-form-label">
+                                    {{companyData.cod_empresa}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group row">
                         <div class="col-sm-3">
                             <div class="b-label">
@@ -89,7 +113,13 @@
                         </div>
                         <div class="col-sm-9" *ngIf="isEditing || isCreating">
                             <input type="email" class="form-control" id="email" placeholder="Email"
-                                formControlName="email">
+                                formControlName="email"
+                                [ngClass]="{'is-invalid': form.get('email').invalid  && (form.get('email').dirty || 
+                                form.get('email').touched)}">
+                            <div class="invalid-feedback" *ngFor="let validation of getMessagesError('email')">
+                                <span *ngIf="form.get('email').hasError(validation.type) && (form.get('email').dirty || 
+                                    form.get('email').touched)">{{validation.message}}</span>
+                            </div>
                         </div>
                         <div class="col-sm-9" *ngIf="!isEditing && !isCreating">
                             <div class="b-label b-label--start">
@@ -125,16 +155,42 @@
                     <div class="form-group row">
                         <div class="col-sm-3">
                             <div class="b-label">
+                                <label for="inputEmail3" class="control-label col-form-label">Segmento</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-9" *ngIf="isEditing || isCreating">
+                            <input id="typeahead-focus" type="text" class="form-control" formControlName="segment"
+                                [ngbTypeahead]="search" (focus)="focusSegment$.next($event.target.value)"
+                                (click)="clickSegment$.next($event.target.value)" #instance="ngbTypeahead" [ngClass]="{'is-invalid': form.get('segment').invalid  && (form.get('segment').dirty || 
+                                form.get('segment').touched)}" />
+                            <div class="invalid-feedback" *ngFor="let validation of getMessagesError('segment')">
+                                <span *ngIf="form.get('segment').hasError(validation.type) && (form.get('segment').dirty || 
+                                    form.get('segment').touched)">{{validation.message}}</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-9" *ngIf="!isEditing && !isCreating">
+                            <div class="b-label b-label--start">
+                                <span class="control-label col-form-label">
+                                    {{companyData.segmento.nome}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <div class="b-label">
                                 <label for="ativo" class="control-label col-form-label">Ativo</label>
                             </div>
                         </div>
                         <div class="col-sm-9" *ngIf="isEditing || isCreating">
-                            <input type="text" class="form-control" id="ativo" placeholder="Cargo"
-                                formControlName="ativo" [ngClass]="{'is-invalid': form.get('ativo').invalid  && (form.get('ativo').dirty || 
-                                form.get('ativo').touched)}">
-                            <div class="invalid-feedback" *ngFor="let validation of getMessagesError('ativo')">
-                                <span *ngIf="form.get('ativo').hasError(validation.type) && (form.get('ativo').dirty || 
-                                        form.get('ativo').touched)">{{validation.message}}</span>
+                            <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic"
+                                formControlName="ativo">
+                                <label ngbButtonLabel class="btn-primary">
+                                    <input ngbButton type="radio" [value]="true"> Sim
+                                </label>
+                                <label ngbButtonLabel class="btn-primary">
+                                    <input ngbButton type="radio" value="false"> Não
+                                </label>
                             </div>
                         </div>
                         <div class="col-sm-9" *ngIf="!isEditing && !isCreating">
@@ -155,7 +211,7 @@
                                 <label for="CEP" class="control-label col-form-label">CEP</label>
                             </div>
                         </div>
-                        <div *ngIf="isEditing || isCreating">
+                        <div class="row py-0 m-l-0" *ngIf="isEditing || isCreating">
                             <div class="col-sm-auto">
                                 <input type="text" class="form-control" id="CEP" placeholder="CEP" formControlName="cep"
                                     [textMask]="{mask: cepMask, guide: false}" [ngClass]="{'is-invalid': form.get('cep').invalid  && (form.get('cep').dirty || 
@@ -167,7 +223,7 @@
                             </div>
                             <div class="col-sm-auto">
                                 <button type="button" [disabled]="form.get('cep').invalid || form.disabled"
-                                    (click)="getAddressData()" class="btn btn-dark waves-effect waves-light">
+                                    (click)="getAddressData()" class="btn btn-dark btn-submit waves-effect waves-light">
                                     <span *ngIf="!isCepSpinnerShow">Buscar</span>
                                     <ngx-spinner [name]="cepSpinner" bdColor="transparent" size="default" color="#fff"
                                         type="ball-beat" [fullScreen]="false">
@@ -232,7 +288,7 @@
                         </div>
                         <div class="col-sm-9" *ngIf="isEditing || isCreating">
                             <input type="text" class="form-control" formControlName="complemento" id="complemento"
-                                placeholder="Complemento">
+                                placeholder="Complemento" maxlength="10">
                         </div>
                         <div class="col-sm-9" *ngIf="!isEditing && !isCreating">
                             <div class="b-label b-label--start">
@@ -300,14 +356,14 @@
                 <hr *ngIf="isEditing || isCreating">
                 <div class="card-body" *ngIf="isEditing || isCreating">
                     <div class="form-group m-b-0 text-right">
-                        <button type="submit" class="btn btn-info waves-effect waves-light">
+                        <button type="submit" class="btn btn-info btn-submit waves-effect waves-light">
                             <span *ngIf="!form.disabled">Salvar</span>
                             <ngx-spinner [name]="saveSpinner" bdColor="transparent" size="default" color="#fff"
                                 type="ball-beat" [fullScreen]="false">
                             </ngx-spinner>
                         </button>
                         <button type="button" class="btn btn-secondary waves-effect waves-light"
-                            (click)="resetForm()">Cancelar</button>
+                            (click)="modal.dismiss();">Cancelar</button>
                     </div>
                 </div>
             </form>

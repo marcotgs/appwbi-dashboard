@@ -25,7 +25,7 @@ const readModels = (sequelize: Sequelize): void => {
 
 const addAssociations = (sequelize: Sequelize): any => {
     const models = readModels(sequelize);
-    
+
     addAcessoUsuariosAssociation(models);
     addMunicipioAssociation(models);
     addCadastroModulosAssociation(models);

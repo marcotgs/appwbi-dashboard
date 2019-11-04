@@ -2,6 +2,7 @@ import { props, createAction } from '@ngrx/store';
 import * as companyTypes from "./company.types";
 import {
     ApiResponseErrors, CompanyBody, CompanyResponse,
+    SegmentResponse,
 } from '@shared/interfaces';
 
 export const getCompanies = createAction(
@@ -15,6 +16,20 @@ export const getCompaniesSuccess = createAction(
 
 export const getCompaniesError = createAction(
     companyTypes.GET_COMPANY_ERROR,
+    props<ApiResponseErrors>()
+);
+
+export const getSegments = createAction(
+    companyTypes.GET_SEGMENT
+);
+
+export const getSegmentsSuccess = createAction(
+    companyTypes.GET_SEGMENT_SUCCESS,
+    props<SegmentResponse[]>()
+);
+
+export const getSegmentsError = createAction(
+    companyTypes.GET_SEGMENT_ERROR,
     props<ApiResponseErrors>()
 );
 

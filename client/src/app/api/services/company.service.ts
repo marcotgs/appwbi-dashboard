@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthTokenService } from '@app/services';
-import { ApiPayload, CompanyResponse, CompanyBody } from '@shared/interfaces';
+import { ApiPayload, CompanyResponse, CompanyBody, SegmentResponse } from '@shared/interfaces';
 
 @Injectable()
 export default class CompanyService {
@@ -10,6 +10,11 @@ export default class CompanyService {
     private controllerPath: string;
     constructor(private http: HttpClient, private authToken: AuthTokenService) {
         this.controllerPath = '/company';
+    }
+
+    public getSegments(): Observable<ApiPayload<SegmentResponse[]>> {
+        const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authToken.getToken()}`);
+        return this.http.get<ApiPayload<SegmentResponse[]>>(`${this.controllerPath}/segments`, { headers });
     }
 
     public getCompanies(): Observable<ApiPayload<CompanyResponse[]>> {

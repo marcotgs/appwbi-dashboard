@@ -4,12 +4,20 @@ import { CompanyState } from '@app/store/states';
 
 export const initialState: CompanyState = {
     companies: null,
+    segments: null,
 };
 
 export const companyReducer = createReducer(
     initialState,
     on(companyActions.getCompaniesSuccess, (state, res) => ({
         ...state, companies: Object.keys(res).reduce((array, key) => {
+            if (key !== 'type')
+                array.push(res[key]);
+            return array;
+        }, [])
+    })),
+    on(companyActions.getSegmentsSuccess, (state, res) => ({
+        ...state, segments: Object.keys(res).reduce((array, key) => {
             if (key !== 'type')
                 array.push(res[key]);
             return array;

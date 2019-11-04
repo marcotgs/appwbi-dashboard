@@ -19,7 +19,8 @@ const auto = new SequelizeAuto(process.env['DB_SERVER_DATABASE'], process.env['D
     },
     typescript: true,
     tables: ['empresa', 'acesso_niveis_permissao', 'acesso_usuarios', 'municipio', 'estado',
-        'cadastro_filiais', 'cadastro_modulos', 'cadastro_processos', 'cadastro_rotinas', 'cadastro_setores']
+        'cadastro_filiais', 'cadastro_modulos', 'cadastro_processos', 'cadastro_rotinas', 'cadastro_setores',
+        'segmento']
 });
 
 auto.run((err: string): void => {

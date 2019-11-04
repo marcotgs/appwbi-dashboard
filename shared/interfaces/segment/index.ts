@@ -1,0 +1,1 @@
+export { default as SegmentResponse } from './segment-response.interface';

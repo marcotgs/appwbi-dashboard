@@ -49,6 +49,10 @@ export default class EmpresaRepository {
                                 model: Database.models.estado,
                             }
                         ],
+                    },
+                    {
+                        model: Database.models.segmento,
+                        attributes: ['id', 'nome'],
                     }
                 ],
             });
@@ -81,6 +85,10 @@ export default class EmpresaRepository {
                                 model: Database.models.estado,
                             }
                         ],
+                    },
+                    {
+                        model: Database.models.segmento,
+                        attributes: ['id', 'nome'],
                     }
                 ],
             });

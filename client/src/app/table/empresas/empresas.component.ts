@@ -1,14 +1,12 @@
 import { Component, ViewEncapsulation, ViewChild, TemplateRef, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
-import { Subject } from 'rxjs';
 import { NotifierService } from 'angular-notifier';
 import { Store } from '@ngrx/store';
 import { CompanyState } from '@app/store/states';
 import { ApiResponseError, CompanyResponse } from '@shared/interfaces';
 import { FormGroup } from '@angular/forms';
-import { postCompany, deleteCompany, getCompanies, getCompanyState } from '@app/store/company';
+import { deleteCompany, getCompanies, getCompanyState } from '@app/store/company';
 import { conformToMask } from 'angular2-text-mask';
 import MasksConstants from '@app/constants/mask/mask.contants';
 
@@ -20,9 +18,6 @@ import MasksConstants from '@app/constants/mask/mask.contants';
 
 export class EmpresasComponent implements OnInit {
   @ViewChild('modal', { static: true }) private modal: TemplateRef<any>;
-  @ViewChild('instance', { static: true }) instance;
-  public focusCompany$ = new Subject<string>();
-  public clickCompany$ = new Subject<string>();
   public rows = [];
   public temp = [];
   public columns = [];
@@ -39,7 +34,6 @@ export class EmpresasComponent implements OnInit {
 
   constructor(
     private modalService: NgbModal,
-    private spinner: NgxSpinnerService,
     private storeCompany: Store<CompanyState>,
     private notifierService: NotifierService,
   ) {
@@ -60,36 +54,6 @@ export class EmpresasComponent implements OnInit {
     this.rows = temp;
   }
 
-  public async formSubmit(): Promise<void> {
-    this.markFormFieldsAsTouched();
-    if (this.form.valid) {
-      this.form.disable();
-      await this.spinner.show();
-      const payload = {
-        ...this.form.value,
-      }
-      if (this.isEditing) {
-        payload.id = this.selectedItem.id;
-      }
-      this.isSubmiting = true;
-      this.storeCompany.dispatch(postCompany(payload));
-    }
-  }
-
-  // public search = (text$: Observable<string>) => {
-  //   const debouncedText$ = text$.pipe(
-  //     debounceTime(200),
-  //     distinctUntilChanged()
-  //   );
-  //   const inputFocus$ = this.focusCompany$;
-
-  //   return merge(debouncedText$, inputFocus$).pipe(
-  //     map(term => (term === '' ? this.companies.map(v => v.nome) :
-  //       this.companies.map(v => v.nome).filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1)).slice(0, 10))
-  //   );
-  //   // tslint:disable-next-line:semicolon
-  // }
-
   public viewItem(id: number) {
     this.isCreating = false;
     this.isEditing = false;
@@ -100,7 +64,6 @@ export class EmpresasComponent implements OnInit {
   public editItem(id: number) {
     this.isCreating = false;
     this.isEditing = true;
-    this.form.reset();
     this.getSelectedItem(id);
     this.openModal();
   }
@@ -112,13 +75,12 @@ export class EmpresasComponent implements OnInit {
 
   public deleteItem() {
     this.isDeleting = true;
+    this.loading = true;
     this.storeCompany.dispatch(deleteCompany({ id: this.selectedItem.id }));
   }
 
   public addNewItem() {
-    if (this.editItem) {
-      this.form.reset();
-    }
+    this.selectedItem = { segmento: {} };
     this.isCreating = true;
     this.isEditing = false;
     this.openModal();
@@ -166,7 +128,6 @@ export class EmpresasComponent implements OnInit {
       .subscribe(async (data) => {
         if (data.companies) {
           this.loading = false;
-          this.data = data.companies;
           this.rows = data.companies.map((r) => {
             return {
               id: r.id,
@@ -177,19 +138,18 @@ export class EmpresasComponent implements OnInit {
             };
           });
           this.temp = [...this.rows];
-          if (this.isSubmiting) {
+          if (data.companies.length > this.data.length || this.isEditing) {
             this.notifierService.notify('success', 'Salvo!');
-            this.form.reset();
-            this.form.enable();
-            await this.spinner.hide();
             this.modalService.dismissAll();
             this.isSubmiting = false;
             this.isEditing = false;
             this.isCreating = false;
           } else if (this.isDeleting) {
             this.isDeleting = false;
+            this.loading = false;
             this.notifierService.notify('success', 'Salvo!');
           }
+          this.data = data.companies;
         }
       });
   }
@@ -199,10 +159,4 @@ export class EmpresasComponent implements OnInit {
     this.storeCompany.dispatch(getCompanies());
   }
 
-  private markFormFieldsAsTouched(): void {
-    Object.keys(this.form.controls).forEach(field => {
-      const control = this.form.get(field);
-      control.markAsTouched({ onlySelf: true });
-    });
-  }
 }
