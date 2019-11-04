@@ -36,7 +36,11 @@ export default class EmpresaRepository {
     public async findAll(): Promise<empresaModel[]> {
         try {
             return await this.empresaModel.findAll({
-                attributes: ['nome', 'id', ],
+                attributes: [
+                    'nome', 'id', 'cod_empresa', 'email', 'razao', 'ddd',
+                    'telefone', 'endereco', 'numero', 'complemento', 'bairro',
+                    'cep', 'cgc', 'ativo'
+                ],
             });
         } catch (ex) {
             logger.error(`Erro ao realizar consulta no repository :'EmpresaRepository'-> 'findAll'. Error: ${ex}`);
@@ -54,7 +58,11 @@ export default class EmpresaRepository {
     public async findById(id: number): Promise<empresaModel> {
         try {
             return await this.empresaModel.findByPk(id, {
-                attributes: ['nome', 'id'],
+                attributes: [
+                    'nome', 'id', 'cod_empresa', 'email', 'razao', 'ddd',
+                    'telefone', 'endereco', 'numero', 'complemento', 'bairro',
+                    'cep', 'cgc', 'ativo'
+                ],
             });
         } catch (ex) {
             logger.error(`Erro ao realizar consulta no repository :'EmpresaRepository'-> 'findById'. Error: ${ex}`);
