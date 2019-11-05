@@ -41,11 +41,12 @@ export default class AcessoUsuariosRepository {
                 attributes: [
                     'nome', 'sobrenome', 'email', 'ddd', 'telefone',
                     'endereco', 'numero', 'complemento', 'bairro', 'cep',
-                    'dataNascimento', 'cargo', 'cgc'
+                    'dataNascimento', 'cargo', 'cgc', 'id'
                 ],
                 include: [
                     { model: Database.models.empresa },
                     { model: Database.models.acessoNiveisPermissao },
+                    { model: Database.models.cadastroSetores },
                     {
                         model: Database.models.municipio,
                         include: [
@@ -91,7 +92,12 @@ export default class AcessoUsuariosRepository {
      */
     public async insert(data: object): Promise<acessoUsuariosModel> {
         try {
-            return await this.acessoUsuariosModel.create(data);
+            return await this.acessoUsuariosModel.create({
+                ...data,
+                ativo: true,
+                idTipoEndereco: 1,
+                dataNascimento: Sequelize.cast(new Date((data as acessoUsuariosModel).dataNascimento), 'DATETIMEOFFSET'),
+            });
         } catch (ex) {
             logger.error(`Erro ao realizar consulta no repository :'AcessoUsuariosRepository'-> 'insert'. Error: ${ex}`);
             throw ex;

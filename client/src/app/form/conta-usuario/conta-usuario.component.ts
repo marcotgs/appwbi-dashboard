@@ -1,15 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
+import { combineLatest, Subject, Observable, merge } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Store } from '@ngrx/store';
 import { Actions, ofType } from '@ngrx/effects';
 import { NotifierService } from 'angular-notifier';
 import { conformToMask } from 'angular2-text-mask';
-import { UserState, updateProfile, getProfile, getProfileSuccess, loginSuccess, updateProfileError } from '@app/store/user';
+import { UserState, updateProfile, getProfile, getProfileSuccess, loginSuccess, updateProfileError, postUser } from '@app/store/user';
 import validationMessages from '@app/constants/form-validation/form-validation.constants';
-import { UserResponse } from '@shared/interfaces';
+import { UserResponse, CompanyResponse, SectorResponse, PermissionResponse } from '@shared/interfaces';
 import MasksConstants from '@app/constants/mask/mask.contants';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { CompanyState, SectorState, AccessPermissionState } from '@app/store/states';
+import { getCompanies, getCompanyState } from '@app/store/company';
+import { getSector, getSectorState } from '@app/store/sector';
+import { distinctUntilChanged, debounceTime, map } from 'rxjs/operators';
+import { getAccessPermissionState, getPermissions } from '@app/store/access-permission';
 
 @Component({
   selector: 'app-form-conta-usuario',
@@ -17,6 +24,11 @@ import MasksConstants from '@app/constants/mask/mask.contants';
   styleUrls: ['./conta-usuario.component.scss']
 })
 export class FormContaUsuarioComponent {
+  @Input('userData') public userData: UserResponse;
+  @Input('modal') public modal: NgbActiveModal;
+  @Input('isEditing') public isEditing: boolean;
+  @Input('isCreating') public isCreating: boolean;
+  @ViewChild('instance', { static: true }) instance;
   public manageAccountForm: FormGroup;
   public initialSpinner = 'initialSpinner';
   public saveSpinner = 'saveSpinner';
@@ -25,24 +37,82 @@ export class FormContaUsuarioComponent {
   public isChangePasswordSpinnerShow = false;
   public cepMask = MasksConstants.CEP;
   public telMask = MasksConstants.TEL;
+  public focusSector$ = new Subject<string>();
+  public clickSector$ = new Subject<string>();
+  public focusPermission$ = new Subject<string>();
+  public clickPermission$ = new Subject<string>();
+  public focusCompany$ = new Subject<string>();
+  public clickCompany$ = new Subject<string>();
   private codigoCompletoCidadeIbge = null;
-  private userData: UserResponse
+  private companies: CompanyResponse[] = [];
+  private sectors: SectorResponse[] = [];
+  private filteredSectors: SectorResponse[] = [];
+  private permissions: PermissionResponse[] = [];
 
   constructor(
     private spinner: NgxSpinnerService,
     private store: Store<UserState>,
+    private storeCompany: Store<CompanyState>,
+    private storeSector: Store<SectorState>,
+    private storePermission: Store<AccessPermissionState>,
     private _actions$: Actions,
     private notifierService: NotifierService,
     private http: HttpClient,
   ) { }
 
   ngOnInit(): void {
-    this.getProfileData();
-    this.updateProfileHandle();
+    if (!this.userData && !this.modal) {
+      this.getProfileData();
+      this.updateProfileHandle();
+    } else {
+      this.initModal();
+    }
   }
 
   public getMessagesError(controlName: string): any {
     return (validationMessages[controlName] || validationMessages['default']);
+  }
+
+  public searchSector = (text$: Observable<string>) => {
+    const debouncedText$ = text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged()
+    );
+    const inputFocus$ = this.focusSector$;
+
+    return merge(debouncedText$, inputFocus$).pipe(
+      map(term => (term === '' ? this.filteredSectors.map(v => v.descricao) :
+        this.filteredSectors.map(v => v.descricao).filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1)).slice(0, 10))
+    );
+    // tslint:disable-next-line:semicolon
+  }
+
+  public searchCompany = (text$: Observable<string>) => {
+    const debouncedText$ = text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged()
+    );
+    const inputFocus$ = this.focusCompany$;
+
+    return merge(debouncedText$, inputFocus$).pipe(
+      map(term => (term === '' ? this.companies.map(v => v.nome) :
+        this.companies.map(v => v.nome).filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1)).slice(0, 10))
+    );
+    // tslint:disable-next-line:semicolon
+  }
+
+  public searchPermission = (text$: Observable<string>) => {
+    const debouncedText$ = text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged()
+    );
+    const inputFocus$ = this.focusPermission$;
+
+    return merge(debouncedText$, inputFocus$).pipe(
+      map(term => (term === '' ? this.permissions.map(v => v.descricao) :
+        this.permissions.map(v => v.descricao).filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1)).slice(0, 10))
+    );
+    // tslint:disable-next-line:semicolon
   }
 
   public async formSubmit(): Promise<void> {
@@ -57,10 +127,20 @@ export class FormContaUsuarioComponent {
         telefone: telefone.replace(/\-/gi, ''),
         cgc: this.manageAccountForm.get('cgc').value.replace(/(-|\/|\.)/gi, ''),
         cep: this.manageAccountForm.get('cep').value.replace(/-/gi, ''),
-        codigoCompletoCidadeIbge: this.codigoCompletoCidadeIbge
+        codigoCompletoCidadeIbge: this.codigoCompletoCidadeIbge,
+        idEmpresa: this.companies.find(p => p.nome === this.manageAccountForm.get('empresa').value).id,
+        idSetor: this.filteredSectors.find(p => p.descricao === this.manageAccountForm.get('setor').value).id,
+        idAcessoNiveisPermissao: this.permissions.find(p => p.descricao === this.manageAccountForm.get('perfil').value).id
       };
       delete payload.confirmPassword;
-      this.store.dispatch(updateProfile(payload));
+      delete payload.setor;
+      delete payload.perfil;
+      delete payload.empresa;
+      if (this.modal) {
+        this.store.dispatch(postUser(payload));
+      } else {
+        this.store.dispatch(updateProfile(payload));
+      }
     } else {
       this.notifierService.notify('error', 'Dados inválidos!');
     }
@@ -105,6 +185,59 @@ export class FormContaUsuarioComponent {
     this.manageAccountForm.reset(value);
   }
 
+  private initModal() {
+    combineLatest(this.storeCompany.select(getCompanyState),
+      this.storeSector.select(getSectorState),
+      this.storePermission.select(getAccessPermissionState),
+      (companyState, sectorState, permissionState) => ({
+        companies: companyState.companies,
+        sectors: sectorState.sectors,
+        permissions: permissionState.permissions,
+      }))
+      .subscribe(({ companies, sectors, permissions }) => {
+        if (!companies) {
+          this.storeCompany.dispatch(getCompanies());
+        }
+        else {
+          this.companies = companies;
+        }
+        if (!sectors) {
+          this.storeSector.dispatch(getSector());
+        }
+        else {
+          this.sectors = sectors;
+        }
+        if (!permissions) {
+          this.storePermission.dispatch(getPermissions());
+        }
+        else {
+          this.permissions = permissions;
+        }
+      });
+    this.initManageAccountForm();
+    this.manageAccountForm.get('password').setValidators(Validators.compose([
+      Validators.required,
+      Validators.minLength(8),
+    ]));
+    this.manageAccountForm.get('confirmPassword').setValidators(Validators.compose([
+      Validators.required,
+      Validators.minLength(8),
+    ]));
+    this.manageAccountForm.get('empresa').valueChanges
+      .subscribe((value) => {
+        if (!this.manageAccountForm.get('empresa').disabled) {
+          this.manageAccountForm.get('setor').reset();
+          if (!value) {
+            this.manageAccountForm.get('setor').disable();
+          }
+          else {
+            this.filteredSectors = this.sectors.filter(s => s.empresa.nome === value);
+            this.manageAccountForm.get('setor').enable();
+          }
+        }
+      });
+  }
+
   private markFormFieldsAsTouched(): void {
     Object.keys(this.manageAccountForm.controls).forEach(field => {
       const control = this.manageAccountForm.get(field);
@@ -118,7 +251,11 @@ export class FormContaUsuarioComponent {
     this._actions$.pipe(ofType(getProfileSuccess)).subscribe(async (userData) => {
       await this.spinner.hide(this.initialSpinner);
       this.codigoCompletoCidadeIbge = (userData as any).codigoCompletoCidadeIbge;
-      this.userData = userData;
+      this.userData = { ...userData };
+      const { formattedCgc, formattedTel, formattedDate } = this.formatUserData();
+      this.userData.cgc = formattedCgc;
+      this.userData.telefone = formattedTel;
+      this.userData.dataNascimento = formattedDate;
       this.initManageAccountForm();
     });
   }
@@ -169,23 +306,28 @@ export class FormContaUsuarioComponent {
   }
 
   private initManageAccountForm(): void {
-    const { formattedCgc, formattedTel, formattedDate } = this.formatUserData();
 
     this.manageAccountForm = new FormGroup({
-      email: new FormControl({ value: this.userData.email, disabled: true }),
+      email: new FormControl({ value: this.userData.email, disabled: !(this.modal) },
+        {
+          validators: Validators.compose([
+            Validators.required,
+            Validators.pattern('^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$')
+          ]),
+        }),
       nome: new FormControl(this.userData.nome, {
         validators: Validators.required,
       }),
       sobrenome: new FormControl(this.userData.sobrenome, {
         validators: Validators.required,
       }),
-      cgc: new FormControl(formattedCgc, {
+      cgc: new FormControl(this.userData.cgc, {
         validators: Validators.compose([
           Validators.required,
           Validators.pattern('([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})')
         ]),
       }),
-      telefone: new FormControl(formattedTel, {
+      telefone: new FormControl(this.userData.telefone, {
         validators: Validators.compose([
           Validators.required,
           Validators.pattern('[(]?[1-9]{2}[)]? [9]{0,1}[6-9]{1}[0-9]{3}[-]?[0-9]{4}')
@@ -194,13 +336,16 @@ export class FormContaUsuarioComponent {
       cargo: new FormControl(this.userData.cargo, {
         validators: Validators.required,
       }),
-      dataNascimento: new FormControl(formattedDate, {
+      dataNascimento: new FormControl(this.userData.dataNascimento, {
         validators: Validators.required,
       }),
-      perfil: new FormControl({ value: this.userData.perfil, disabled: true }, {
+      perfil: new FormControl({ value: this.userData.perfil, disabled: !(this.modal) }, {
         validators: Validators.required,
       }),
-      empresa: new FormControl({ value: this.userData.empresa, disabled: true }, {
+      setor: new FormControl({ value: this.userData.setor, disabled: true }, {
+        validators: Validators.required,
+      }),
+      empresa: new FormControl({ value: this.userData.empresa, disabled: !(this.modal) }, {
         validators: Validators.required,
       }),
       cep: new FormControl(conformToMask(this.userData.cep, this.cepMask, { guide: false }).conformedValue, {

@@ -22,6 +22,7 @@ interface UserBody {
     password?: string;
     idEmpresa?: string;
     idSetor?: string;
+    idAcessoNiveisPermissao?: string;
 }
 
 export default UserBody;

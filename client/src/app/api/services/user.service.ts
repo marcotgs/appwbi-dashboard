@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import sha1 from "crypto-js/sha1";
 import { AuthTokenService } from '@app/services';
-import { ApiPayload, UserResponse, LoginResponse } from '@shared/interfaces';
+import { ApiPayload, UserResponse, LoginResponse, UserBody } from '@shared/interfaces';
 
 @Injectable()
 export default class UserService {
@@ -22,10 +22,14 @@ export default class UserService {
         return this.http.get<ApiPayload<UserResponse[]>>(`${this.controllerPath}/`, { headers });
     }
 
-    // public postCompanyBranch(body: CompanyBranchBody): Observable<ApiPayload<CompanyBranchResponse>> {
-    //     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authToken.getToken()}`);
-    //     return this.http.post<ApiPayload<CompanyBranchResponse>>(`${this.controllerPath}/`, body, { headers });
-    // }
+    public postUser(body: UserBody): Observable<ApiPayload<UserResponse>> {
+        const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authToken.getToken()}`);
+        const payload = { ...body };
+        if (payload.password) {
+            payload.password = sha1(payload.password).toString();
+        }
+        return this.http.post<ApiPayload<UserResponse>>(`${this.controllerPath}/`, payload, { headers });
+    }
 
     public deleteUser(id: number): Observable<ApiPayload<UserResponse>> {
         const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authToken.getToken()}`);

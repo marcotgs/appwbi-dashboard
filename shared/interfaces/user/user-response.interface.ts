@@ -1,11 +1,12 @@
 
-interface acessoUsuariosResponse {
+interface UserResponse {
     id?: number;
     nome?: string;
     sobrenome?: string;
     email?: string;
     perfil?: string;
     empresa?: string;
+    setor?: string;
     ddd?: string;
     telefone?: string;
     endereco?: string;
@@ -22,4 +23,4 @@ interface acessoUsuariosResponse {
     password?: string;
 }
 
-export default acessoUsuariosResponse;
+export default UserResponse;

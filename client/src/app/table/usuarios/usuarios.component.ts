@@ -104,16 +104,17 @@ export class UsuariosComponent implements OnInit {
 
   private getSelectedItem(id: number) {
     this.selectedItem = this.data.find(m => m.id === id);
-    const { formattedCgc, formattedTel, formattedCep } = this.formatCompanyData();
+    const { formattedCgc, formattedTel, formattedCep, formattedDate } = this.formatUserData();
     this.selectedItem = {
       ...this.selectedItem,
       telefone: formattedTel,
       cgc: formattedCgc,
-      cep: formattedCep
+      cep: formattedCep,
+      dataNascimento: formattedDate,
     };
   }
 
-  private formatCompanyData(): any {
+  private formatUserData(): any {
     const formattedCgc = conformToMask(this.selectedItem.cgc, this.getMaskCgc(this.selectedItem.cgc), { guide: false }).conformedValue;
     const formattedTel = conformToMask(
       this.selectedItem.ddd.concat(this.selectedItem.telefone), MasksConstants.TEL, { guide: false }
@@ -121,7 +122,11 @@ export class UsuariosComponent implements OnInit {
     const formattedCep = conformToMask(
       this.selectedItem.cep, MasksConstants.CEP, { guide: false }
     ).conformedValue;
-    return { formattedCgc, formattedTel, formattedCep };
+    const birthdayDate = new Date(this.selectedItem.dataNascimento);
+    const month = birthdayDate.getMonth() + 1;
+    const day = birthdayDate.getDate() + 1;
+    const formattedDate = `${(day > 9 ? '' : '0') + day}-${(month > 9 ? '' : '0') + month}-${birthdayDate.getFullYear()}`
+    return { formattedCgc, formattedTel, formattedCep, formattedDate };
   }
 
   private openModal() {

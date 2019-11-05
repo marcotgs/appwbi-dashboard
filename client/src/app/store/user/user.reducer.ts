@@ -19,6 +19,9 @@ export const userReducer = createReducer(
             return array;
         }, [])
     })),
+    on(UserActions.postUserSuccess, (state, res) => ({
+        ...state, users: [...state.users, res]
+    })),
 );
 
 export const getUserState = createFeatureSelector<UserState>('userState');

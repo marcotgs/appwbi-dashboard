@@ -107,4 +107,23 @@ export class UserEffects {
                 )
         )
     ));
+
+    public postUser$ = createEffect(() => this.actions$.pipe(
+        ofType(userActions.postUser),
+        switchMap((action) => {
+            const body = { ...action };
+            delete body.type;
+            return this.userService.postUser(body)
+                .pipe(
+                    map(res => {
+                        if (action.id) {
+                            return userActions.postUserEditSuccess(res.data);
+                        }
+                        return userActions.postUserSuccess(res.data);
+                    }),
+                    catchError(res => {
+                        return of(userActions.postUserError(((res.error && res.error.data) || { errors: [ApiConstants.UNEXPECTED_ERROR] })));
+                    })
+                )
+        })));
 }

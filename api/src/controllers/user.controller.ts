@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Response } from 'express';
 import sha256 from 'crypto-js/sha256';
+import CryptoJS from 'crypto-js';
 import { Post, Res, JsonController, Body, Authorized, CurrentUser, Get, Delete, Param } from 'routing-controllers';
 import { AcessoUsuariosRepository } from '@api/database/repositories/acesso-usuarios';
 import BaseController from '@api/controllers/base-controller.class';
-import { LoginResponse, UserResponse } from '@shared/interfaces';
+import { LoginResponse, UserResponse, UserBody } from '@shared/interfaces';
 import logger from '@api/util/logger';
-import { acessoUsuariosModel, municipioModel, empresaModel, estadoModel, acessoNiveisPermissaoModel } from '@api/database/models';
+import { acessoUsuariosModel, municipioModel, empresaModel, estadoModel, acessoNiveisPermissaoModel, cadastroSetoresModel } from '@api/database/models';
 import { MunicipioRepository } from '@api/database/repositories/municipio';
 import Database from '@api/database';
 import { JwtTokenService } from '@api/services';
@@ -62,6 +63,7 @@ export default class UserController extends BaseController {
                 municipio: municipioModel & { estado: estadoModel };
                 acessoNiveisPermissao: acessoNiveisPermissaoModel;
                 empresa: empresaModel;
+                cadastroSetore: cadastroSetoresModel;
             }): any => {
                 const json = e.toJSON() as any;
                 const object = {
@@ -71,15 +73,112 @@ export default class UserController extends BaseController {
                     estado: e.municipio.estado.sigla,
                     perfil: e.acessoNiveisPermissao.descricao,
                     empresa: e.empresa.nome,
+                    setor: e.cadastroSetore.descricao,
                 };
                 delete object.municipio;
                 delete object.acessoNiveisPermissao;
-                delete object.empresa;
+                delete object.cadastroSetore;
                 return object;
             });
             return this.sendResponse(res, 200, response);
         } catch (ex) {
             logger.error(`Erro na requisição de 'getUsers' no controller 'UserController'. Erro -> ${ex}`);
+            return this.sendResponse(res, 500);
+        }
+    }
+
+    /**
+     * Adiciona ou edita um usuário.
+     *
+     * @param {CompanyBody} body
+     * @param {Response} res
+     * @returns {Promise<Response>}
+     * @memberof UserController
+     */
+    @Authorized()
+    @Post('/')
+    public async postUser(
+        @Body() body: UserBody,
+        @Res() res: Response,
+    ): Promise<Response> {
+        try {
+            if (!body.id) {
+                const municipio = await this.municipioRepository.findByIbgeCode(body.codigoCompletoCidadeIbge);
+                const passwordSalt = CryptoJS.lib.WordArray.random(128 / 16).toString();
+                if (body.password) {
+                    body.password = sha256(`${passwordSalt}${body.password}`).toString();
+                }
+                const results = await this.acessoUsuariosRepository.insert({ ...body, idMunicipio: municipio.id, passwordSalt });
+                body.id = results.id;
+            } else {
+                const userData = await this.acessoUsuariosRepository.findById(body.id, {
+                    attributes: [
+                        'nome', 'sobrenome', 'email', 'ddd', 'telefone',
+                        'endereco', 'numero', 'complemento', 'bairro', 'cep',
+                        'dataNascimento', 'cargo', 'cgc', 'id',
+                    ],
+                    include: [
+                        { model: Database.models.empresa },
+                        { model: Database.models.acessoNiveisPermissao },
+                        { model: Database.models.cadastroSetores },
+                        {
+                            model: Database.models.municipio,
+                            include: [
+                                {
+                                    model: Database.models.estado,
+                                }
+                            ],
+                        }
+                    ],
+                }) as any;
+
+                const newValue = { ...userData.toJSON(), ...body } as any;
+                if (body.codigoCompletoCidadeIbge !== userData.municipio.codigoCompletoCidadeIbge) {
+                    const municipio = await this.municipioRepository.findByIbgeCode(body.codigoCompletoCidadeIbge);
+                    newValue.idMunicipio = municipio.id;
+                }
+                if (body.password) {
+                    body.password = sha256(`${userData.passwordSalt}${body.password}`).toString();
+                }
+                const mergeData = { ...userData.toJSON(), ...body };
+                await this.acessoUsuariosRepository.updateUser(mergeData);
+            }
+            const userData = await this.acessoUsuariosRepository.findById(body.id, {
+                attributes: [
+                    'nome', 'sobrenome', 'email', 'ddd', 'telefone',
+                    'endereco', 'numero', 'complemento', 'bairro', 'cep',
+                    'dataNascimento', 'cargo', 'cgc', 'id',
+                ],
+                include: [
+                    { model: Database.models.empresa },
+                    { model: Database.models.acessoNiveisPermissao },
+                    { model: Database.models.cadastroSetores },
+                    {
+                        model: Database.models.municipio,
+                        include: [
+                            {
+                                model: Database.models.estado,
+                            }
+                        ],
+                    }
+                ],
+            }) as any;
+            const userDataJson = userData.toJSON();
+            const response = {
+                ...userDataJson,
+                cidade: userDataJson.municipio.nome,
+                codigoCompletoCidadeIbge: userDataJson.municipio.codigoCompletoCidadeIbge,
+                estado: userDataJson.municipio.estado.sigla,
+                perfil: userDataJson.acessoNiveisPermissao.descricao,
+                empresa: userDataJson.empresa.nome,
+                setor: userDataJson.cadastroSetore.descricao,
+            };
+            delete response.municipio;
+            delete response.acessoNiveisPermissao;
+            delete response.cadastroSetore;
+            return this.sendResponse(res, 200, response);
+        } catch (ex) {
+            logger.error(`Erro na requisição de 'postUser' no controller 'UserController'. Erro -> ${ex}`);
             return this.sendResponse(res, 500);
         }
     }
@@ -184,7 +283,7 @@ export default class UserController extends BaseController {
     @Authorized()
     @Post('/profile')
     public async updateProfile(
-        @Body() body: UserResponse,
+        @Body() body: UserBody,
         @Res() res: Response,
         @CurrentUser() userId?: number,
     ): Promise<Response> {

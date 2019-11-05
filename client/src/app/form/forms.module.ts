@@ -84,7 +84,8 @@ import { FormEmpresaComponent } from './form-empresa/form-empresa.component';
     FormEmpresaComponent,
   ],
   exports: [
-    FormEmpresaComponent
+    FormEmpresaComponent,
+    FormContaUsuarioComponent
   ]
 })
 export class FormModule { }

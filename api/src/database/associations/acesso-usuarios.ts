@@ -13,6 +13,11 @@ const addAcessoUsuariosAssociation = (models: any): void => {
         }
     );
     (models.acessoUsuarios as acessoUsuariosModelStatic).belongsTo(
+        models.cadastroSetores, {
+            foreignKey: 'id_setor',
+        }
+    );
+    (models.acessoUsuarios as acessoUsuariosModelStatic).belongsTo(
         models.acessoNiveisPermissao, {
             foreignKey: 'id_acesso_niveis_permissao',
         }
