@@ -126,4 +126,18 @@ export class UserEffects {
                     })
                 )
         })));
+
+    public deleteUser$ = createEffect(() => this.actions$.pipe(
+        ofType(userActions.deleteUser),
+        switchMap((action) =>
+            this.userService.deleteUser(action.id)
+                .pipe(
+                    map(() => {
+                        return userActions.deleteUserSuccess(action);
+                    }),
+                    catchError(res => {
+                        return of(userActions.deleteUserError(((res.error && res.error.data) || { errors: [ApiConstants.UNEXPECTED_ERROR] })));
+                    })
+                )
+        )));
 }

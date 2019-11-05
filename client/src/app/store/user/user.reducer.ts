@@ -22,6 +22,22 @@ export const userReducer = createReducer(
     on(UserActions.postUserSuccess, (state, res) => ({
         ...state, users: [...state.users, res]
     })),
+    on(UserActions.postUserEditSuccess, (state, res) => {
+        const users = [...state.users];
+        const index = users.findIndex(m => m.id == res.id);
+        users[index] = res;
+        return ({
+            ...state, users
+        });
+    }),
+    on(UserActions.deleteUserSuccess, (state, res) => {
+        const users = [...state.users];
+        const index = users.findIndex(m => m.id == res.id);
+        users.splice(index, 1);
+        return ({
+            ...state, users
+        });
+    }),
 );
 
 export const getUserState = createFeatureSelector<UserState>('userState');

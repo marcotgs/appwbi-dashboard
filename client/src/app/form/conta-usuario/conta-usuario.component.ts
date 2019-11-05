@@ -137,6 +137,9 @@ export class FormContaUsuarioComponent {
       delete payload.perfil;
       delete payload.empresa;
       if (this.modal) {
+        if (this.isEditing) {
+          payload.id = this.userData.id;
+        }
         this.store.dispatch(postUser(payload));
       } else {
         this.store.dispatch(updateProfile(payload));
@@ -206,6 +209,9 @@ export class FormContaUsuarioComponent {
         }
         else {
           this.sectors = sectors;
+          if (this.isEditing) {
+            this.filteredSectors = this.sectors.filter(s => s.empresa.nome === this.userData.empresa);
+          }
         }
         if (!permissions) {
           this.storePermission.dispatch(getPermissions());
@@ -215,14 +221,17 @@ export class FormContaUsuarioComponent {
         }
       });
     this.initManageAccountForm();
-    this.manageAccountForm.get('password').setValidators(Validators.compose([
-      Validators.required,
-      Validators.minLength(8),
-    ]));
-    this.manageAccountForm.get('confirmPassword').setValidators(Validators.compose([
-      Validators.required,
-      Validators.minLength(8),
-    ]));
+    this.codigoCompletoCidadeIbge = this.userData.codigoCompletoCidadeIbge;
+    if (this.isCreating) {
+      this.manageAccountForm.get('password').setValidators(Validators.compose([
+        Validators.required,
+        Validators.minLength(8),
+      ]));
+      this.manageAccountForm.get('confirmPassword').setValidators(Validators.compose([
+        Validators.required,
+        Validators.minLength(8),
+      ]));
+    }
     this.manageAccountForm.get('empresa').valueChanges
       .subscribe((value) => {
         if (!this.manageAccountForm.get('empresa').disabled) {
@@ -290,7 +299,7 @@ export class FormContaUsuarioComponent {
     const birthdayDate = new Date(this.userData.dataNascimento);
     const month = birthdayDate.getMonth() + 1;
     const day = birthdayDate.getDate() + 1;
-    const formattedDate = `${birthdayDate.getFullYear()}-${(month > 9 ? '' : '0') + month}-${(day > 9 ? '' : '0') + day}`
+    const formattedDate = `${birthdayDate.getFullYear()}-${(month > 9 ? '' : '0') + month}-${(day > 9 ? '' : '0') + day}`;
     return { formattedCgc, formattedTel, formattedDate };
   }
 

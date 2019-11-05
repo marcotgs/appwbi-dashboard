@@ -139,6 +139,8 @@ export default class UserController extends BaseController {
                 }
                 if (body.password) {
                     body.password = sha256(`${userData.passwordSalt}${body.password}`).toString();
+                }else{
+                    delete body.password;
                 }
                 const mergeData = { ...userData.toJSON(), ...body };
                 await this.acessoUsuariosRepository.updateUser(mergeData);

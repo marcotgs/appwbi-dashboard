@@ -6,10 +6,9 @@ import { Store } from '@ngrx/store';
 import { CompanyState as UserState } from '@app/store/states';
 import { ApiResponseError, UserResponse } from '@shared/interfaces';
 import { FormGroup } from '@angular/forms';
-import { deleteCompany } from '@app/store/company';
 import { conformToMask } from 'angular2-text-mask';
 import MasksConstants from '@app/constants/mask/mask.contants';
-import { getUserState, getUsers } from '@app/store/user';
+import { getUserState, getUsers, deleteUser } from '@app/store/user';
 
 @Component({
   selector: 'app-usuarios',
@@ -81,7 +80,7 @@ export class UsuariosComponent implements OnInit {
   public deleteItem() {
     this.isDeleting = true;
     this.loading = true;
-    this.storeUser.dispatch(deleteCompany({ id: this.selectedItem.id }));
+    this.storeUser.dispatch(deleteUser({ id: this.selectedItem.id }));
   }
 
   public addNewItem() {
@@ -125,7 +124,12 @@ export class UsuariosComponent implements OnInit {
     const birthdayDate = new Date(this.selectedItem.dataNascimento);
     const month = birthdayDate.getMonth() + 1;
     const day = birthdayDate.getDate() + 1;
-    const formattedDate = `${(day > 9 ? '' : '0') + day}-${(month > 9 ? '' : '0') + month}-${birthdayDate.getFullYear()}`
+    let formattedDate;
+    if (this.isEditing) {
+      formattedDate = `${birthdayDate.getFullYear()}-${(month > 9 ? '' : '0') + month}-${(day > 9 ? '' : '0') + day}`;
+    } else {
+      formattedDate = `${(day > 9 ? '' : '0') + day}-${(month > 9 ? '' : '0') + month}-${birthdayDate.getFullYear()}`;
+    }
     return { formattedCgc, formattedTel, formattedCep, formattedDate };
   }
 
