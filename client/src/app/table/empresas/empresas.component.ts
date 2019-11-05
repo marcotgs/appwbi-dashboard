@@ -138,7 +138,8 @@ export class EmpresasComponent implements OnInit {
             };
           });
           this.temp = [...this.rows];
-          if (data.companies.length > this.data.length || this.isEditing) {
+          if ((data.companies.length > this.data.length && this.data.length > 0)
+            || this.isEditing) {
             this.notifierService.notify('success', 'Salvo!');
             this.modalService.dismissAll();
             this.isSubmiting = false;

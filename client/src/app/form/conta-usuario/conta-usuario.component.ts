@@ -69,6 +69,11 @@ export class FormContaUsuarioComponent {
     }
   }
 
+  ngOnDestroy(): void {
+    this.spinner.hide(this.cepSpinner);
+    this.spinner.hide(this.saveSpinner);    
+}
+
   public getMessagesError(controlName: string): any {
     return (validationMessages[controlName] || validationMessages['default']);
   }

@@ -125,7 +125,6 @@ export class PermissoesComponent implements OnInit {
   private initRows() {
     this.storePermission.select(getAccessPermissionState)
       .subscribe(async (data) => {
-        console.log(data.permissions);
         if (data.permissions) {
           this.loading = false;
           this.data = data.permissions;

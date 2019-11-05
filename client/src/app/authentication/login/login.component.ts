@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit {
     authTokenService: AuthTokenService,
   ) {
     if (authTokenService.isLoggedIn()) {
-      this.router.navigate(['/'], { replaceUrl: true });
+      this.router.navigate(['/starter'], { replaceUrl: true });
     }
   }
 
@@ -37,9 +37,13 @@ export class LoginComponent implements OnInit {
     });
     this.store.select(getUserState).subscribe((userState) => {
       if (userState.currentUser.email) {
-        this.router.navigate(['/'], { replaceUrl: true });
+        this.router.navigate(['/starter'], { replaceUrl: true });
       }
     });
+  }
+
+  ngOnDestroy(): void {
+      this.spinner.hide();
   }
 
   private toggleErrors(errors: ApiResponseError[] | string[]) {

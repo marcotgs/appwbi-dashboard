@@ -36,13 +36,12 @@ export class UsuariosComponent implements OnInit {
     private modalService: NgbModal,
     private storeUser: Store<UserState>,
     private notifierService: NotifierService,
-  ) {
-    this.getUsers();
-    this.initRows();
-  }
+  ) {}
 
   ngOnInit(): void {
     this.columns = [{ name: 'Nome' }, { name: 'Sobrenome' }, { name: 'Email' }, { name: 'CGC' }];
+    this.getUsers();
+    this.initRows();
   }
 
   public filterTable(event) {
@@ -139,7 +138,7 @@ export class UsuariosComponent implements OnInit {
 
   private initRows() {
     this.storeUser.select(getUserState)
-      .subscribe(async (data) => {
+      .subscribe((data) => {
         if (data.users) {
           this.loading = false;
           this.rows = data.users.map((r) => {

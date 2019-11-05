@@ -115,7 +115,7 @@ export default class UserController extends BaseController {
                     attributes: [
                         'nome', 'sobrenome', 'email', 'ddd', 'telefone',
                         'endereco', 'numero', 'complemento', 'bairro', 'cep',
-                        'dataNascimento', 'cargo', 'cgc', 'id',
+                        'dataNascimento', 'cargo', 'cgc', 'id', 'passwordSalt'
                     ],
                     include: [
                         { model: Database.models.empresa },
@@ -139,7 +139,7 @@ export default class UserController extends BaseController {
                 }
                 if (body.password) {
                     body.password = sha256(`${userData.passwordSalt}${body.password}`).toString();
-                }else{
+                } else {
                     delete body.password;
                 }
                 const mergeData = { ...userData.toJSON(), ...body };
@@ -235,6 +235,7 @@ export default class UserController extends BaseController {
                     include: [
                         { model: Database.models.empresa },
                         { model: Database.models.acessoNiveisPermissao },
+                        { model: Database.models.cadastroSetores },
                         {
                             model: Database.models.municipio,
                             include: [
@@ -249,6 +250,7 @@ export default class UserController extends BaseController {
                 municipio: municipioModel & { estado: estadoModel };
                 acessoNiveisPermissao: acessoNiveisPermissaoModel;
                 empresa: empresaModel;
+                cadastroSetore: cadastroSetoresModel;
             };
 
             const userDataJSON = userData.toJSON() as any;
@@ -259,6 +261,7 @@ export default class UserController extends BaseController {
                 estado: userData.municipio.estado.sigla,
                 perfil: userData.acessoNiveisPermissao.descricao,
                 empresa: userData.empresa.nome,
+                setor: userData.cadastroSetore.descricao,
             };
 
             delete userDataJSON.municipio;
