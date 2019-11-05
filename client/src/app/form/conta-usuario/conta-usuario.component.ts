@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -8,8 +8,7 @@ import { NotifierService } from 'angular-notifier';
 import { conformToMask } from 'angular2-text-mask';
 import { UserState, updateProfile, getProfile, getProfileSuccess, loginSuccess, updateProfileError } from '@app/store/user';
 import validationMessages from '@app/constants/form-validation/form-validation.constants';
-import { acessoUsuariosResponse } from '@shared/interfaces';
-import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
+import { UserResponse } from '@shared/interfaces';
 import MasksConstants from '@app/constants/mask/mask.contants';
 
 @Component({
@@ -27,8 +26,7 @@ export class FormContaUsuarioComponent {
   public cepMask = MasksConstants.CEP;
   public telMask = MasksConstants.TEL;
   private codigoCompletoCidadeIbge = null;
-  @ViewChild('successAlert', { static: false }) private successAlert: SwalComponent;
-  private userData: acessoUsuariosResponse
+  private userData: UserResponse
 
   constructor(
     private spinner: NgxSpinnerService,

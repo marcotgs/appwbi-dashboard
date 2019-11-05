@@ -30,13 +30,83 @@ export default class AcessoUsuariosRepository {
     }
 
     /**
+    * Procura os registros usuários.
+    *
+    * @returns {Promise<acessoUsuariosModel[]>}
+    * @memberof AcessoUsuariosRepository
+    */
+    public async findAll(): Promise<acessoUsuariosModel[]> {
+        try {
+            return await this.acessoUsuariosModel.findAll({
+                attributes: [
+                    'nome', 'sobrenome', 'email', 'ddd', 'telefone',
+                    'endereco', 'numero', 'complemento', 'bairro', 'cep',
+                    'dataNascimento', 'cargo', 'cgc'
+                ],
+                include: [
+                    { model: Database.models.empresa },
+                    { model: Database.models.acessoNiveisPermissao },
+                    {
+                        model: Database.models.municipio,
+                        include: [
+                            {
+                                model: Database.models.estado,
+                            }
+                        ],
+                    }
+                ],
+            });
+        } catch (ex) {
+            logger.error(`Erro ao realizar consulta no repository :'AcessoUsuariosRepository'-> 'findAll'. Error: ${ex}`);
+            throw ex;
+        }
+    };
+
+    /**
+     * Deleta um usuário.
+     *
+     * @param {number} id
+     * @returns {Promise<number>}
+     * @memberof AcessoUsuariosRepository
+     */
+    public async delete(id: number): Promise<number> {
+        try {
+            return await this.acessoUsuariosModel.destroy({
+                where: {
+                    id,
+                },
+            });
+        } catch (ex) {
+            logger.error(`Erro ao realizar consulta no repository :'AcessoUsuariosRepository'-> 'delete'. Error: ${ex}`);
+            throw ex;
+        }
+    };
+
+    /**
+     * Insere uma novo usuário.
+     *
+     * @param {object} data
+     * @returns {Promise<acessoUsuariosModel>}
+     * @memberof AcessoUsuariosRepository
+     */
+    public async insert(data: object): Promise<acessoUsuariosModel> {
+        try {
+            return await this.acessoUsuariosModel.create(data);
+        } catch (ex) {
+            logger.error(`Erro ao realizar consulta no repository :'AcessoUsuariosRepository'-> 'insert'. Error: ${ex}`);
+            throw ex;
+        }
+    };
+
+
+    /**
      * Procura um registro por id na tabela.
      *
      * @param {number} id
      * @returns {Promise<acessoUsuariosModel>}
      * @memberof AcessoUsuariosRepository
      */
-    public async findById(id: number, options: Omit<FindOptions, 'where'> = {} ): Promise<acessoUsuariosModel> {
+    public async findById(id: number, options: Omit<FindOptions, 'where'> = {}): Promise<acessoUsuariosModel> {
         try {
             return await this.acessoUsuariosModel.findByPk(id, options);
         } catch (ex) {

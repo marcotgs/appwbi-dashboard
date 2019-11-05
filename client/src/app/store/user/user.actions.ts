@@ -2,7 +2,7 @@ import { props, createAction } from '@ngrx/store';
 import * as userTypes from "./user.types";
 import {
     ApiResponseErrors, ChangePasswordBody,
-    SendEmailChangePasswordBody, acessoUsuariosResponse,
+    SendEmailChangePasswordBody, UserResponse, UserBody,
 } from '@shared/interfaces';
 import { LoginBody } from '@app/api/interfaces';
 
@@ -59,7 +59,7 @@ export const getProfile = createAction(
 
 export const getProfileSuccess = createAction(
     userTypes.GET_PROFILE_SUCCESS,
-    props<acessoUsuariosResponse>()
+    props<UserResponse>()
 );
 
 export const getProfileError = createAction(
@@ -69,11 +69,59 @@ export const getProfileError = createAction(
 
 export const updateProfile = createAction(
     userTypes.UPDATE_PROFILE,
-    props<acessoUsuariosResponse>()
+    props<UserResponse>()
 );
-
 
 export const updateProfileError = createAction(
     userTypes.UPDATE_PROFILE_ERROR,
     props<ApiResponseErrors>(),
+);
+
+export const getUsers = createAction(
+    userTypes.GET_USERS
+);
+
+export const getUsersSuccess = createAction(
+    userTypes.GET_USERS_SUCCESS,
+    props<UserResponse[]>()
+);
+
+export const getUsersError = createAction(
+    userTypes.GET_USERS_ERROR,
+    props<ApiResponseErrors>()
+);
+
+export const postUser = createAction(
+    userTypes.POST_USER,
+    props<UserBody>(),
+);
+
+export const postUserSuccess = createAction(
+    userTypes.POST_USER_SUCCESS,
+    props<UserResponse>()
+);
+
+export const postUserEditSuccess = createAction(
+    userTypes.POST_EDIT_USER_SUCCESS,
+    props<UserResponse>()
+);
+
+export const postUserError = createAction(
+    userTypes.POST_USER_ERROR,
+    props<ApiResponseErrors>()
+);
+
+export const deleteUser = createAction(
+    userTypes.DELETE_USER,
+    props<{ id: number }>(),
+);
+
+export const deleteUserSuccess = createAction(
+    userTypes.DELETE_USER_SUCCESS,
+    props<{ id: number }>(),
+);
+
+export const deleteUserError = createAction(
+    userTypes.DELETE_USER_ERROR,
+    props<ApiResponseErrors>()
 );

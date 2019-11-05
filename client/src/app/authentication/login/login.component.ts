@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
       this.toggleErrors(data.errors);
     });
     this.store.select(getUserState).subscribe((userState) => {
-      if (userState.user.email) {
+      if (userState.currentUser.email) {
         this.router.navigate(['/'], { replaceUrl: true });
       }
     });

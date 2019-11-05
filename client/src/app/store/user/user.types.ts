@@ -18,3 +18,17 @@ export const GET_PROFILE_ERROR = '[USER] get profile error';
 
 export const UPDATE_PROFILE = '[USER] update profile';
 export const UPDATE_PROFILE_ERROR = '[USER] update profile error';
+
+export const GET_USERS = '[USER] getUser';
+export const GET_USERS_SUCCESS = '[USER] getUser success';
+export const GET_USERS_ERROR = '[USER] getUser error';
+
+export const POST_USER = '[USER] postUser';
+export const POST_USER_SUCCESS = '[USER] postUser success';
+export const POST_EDIT_USER_SUCCESS = '[USER] postEditUser success';
+export const POST_USER_ERROR = '[USER] postUser error';
+
+export const DELETE_USER = '[USER] deleteUser';
+export const DELETE_USER_SUCCESS = '[USER] deleteUser success';
+export const DELETE_USER_ERROR = '[USER] deleteUser error';
+

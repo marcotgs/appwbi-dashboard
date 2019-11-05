@@ -1,112 +1,168 @@
-import { Component, ViewEncapsulation, ViewChild } from '@angular/core';
-import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-
-declare var require: any;
-const data: any = require('./usuarios.json');
+import { Component, ViewEncapsulation, ViewChild, TemplateRef, OnInit } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
+import { NotifierService } from 'angular-notifier';
+import { Store } from '@ngrx/store';
+import { CompanyState as UserState } from '@app/store/states';
+import { ApiResponseError, UserResponse } from '@shared/interfaces';
+import { FormGroup } from '@angular/forms';
+import { deleteCompany } from '@app/store/company';
+import { conformToMask } from 'angular2-text-mask';
+import MasksConstants from '@app/constants/mask/mask.contants';
+import { getUserState, getUsers } from '@app/store/user';
 
 @Component({
   selector: 'app-usuarios',
   templateUrl: './usuarios.component.html',
   encapsulation: ViewEncapsulation.None,
-  styles: [
-    `
-      .dark-modal .modal-content {
-        background-color: #009efb;
-        color: white;
-      }
-      .dark-modal .close {
-        color: white;
-      }
-      .light-blue-backdrop {
-        background-color: #5cb3fd;
-      }
-    `
-  ]
 })
 
-export class UsuariosComponent {
-  editing = {};
-  rows = [];
-  temp = [...data];
+export class UsuariosComponent implements OnInit {
+  @ViewChild('modal', { static: true }) private modal: TemplateRef<any>;
+  public rows = [];
+  public temp = [];
+  public columns = [];
+  public loading = false;
+  public isEditing = false;
+  public isCreating = false;
+  public isSubmiting = false;
+  public isDeleting = false;
+  public selectedItem: UserResponse = null;
+  public form: FormGroup;
+  public formErrors: ApiResponseError[] | string[] = [];
+  private data: UserResponse[] = [];
+  @ViewChild('alertDeleteWarning', { static: false }) private alertDeleteWarning: SwalComponent;
 
-  loadingIndicator = true;
-  reorderable = true;
-
-  columns = [{ prop: 'nome' }, { name: 'Sobrenome' }, { name: 'Email' }, { name: 'CGC' }, { name: 'Controles' }];
-
-  closeResult: string;
-
-  @ViewChild(UsuariosComponent, { static: false }) table: UsuariosComponent;
-  constructor(private modalService: NgbModal, private modalService2: NgbModal) {
-    this.rows = data;
-    this.temp = [...data];
-    setTimeout(() => {
-      this.loadingIndicator = false;
-    }, 1500);
+  constructor(
+    private modalService: NgbModal,
+    private storeUser: Store<UserState>,
+    private notifierService: NotifierService,
+  ) {
+    this.getUsers();
+    this.initRows();
   }
 
-  updateFilter(event) {
+  ngOnInit(): void {
+    this.columns = [{ name: 'Nome' }, { name: 'Sobrenome' }, { name: 'Email' }, { name: 'CGC' }];
+  }
+
+  public filterTable(event) {
     const val = event.target.value.toLowerCase();
 
-    // filter our data
-    const temp = this.temp.filter(function(d) {
-      return d.name.toLowerCase().indexOf(val) !== -1 || !val;
+    const temp = this.temp.filter((d) => {
+      return (
+        d.nome.toLowerCase().indexOf(val) !== -1
+        || d.email.toLowerCase().indexOf(val) !== -1
+        || !val
+      );
     });
-
-    // update the rows
     this.rows = temp;
-    // Whenever the filter changes, always go back to the first page
-    this.table = data;
-  }
-  
-  updateValue(event, cell, rowIndex) {
-    console.log('inline editing rowIndex', rowIndex);
-    this.editing[rowIndex + '-' + cell] = false;
-    this.rows[rowIndex][cell] = event.target.value;
-    this.rows = [...this.rows];
-    console.log('UPDATED!', this.rows[rowIndex][cell]);
   }
 
-  open2(content) {
-    this.modalService.open(content).result.then(
-      result => {
-        this.closeResult = `Closed with: ${result}`;
-      },
-      reason => {
-        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-      }
-    );
-  }
-  open(content) {
-    this.modalService2.open(content, { windowClass: 'dark-modal' });
-  }
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
+  public viewItem(id: number) {
+    this.isCreating = false;
+    this.isEditing = false;
+    this.getSelectedItem(id);
+    this.openModal();
   }
 
-  openBackDropCustomClass(content) {
-    this.modalService.open(content, {backdropClass: 'light-blue-backdrop'});
+  public editItem(id: number) {
+    this.isCreating = false;
+    this.isEditing = true;
+    this.getSelectedItem(id);
+    this.openModal();
   }
 
-  openWindowCustomClass(content) {
-    this.modalService.open(content, { windowClass: 'dark-modal' });
+  public showAlertDelete(id: number) {
+    this.selectedItem = this.data.find(m => m.id === id);
+    this.alertDeleteWarning.fire();
   }
 
-  openSm(content) {
-    this.modalService.open(content, { size: 'sm' });
+  public deleteItem() {
+    this.isDeleting = true;
+    this.loading = true;
+    this.storeUser.dispatch(deleteCompany({ id: this.selectedItem.id }));
   }
 
-  openLg(content) {
-    this.modalService.open(content, { size: 'lg' });
+  public addNewItem() {
+    this.selectedItem = {};
+    this.isCreating = true;
+    this.isEditing = false;
+    this.openModal();
   }
 
-  openVerticallyCentered(content) {
+  public openVerticallyCentered(content) {
     this.modalService.open(content, { centered: true });
   }
+
+  public getMaskCgc(rawValue: string): (string | RegExp)[] {
+    if (rawValue.replace(/(-|\/|\.)/gi, '').length > 11) {
+      return MasksConstants.CNPJ;
+    }
+    return MasksConstants.CPF;
+  }
+
+  private getSelectedItem(id: number) {
+    this.selectedItem = this.data.find(m => m.id === id);
+    const { formattedCgc, formattedTel, formattedCep } = this.formatCompanyData();
+    this.selectedItem = {
+      ...this.selectedItem,
+      telefone: formattedTel,
+      cgc: formattedCgc,
+      cep: formattedCep
+    };
+  }
+
+  private formatCompanyData(): any {
+    const formattedCgc = conformToMask(this.selectedItem.cgc, this.getMaskCgc(this.selectedItem.cgc), { guide: false }).conformedValue;
+    const formattedTel = conformToMask(
+      this.selectedItem.ddd.concat(this.selectedItem.telefone), MasksConstants.TEL, { guide: false }
+    ).conformedValue;
+    const formattedCep = conformToMask(
+      this.selectedItem.cep, MasksConstants.CEP, { guide: false }
+    ).conformedValue;
+    return { formattedCgc, formattedTel, formattedCep };
+  }
+
+  private openModal() {
+    this.modalService.open(this.modal, { centered: true });
+  }
+
+  private initRows() {
+    this.storeUser.select(getUserState)
+      .subscribe(async (data) => {
+        if (data.users) {
+          this.loading = false;
+          this.rows = data.users.map((r) => {
+            return {
+              id: r.id,
+              [this.columns[0].name.toLowerCase()]: r.nome,
+              [this.columns[1].name.toLowerCase()]: r.sobrenome,
+              [this.columns[2].name.toLowerCase()]: r.email,
+              [this.columns[3].name.toLowerCase()]: conformToMask(r.cgc, this.getMaskCgc(r.cgc), { guide: false }).conformedValue,
+            };
+          });
+          this.temp = [...this.rows];
+          if ((data.users.length > this.data.length && this.data.length > 0)
+            || this.isEditing) {
+            this.notifierService.notify('success', 'Salvo!');
+            this.modalService.dismissAll();
+            this.isSubmiting = false;
+            this.isEditing = false;
+            this.isCreating = false;
+          } else if (this.isDeleting) {
+            this.isDeleting = false;
+            this.loading = false;
+            this.notifierService.notify('success', 'Salvo!');
+          }
+          this.data = data.users;
+        }
+      });
+  }
+
+  private getUsers() {
+    this.loading = true;
+    this.storeUser.dispatch(getUsers());
+  }
+
 }

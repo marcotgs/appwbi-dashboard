@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import sha1 from "crypto-js/sha1";
 import { AuthTokenService } from '@app/services';
-import { ApiPayload, acessoUsuariosResponse, LoginResponse, SendEmailChangePasswordBody, ChangePasswordBody, MenuPermissionsResponse } from '@shared/interfaces';
+import { ApiPayload, LoginResponse, SendEmailChangePasswordBody, ChangePasswordBody, MenuPermissionsResponse } from '@shared/interfaces';
 import { LoginBody } from '../interfaces';
 
 @Injectable()

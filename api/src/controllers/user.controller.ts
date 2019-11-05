@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Response } from 'express';
 import sha256 from 'crypto-js/sha256';
-import { Post, Res, JsonController, Body, Authorized, CurrentUser, Get } from 'routing-controllers';
+import { Post, Res, JsonController, Body, Authorized, CurrentUser, Get, Delete, Param } from 'routing-controllers';
 import { AcessoUsuariosRepository } from '@api/database/repositories/acesso-usuarios';
 import BaseController from '@api/controllers/base-controller.class';
-import { LoginResponse, acessoUsuariosResponse } from '@shared/interfaces';
+import { LoginResponse, UserResponse } from '@shared/interfaces';
 import logger from '@api/util/logger';
 import { acessoUsuariosModel, municipioModel, empresaModel, estadoModel, acessoNiveisPermissaoModel } from '@api/database/models';
 import { MunicipioRepository } from '@api/database/repositories/municipio';
@@ -41,6 +41,70 @@ export default class UserController extends BaseController {
         this.acessoUsuariosRepository = new AcessoUsuariosRepository();
         this.municipioRepository = new MunicipioRepository();
         this.jwtTokenService = new JwtTokenService();
+    }
+
+
+    /**
+    * Recupera uma lista de usuários.
+    *
+    * @param {Response} res
+    * @returns {Promise<Response>}
+    * @memberof UserController
+    */
+    @Authorized()
+    @Get('/')
+    public async getUsers(
+        @Res() res: Response,
+    ): Promise<Response> {
+        try {
+            const results = await this.acessoUsuariosRepository.findAll();
+            const response = results.map((e: acessoUsuariosModel & {
+                municipio: municipioModel & { estado: estadoModel };
+                acessoNiveisPermissao: acessoNiveisPermissaoModel;
+                empresa: empresaModel;
+            }): any => {
+                const json = e.toJSON() as any;
+                const object = {
+                    ...json,
+                    cidade: e.municipio.nome,
+                    codigoCompletoCidadeIbge: e.municipio.codigoCompletoCidadeIbge,
+                    estado: e.municipio.estado.sigla,
+                    perfil: e.acessoNiveisPermissao.descricao,
+                    empresa: e.empresa.nome,
+                };
+                delete object.municipio;
+                delete object.acessoNiveisPermissao;
+                delete object.empresa;
+                return object;
+            });
+            return this.sendResponse(res, 200, response);
+        } catch (ex) {
+            logger.error(`Erro na requisição de 'getUsers' no controller 'UserController'. Erro -> ${ex}`);
+            return this.sendResponse(res, 500);
+        }
+    }
+
+    /**
+   * Deleta um usuário.
+   *
+   * @param {number} id
+   * @param {Response} res
+   * @returns {Promise<Response>}
+   * @memberof CompanyController
+   */
+    @Authorized()
+    @Delete('/:id')
+    public async deletUser(
+        @Param('id') id: number,
+        @Res() res: Response,
+    ): Promise<Response> {
+        try {
+            await this.acessoUsuariosRepository.delete(id);
+            return this.sendResponse(res, 200);
+        } catch (ex) {
+            logger.error(`Erro na requisição de 'deletUser' no controller 'UserController'. Erro -> ${ex}`);
+            return this.sendResponse(res, 500);
+        }
     }
 
     /**
@@ -88,7 +152,7 @@ export default class UserController extends BaseController {
 
             const userDataJSON = userData.toJSON() as any;
 
-            const result: acessoUsuariosResponse = {
+            const result: UserResponse = {
                 cidade: userData.municipio.nome,
                 codigoCompletoCidadeIbge: userData.municipio.codigoCompletoCidadeIbge,
                 estado: userData.municipio.estado.sigla,
@@ -120,7 +184,7 @@ export default class UserController extends BaseController {
     @Authorized()
     @Post('/profile')
     public async updateProfile(
-        @Body() body: acessoUsuariosResponse,
+        @Body() body: UserResponse,
         @Res() res: Response,
         @CurrentUser() userId?: number,
     ): Promise<Response> {

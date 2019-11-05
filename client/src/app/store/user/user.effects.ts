@@ -92,4 +92,19 @@ export class UserEffects {
                 )
         )
     ));
+
+    public getUsers$ = createEffect(() => this.actions$.pipe(
+        ofType(userActions.getUsers),
+        switchMap(() =>
+            this.userService.getUsers()
+                .pipe(
+                    map((response) => {
+                        return userActions.getUsersSuccess(response.data);
+                    }),
+                    catchError(res => of(userActions.getUsersError((
+                        (res.error && res.error.data) || { errors: [ApiConstants.UNEXPECTED_ERROR] }
+                    ))))
+                )
+        )
+    ));
 }
