@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Response } from "express";
-import { ApiPayload } from "@shared/interfaces";
+import { Response } from 'express';
+import { ApiPayload } from '@shared/interfaces';
 
 
 /**
@@ -30,6 +30,6 @@ export default abstract class BaseController {
             status: statusCode,
             data,
         };
-        return res.status(statusCode).json(result);
+        return res.status(statusCode).set('Content-type', 'application/json; charset=utf-8').json(result);
     }
 }

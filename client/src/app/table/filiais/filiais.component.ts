@@ -114,7 +114,7 @@ export class FiliaisComponent implements OnInit {
     this.isCreating = false;
     this.isEditing = true;
     this.form.reset();
-    this.selectedItem = this.data.find(m => m.id === id);
+    this.selectedItem = { ...this.data.find(m => m.id === id) };
     this.form.patchValue({
       ...this.selectedItem,
       company: this.selectedItem.empresa.nome,

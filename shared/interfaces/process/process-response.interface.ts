@@ -5,6 +5,7 @@ interface ProcessResponse {
     id?: number;
     descricao?: string;
     icone?: string;
+    funcao?: string;
     acessoNiveisPermissao?: PermissionResponse;
     cadastroRotina?: RoutineResponse;
 }

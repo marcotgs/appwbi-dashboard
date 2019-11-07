@@ -36,7 +36,7 @@ export default class CadastroProcessosRepository {
     public async findAll(): Promise<cadastroProcessosModel[]> {
         try {
             return await this.cadastroProcessosModel.findAll({
-                attributes: ['descricao', 'id', 'icone'],
+                attributes: ['descricao', 'id', 'icone', 'funcao'],
                 include: [
                     {
                         model: Database.models.acessoNiveisPermissao,
@@ -70,7 +70,7 @@ export default class CadastroProcessosRepository {
     public async findById(id: number): Promise<cadastroProcessosModel> {
         try {
             return await this.cadastroProcessosModel.findByPk(id, {
-                attributes: ['descricao', 'id', 'icone'],
+                attributes: ['descricao', 'id', 'icone', 'funcao'],
                 include: [
                     {
                         model: Database.models.acessoNiveisPermissao,

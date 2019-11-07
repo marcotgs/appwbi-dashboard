@@ -53,7 +53,7 @@ export class SetoresComponent implements OnInit {
 
   ngOnInit(): void {
     this.columns = [{ name: 'Codigo' }, { name: 'Descricao' }, { name: 'Empresa' }];
-    this.storeCompany.dispatch(getCompanies);
+    this.storeCompany.dispatch(getCompanies());
     this.storeCompany.select(getCompanyState)
       .subscribe(async (data) => {
         if (data.companies) {

@@ -203,6 +203,29 @@
                   </div>
                 </div>
             </div>
+            <div class="form-group row">
+              <div class="col-sm-3">
+                <div class="b-label">
+                  <label for="inputEmail3" class="control-label col-form-label">Função</label>
+                </div>
+              </div>
+              <div class="col-sm-9" *ngIf="isEditing || isCreating">
+                  <input type="text" formControlName="funcao" class="form-control" id="inputEmail3" 
+                    [ngClass]="{'is-invalid': form.get('funcao').invalid  && (form.get('funcao').dirty || 
+                    form.get('funcao').touched)}">
+                    <div class="invalid-feedback" *ngFor="let validation of getMessagesError('funcao')">
+                        <span *ngIf="form.get('funcao').hasError(validation.type) && (form.get('funcao').dirty || 
+                        form.get('funcao').touched)">{{validation.message}}</span>
+                    </div>
+                </div>
+                <div class="col-sm-9" *ngIf="!isEditing && !isCreating">
+                  <div class="b-label b-label--start">
+                    <span class="control-label col-form-label">
+                      {{selectedItem.funcao}}
+                    </span>
+                  </div>
+                </div>
+            </div>
           </div>
           <hr *ngIf="isEditing || isCreating">
           <div class="card-body" *ngIf="isEditing || isCreating">

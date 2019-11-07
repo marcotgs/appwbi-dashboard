@@ -241,6 +241,9 @@ export class ProcessosComponent implements OnInit {
       icone: new FormControl('', {
         validators: Validators.required,
       }),
+      funcao: new FormControl('', {
+        validators: Validators.required,
+      }),
     });
   }
 }
