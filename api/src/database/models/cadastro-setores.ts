@@ -22,16 +22,10 @@ const cadastroSetoresModelInit = (sequelize: Sequelize): cadastroSetoresModelSta
 			field: 'id_empresa'
 		},
 		'descricao': {
-			type: "NCHAR(60)",
+			type: DataTypes.STRING,
 			allowNull: false,
 			comment: "null",
 			field: 'descricao'
-		},
-		'codigo': {
-			type: DataTypes.STRING(4),
-			allowNull: true,
-			comment: "null",
-			field: 'codigo'
 		}
 	}, {
 		tableName: 'cadastro_setores',
@@ -42,8 +36,7 @@ const cadastroSetoresModelInit = (sequelize: Sequelize): cadastroSetoresModelSta
 export interface cadastroSetoresModel extends Model {
 	id:number;
 	idEmpresa:number;
-	descricao:any;
-	codigo:string;
+	descricao:string;
 }
 
 export type cadastroSetoresModelStatic = typeof Model & {

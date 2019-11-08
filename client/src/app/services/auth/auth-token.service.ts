@@ -8,13 +8,13 @@ export default class AuthTokenService {
     private keyExpiresAt = 'expires_at';
 
     public setSession(authResult: LoginResponse): void {
-        localStorage.setItem(this.keyIdToken, authResult.token);
-        localStorage.setItem(this.keyExpiresAt, authResult.expiresIn.toString());
+        sessionStorage.setItem(this.keyIdToken, authResult.token);
+        sessionStorage.setItem(this.keyExpiresAt, authResult.expiresIn.toString());
     }
 
     public logout() {
-        localStorage.removeItem(this.keyIdToken);
-        localStorage.removeItem(this.keyExpiresAt);
+        sessionStorage.removeItem(this.keyIdToken);
+        sessionStorage.removeItem(this.keyExpiresAt);
     }
 
     public isLoggedIn() {
@@ -27,11 +27,11 @@ export default class AuthTokenService {
     }
 
     public getToken(): string {
-        return localStorage.getItem(this.keyIdToken);
+        return sessionStorage.getItem(this.keyIdToken);
     }
 
     private getExpiration() {
-        const expiration = localStorage.getItem(this.keyExpiresAt);
+        const expiration = sessionStorage.getItem(this.keyExpiresAt);
         const expiresAt = JSON.parse(expiration);
         return new Date(expiresAt);
     }

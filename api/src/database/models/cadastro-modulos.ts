@@ -12,7 +12,7 @@ const cadastroModulosModelInit = (sequelize: Sequelize): cadastroModulosModelSta
 			field: 'id'
 		},
 		'descricao': {
-			type: "NCHAR(30)",
+			type: DataTypes.STRING,
 			allowNull: false,
 			comment: "null",
 			field: 'descricao'
@@ -41,7 +41,7 @@ const cadastroModulosModelInit = (sequelize: Sequelize): cadastroModulosModelSta
 
 export interface cadastroModulosModel extends Model {
 	id:number;
-	descricao:any;
+	descricao:string;
 	idAcessoNiveisPermissao:number;
 	icone:string;
 }

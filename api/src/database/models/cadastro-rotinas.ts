@@ -22,7 +22,7 @@ const cadastroRotinasModelInit = (sequelize: Sequelize): cadastroRotinasModelSta
 			field: 'id_cadastro_modulos'
 		},
 		'descricao': {
-			type: "NCHAR(30)",
+			type: DataTypes.STRING,
 			allowNull: false,
 			comment: "null",
 			field: 'descricao'
@@ -52,7 +52,7 @@ const cadastroRotinasModelInit = (sequelize: Sequelize): cadastroRotinasModelSta
 export interface cadastroRotinasModel extends Model {
 	id:number;
 	idCadastroModulos:number;
-	descricao:any;
+	descricao:string;
 	idAcessoNiveisPermissao:number;
 	icone:string;
 }

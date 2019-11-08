@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { combineLatest, Subject, Observable, merge } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
@@ -21,7 +21,8 @@ import { getAccessPermissionState, getPermissions } from '@app/store/access-perm
 @Component({
   selector: 'app-form-conta-usuario',
   templateUrl: './conta-usuario.component.html',
-  styleUrls: ['./conta-usuario.component.scss']
+  styleUrls: ['./conta-usuario.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class FormContaUsuarioComponent {
   @Input('userData') public userData: UserResponse;
@@ -61,6 +62,7 @@ export class FormContaUsuarioComponent {
   ) { }
 
   ngOnInit(): void {
+    this.loadData();
     if (!this.userData && !this.modal) {
       this.getProfileData();
       this.updateProfileHandle();
@@ -71,8 +73,8 @@ export class FormContaUsuarioComponent {
 
   ngOnDestroy(): void {
     this.spinner.hide(this.cepSpinner);
-    this.spinner.hide(this.saveSpinner);    
-}
+    this.spinner.hide(this.saveSpinner);
+  }
 
   public getMessagesError(controlName: string): any {
     return (validationMessages[controlName] || validationMessages['default']);
@@ -194,37 +196,6 @@ export class FormContaUsuarioComponent {
   }
 
   private initModal() {
-    combineLatest(this.storeCompany.select(getCompanyState),
-      this.storeSector.select(getSectorState),
-      this.storePermission.select(getAccessPermissionState),
-      (companyState, sectorState, permissionState) => ({
-        companies: companyState.companies,
-        sectors: sectorState.sectors,
-        permissions: permissionState.permissions,
-      }))
-      .subscribe(({ companies, sectors, permissions }) => {
-        if (!companies) {
-          this.storeCompany.dispatch(getCompanies());
-        }
-        else {
-          this.companies = companies;
-        }
-        if (!sectors) {
-          this.storeSector.dispatch(getSector());
-        }
-        else {
-          this.sectors = sectors;
-          if (this.isEditing) {
-            this.filteredSectors = this.sectors.filter(s => s.empresa.nome === this.userData.empresa);
-          }
-        }
-        if (!permissions) {
-          this.storePermission.dispatch(getPermissions());
-        }
-        else {
-          this.permissions = permissions;
-        }
-      });
     this.initManageAccountForm();
     this.codigoCompletoCidadeIbge = this.userData.codigoCompletoCidadeIbge;
     if (this.isCreating) {
@@ -248,6 +219,40 @@ export class FormContaUsuarioComponent {
             this.filteredSectors = this.sectors.filter(s => s.empresa.nome === value);
             this.manageAccountForm.get('setor').enable();
           }
+        }
+      });
+  }
+
+  private loadData() {
+    combineLatest(this.storeCompany.select(getCompanyState),
+      this.storeSector.select(getSectorState),
+      this.storePermission.select(getAccessPermissionState),
+      (companyState, sectorState, permissionState) => ({
+        companies: companyState.companies,
+        sectors: sectorState.sectors,
+        permissions: permissionState.permissions,
+      }))
+      .subscribe(({ companies, sectors, permissions }) => {
+        if (!companies) {
+          this.storeCompany.dispatch(getCompanies());
+        }
+        else {
+          this.companies = companies;
+        }
+        if (!sectors) {
+          this.storeSector.dispatch(getSector());
+        }
+        else {
+          this.sectors = sectors;
+          if (this.isEditing || !(this.modal)) {
+            this.filteredSectors = this.sectors.filter(s => s.empresa.nome === this.userData.empresa);
+          }
+        }
+        if (!permissions) {
+          this.storePermission.dispatch(getPermissions());
+        }
+        else {
+          this.permissions = permissions;
         }
       });
   }
@@ -322,7 +327,7 @@ export class FormContaUsuarioComponent {
   private initManageAccountForm(): void {
 
     this.manageAccountForm = new FormGroup({
-      email: new FormControl({ value: this.userData.email, disabled: !(this.modal) },
+      email: new FormControl({ value: this.userData.email, disabled: (!(this.modal) || this.isEditing) },
         {
           validators: Validators.compose([
             Validators.required,

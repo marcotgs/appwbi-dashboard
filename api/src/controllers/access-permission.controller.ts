@@ -66,11 +66,11 @@ export default class AccessPermissionController extends BaseController {
         @Res() res: Response,
     ): Promise<Response> {
         try {
-            body.id = Number(body.id);
-            const permissionData = await this.acessoNiveisPermissaoRepository.findById(body.id);
-            if (!permissionData) {
-                await this.acessoNiveisPermissaoRepository.insert(body);
+            if (!body.id) {
+                const results = await this.acessoNiveisPermissaoRepository.insert(body);
+                body.id = results.id;
             } else {
+                const permissionData = await this.acessoNiveisPermissaoRepository.findById(body.id);
                 const newValue = { ...permissionData, ...body };
                 await this.acessoNiveisPermissaoRepository.update(body.id, newValue);
             }

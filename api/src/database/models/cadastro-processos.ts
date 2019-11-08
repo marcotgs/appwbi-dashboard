@@ -12,7 +12,7 @@ const cadastroProcessosModelInit = (sequelize: Sequelize): cadastroProcessosMode
 			field: 'id'
 		},
 		'descricao': {
-			type: "NCHAR(30)",
+			type: DataTypes.STRING,
 			allowNull: false,
 			comment: "null",
 			field: 'descricao'
@@ -57,7 +57,7 @@ const cadastroProcessosModelInit = (sequelize: Sequelize): cadastroProcessosMode
 
 export interface cadastroProcessosModel extends Model {
 	id:number;
-	descricao:any;
+	descricao:string;
 	idCadastroRotinas:number;
 	idAcessoNiveisPermissao:number;
 	funcao:string;

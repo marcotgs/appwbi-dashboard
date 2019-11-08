@@ -52,7 +52,7 @@ export class SetoresComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.columns = [{ name: 'Codigo' }, { name: 'Descricao' }, { name: 'Empresa' }];
+    this.columns = [{ name: 'Descricao' }, { name: 'Empresa' }];
     this.storeCompany.dispatch(getCompanies());
     this.storeCompany.select(getCompanyState)
       .subscribe(async (data) => {
@@ -64,9 +64,10 @@ export class SetoresComponent implements OnInit {
 
   public filterTable(event) {
     const val = event.target.value.toLowerCase();
-
     const temp = this.temp.filter((d) => {
-      return d.descricao.toLowerCase().indexOf(val) !== -1 || !val;
+      return d.descricao.toLowerCase().indexOf(val) !== -1
+        || d.empresa.toLowerCase().indexOf(val) !== -1
+        || !val;
     });
     this.rows = temp;
   }
@@ -161,10 +162,9 @@ export class SetoresComponent implements OnInit {
           this.data = data.sectors;
           this.rows = data.sectors.map((r) => {
             return {
-              id: r.id,
-              [this.columns[0].name.toLowerCase()]: r.codigo,
-              [this.columns[1].name.toLowerCase()]: r.descricao,
-              [this.columns[2].name.toLowerCase()]: r.empresa.nome,
+              ...r,
+              [this.columns[0].name.toLowerCase()]: r.descricao,
+              [this.columns[1].name.toLowerCase()]: r.empresa.nome,
             };
           });
           this.temp = [...this.rows];
@@ -204,12 +204,6 @@ export class SetoresComponent implements OnInit {
       }),
       company: new FormControl('', {
         validators: Validators.required,
-      }),
-      codigo: new FormControl('', {
-        validators: Validators.compose([
-          Validators.required,
-          Validators.maxLength(4),
-        ]),
       }),
     });
   }

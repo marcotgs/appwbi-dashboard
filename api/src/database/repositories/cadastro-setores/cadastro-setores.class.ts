@@ -36,7 +36,7 @@ export default class CadastroSetoresRepository {
     public async findAll(): Promise<cadastroSetoresModel[]> {
         try {
             return await this.cadastroSetoresModel.findAll({
-                attributes: ['descricao', 'id', 'codigo'],
+                attributes: ['descricao', 'id'],
                 include: [
                     {
                         model: Database.models.empresa,
@@ -60,7 +60,7 @@ export default class CadastroSetoresRepository {
     public async findById(id: number): Promise<cadastroSetoresModel> {
         try {
             return await this.cadastroSetoresModel.findByPk(id, {
-                attributes: ['descricao', 'id', 'codigo'],
+                attributes: ['descricao', 'id'],
                 include: [
                     {
                         model: Database.models.empresa,

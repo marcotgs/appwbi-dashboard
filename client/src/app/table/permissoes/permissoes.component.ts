@@ -45,7 +45,7 @@ export class PermissoesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.columns = [{ name: 'Id' }, { name: 'Descricao' }];
+    this.columns = [{ name: 'Descricao' }];
   }
 
   public filterTable(event) {
@@ -131,8 +131,7 @@ export class PermissoesComponent implements OnInit {
           this.rows = data.permissions.map((r) => {
             return {
               id: r.id,
-              [this.columns[0].name.toLowerCase()]: r.id,
-              [this.columns[1].name.toLowerCase()]: r.descricao,
+              [this.columns[0].name.toLowerCase()]: r.descricao,
             };
           });
           this.temp = [...this.rows];
@@ -168,9 +167,6 @@ export class PermissoesComponent implements OnInit {
   private initForm(): void {
     this.form = new FormGroup({
       descricao: new FormControl('', {
-        validators: Validators.required,
-      }),
-      id: new FormControl('', {
         validators: Validators.required,
       }),
     });

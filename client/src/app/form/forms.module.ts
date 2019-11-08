@@ -34,11 +34,14 @@ import { FormProcessosComponent } from './form-processos/form-processos.componen
 import { FormdetailComponent } from './form-detail/detail.component';
 import { MultiselectComponent } from './multiselect/multiselect.component';
 import { FormEmpresaComponent } from './form-empresa/form-empresa.component';
+import { CompanyEffects } from '@app/store/company';
+import { SectorEffects } from '@app/store/sector';
+import { AccessPermissionEffects } from '@app/store/access-permission';
 
 @NgModule({
   imports: [
     CommonModule,
-    EffectsModule.forFeature([UserEffects]),
+    EffectsModule.forFeature([UserEffects, CompanyEffects, SectorEffects, AccessPermissionEffects]),
     RouterModule.forChild(FormsRoutes),
     FormsModule,
     NGXFormWizardModule,

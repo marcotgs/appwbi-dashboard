@@ -22,13 +22,13 @@ const cadastroFiliaisModelInit = (sequelize: Sequelize): cadastroFiliaisModelSta
 			field: 'id_empresa'
 		},
 		'filial': {
-			type: "NCHAR(10)",
+			type: DataTypes.STRING,
 			allowNull: false,
 			comment: "null",
 			field: 'filial'
 		},
 		'descricao': {
-			type: "NCHAR(30)",
+			type: DataTypes.STRING,
 			allowNull: false,
 			comment: "null",
 			field: 'descricao'
@@ -42,8 +42,8 @@ const cadastroFiliaisModelInit = (sequelize: Sequelize): cadastroFiliaisModelSta
 export interface cadastroFiliaisModel extends Model {
 	id:number;
 	idEmpresa:number;
-	filial:any;
-	descricao:any;
+	filial:string;
+	descricao:string;
 }
 
 export type cadastroFiliaisModelStatic = typeof Model & {
