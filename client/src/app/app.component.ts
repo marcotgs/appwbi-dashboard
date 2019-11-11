@@ -11,6 +11,7 @@ import { UserState, getUserState } from './store/user';
 })
 export class AppComponent implements OnInit {
   public loading = true;
+  public menuPermissions = [];
   title = 'app';
 
   constructor(
@@ -22,7 +23,7 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.userStateObservable();
     this.permissionsStateObservable();
-    if (!this.authToken.isLoggedIn()) {
+    if (this.authToken.isLoggedIn()) {
       this.loading = false;
     }
   }
@@ -32,8 +33,10 @@ export class AppComponent implements OnInit {
       .subscribe((data) => {
         if (Object.entries(data.currentUser).length !== 0
           && this.authToken.isLoggedIn()
-          && this.loading) {
+          && this.menuPermissions.length === 0) {
           this.storePermission.dispatch(getMenuPermissions());
+        } else if (!this.authToken.isLoggedIn()) {
+          this.loading = false;
         }
       });
   }
@@ -42,6 +45,7 @@ export class AppComponent implements OnInit {
     this.storePermission.select(getAccessPermissionState)
       .subscribe((data) => {
         if (data.menuPermissions) {
+          this.menuPermissions = data.menuPermissions;
           this.loading = false;
         }
       });

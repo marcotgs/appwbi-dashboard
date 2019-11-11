@@ -86,11 +86,6 @@ export const getUsersSuccess = createAction(
     props<UserResponse[]>()
 );
 
-export const getUsersError = createAction(
-    userTypes.GET_USERS_ERROR,
-    props<ApiResponseErrors>()
-);
-
 export const postUser = createAction(
     userTypes.POST_USER,
     props<UserBody>(),
@@ -106,11 +101,6 @@ export const postUserEditSuccess = createAction(
     props<UserResponse>()
 );
 
-export const postUserError = createAction(
-    userTypes.POST_USER_ERROR,
-    props<ApiResponseErrors>()
-);
-
 export const deleteUser = createAction(
     userTypes.DELETE_USER,
     props<{ id: number }>(),
@@ -121,7 +111,7 @@ export const deleteUserSuccess = createAction(
     props<{ id: number }>(),
 );
 
-export const deleteUserError = createAction(
-    userTypes.DELETE_USER_ERROR,
+export const userApiError = createAction(
+    userTypes.USER_API_ERROR,
     props<ApiResponseErrors>()
 );

@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store';
 import { Actions, ofType } from '@ngrx/effects';
 import { NotifierService } from 'angular-notifier';
 import { conformToMask } from 'angular2-text-mask';
-import { UserState, updateProfile, getProfile, getProfileSuccess, loginSuccess, updateProfileError, postUser } from '@app/store/user';
+import { UserState, updateProfile, getProfile, getProfileSuccess, loginSuccess, updateProfileError, postUser, getUserState } from '@app/store/user';
 import validationMessages from '@app/constants/form-validation/form-validation.constants';
 import { UserResponse, CompanyResponse, SectorResponse, PermissionResponse } from '@shared/interfaces';
 import MasksConstants from '@app/constants/mask/mask.contants';
@@ -45,6 +45,7 @@ export class FormContaUsuarioComponent {
   public focusCompany$ = new Subject<string>();
   public clickCompany$ = new Subject<string>();
   private codigoCompletoCidadeIbge = null;
+  private isSubmitting = false;
   private companies: CompanyResponse[] = [];
   private sectors: SectorResponse[] = [];
   private filteredSectors: SectorResponse[] = [];
@@ -68,6 +69,17 @@ export class FormContaUsuarioComponent {
       this.updateProfileHandle();
     } else {
       this.initModal();
+      this.store.select(getUserState)
+        .subscribe((data) => {
+          if (data.apiErrors) {
+            this.spinner.hide(this.saveSpinner);
+            this.enableForm();
+            data.apiErrors.errors.forEach((error) => {
+              this.notifierService.notify('error', error.message);
+            });
+            this.isSubmitting = false;
+          }
+        });
     }
   }
 
@@ -123,6 +135,7 @@ export class FormContaUsuarioComponent {
   }
 
   public async formSubmit(): Promise<void> {
+    this.isSubmitting = true;
     this.markFormFieldsAsTouched();
     if (this.manageAccountForm.valid) {
       this.manageAccountForm.disable();
@@ -152,6 +165,7 @@ export class FormContaUsuarioComponent {
         this.store.dispatch(updateProfile(payload));
       }
     } else {
+      this.isSubmitting = false;
       this.notifierService.notify('error', 'Dados inválidos!');
     }
   }
@@ -210,7 +224,7 @@ export class FormContaUsuarioComponent {
     }
     this.manageAccountForm.get('empresa').valueChanges
       .subscribe((value) => {
-        if (!this.manageAccountForm.get('empresa').disabled) {
+        if (!this.manageAccountForm.get('empresa').disabled && !this.isSubmitting) {
           this.manageAccountForm.get('setor').reset();
           if (!value) {
             this.manageAccountForm.get('setor').disable();
@@ -224,6 +238,9 @@ export class FormContaUsuarioComponent {
   }
 
   private loadData() {
+    this.storeCompany.dispatch(getCompanies());
+    this.storeSector.dispatch(getSector());
+    this.storePermission.dispatch(getPermissions());
     combineLatest(this.storeCompany.select(getCompanyState),
       this.storeSector.select(getSectorState),
       this.storePermission.select(getAccessPermissionState),
@@ -233,26 +250,11 @@ export class FormContaUsuarioComponent {
         permissions: permissionState.permissions,
       }))
       .subscribe(({ companies, sectors, permissions }) => {
-        if (!companies) {
-          this.storeCompany.dispatch(getCompanies());
-        }
-        else {
-          this.companies = companies;
-        }
-        if (!sectors) {
-          this.storeSector.dispatch(getSector());
-        }
-        else {
-          this.sectors = sectors;
-          if (this.isEditing || !(this.modal)) {
-            this.filteredSectors = this.sectors.filter(s => s.empresa.nome === this.userData.empresa);
-          }
-        }
-        if (!permissions) {
-          this.storePermission.dispatch(getPermissions());
-        }
-        else {
-          this.permissions = permissions;
+        this.companies = companies;
+        this.sectors = sectors;
+        this.permissions = permissions;
+        if (sectors && ((this.isEditing || !(this.modal)) && this.userData)) {
+          this.filteredSectors = this.sectors.filter(s => s.empresa.nome === this.userData.empresa);
         }
       });
   }
@@ -275,6 +277,9 @@ export class FormContaUsuarioComponent {
       this.userData.cgc = formattedCgc;
       this.userData.telefone = formattedTel;
       this.userData.dataNascimento = formattedDate;
+      if (this.sectors.length > 0) {
+        this.filteredSectors = this.sectors.filter(s => s.empresa.nome === this.userData.empresa);
+      }
       this.initManageAccountForm();
     });
   }
@@ -294,13 +299,15 @@ export class FormContaUsuarioComponent {
 
   private enableForm(): void {
     this.manageAccountForm.enable();
-    this.manageAccountForm.get('email').disable();
     this.manageAccountForm.get('endereco').disable();
     this.manageAccountForm.get('bairro').disable();
     this.manageAccountForm.get('cidade').disable();
     this.manageAccountForm.get('estado').disable();
-    this.manageAccountForm.get('perfil').disable();
-    this.manageAccountForm.get('empresa').disable();
+    if (!this.modal) {
+      this.manageAccountForm.get('email').disable();
+      this.manageAccountForm.get('perfil').disable();
+      this.manageAccountForm.get('empresa').disable();
+    }
   }
 
   private formatUserData(): any {

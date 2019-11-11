@@ -8,6 +8,7 @@ import { Store } from '@ngrx/store';
 import { UserState, getUserState, loginError, login } from '@app/store/user';
 import { ApiResponseError } from '@shared/interfaces';
 import { AuthTokenService } from '@app/services';
+import { getMenuPermissions, AccessPermissionState } from '@app/store/access-permission';
 
 @Component({
   selector: 'app-login',
@@ -20,12 +21,13 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private store: Store<UserState>,
+    private storePermission: Store<AccessPermissionState>,
     private spinner: NgxSpinnerService,
     private router: Router,
     private _actions$: Actions,
-    authTokenService: AuthTokenService,
+    private authTokenService: AuthTokenService,
   ) {
-    if (authTokenService.isLoggedIn()) {
+    if (this.authTokenService.isLoggedIn()) {
       this.router.navigate(['/starter'], { replaceUrl: true });
     }
   }
@@ -37,13 +39,14 @@ export class LoginComponent implements OnInit {
     });
     this.store.select(getUserState).subscribe((userState) => {
       if (userState.currentUser.email) {
+        this.storePermission.dispatch(getMenuPermissions());
         this.router.navigate(['/starter'], { replaceUrl: true });
       }
     });
   }
 
   ngOnDestroy(): void {
-      this.spinner.hide();
+    this.spinner.hide();
   }
 
   private toggleErrors(errors: ApiResponseError[] | string[]) {

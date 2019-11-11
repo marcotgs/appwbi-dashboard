@@ -78,7 +78,11 @@ export class ProcessosComponent implements OnInit {
     const val = event.target.value.toLowerCase();
 
     const temp = this.temp.filter((d) => {
-      return d.descricao.toLowerCase().indexOf(val) !== -1 || !val;
+      return d.descricao.toLowerCase().indexOf(val) !== -1 
+      || d.cadastroRotina.descricao.toLowerCase().indexOf(val) !== -1 
+      || d.cadastroRotina.cadastroModulo.descricao.toLowerCase().indexOf(val) !== -1 
+      || d.acessoNiveisPermissao.descricao.toLowerCase().indexOf(val) !== -1 
+      || !val;
     });
 
     this.rows = temp;
@@ -190,7 +194,7 @@ export class ProcessosComponent implements OnInit {
           this.data = data.processes;
           this.rows = data.processes.map((r) => {
             return {
-              id: r.id,
+              ...r,
               [this.columns[0].name.toLowerCase()]: r.descricao,
               [this.columns[1].name.toLowerCase()]: r.cadastroRotina.descricao,
               [this.columns[2].name.toLowerCase()]: r.cadastroRotina.cadastroModulo.descricao,

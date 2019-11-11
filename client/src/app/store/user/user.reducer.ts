@@ -4,7 +4,8 @@ import { UserState } from '@app/store/states';
 
 export const initialState: UserState = {
     currentUser: {},
-    users: null
+    users: null,
+    apiErrors: null,
 };
 
 export const userReducer = createReducer(
@@ -20,14 +21,18 @@ export const userReducer = createReducer(
         }, [])
     })),
     on(UserActions.postUserSuccess, (state, res) => ({
-        ...state, users: [...state.users, res]
+        ...state,
+        users: [...state.users, res],
+        apiErrors: null,
     })),
     on(UserActions.postUserEditSuccess, (state, res) => {
         const users = [...state.users];
         const index = users.findIndex(m => m.id == res.id);
         users[index] = res;
         return ({
-            ...state, users
+            ...state,
+            users,
+            apiErrors: null,
         });
     }),
     on(UserActions.deleteUserSuccess, (state, res) => {
@@ -35,7 +40,14 @@ export const userReducer = createReducer(
         const index = users.findIndex(m => m.id == res.id);
         users.splice(index, 1);
         return ({
-            ...state, users
+            ...state, 
+            users,
+            apiErrors: null,
+        });
+    }),
+    on(UserActions.userApiError, (state, res) => {
+        return ({
+            ...state, apiErrors: res,
         });
     }),
 );

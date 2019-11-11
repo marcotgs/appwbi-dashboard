@@ -5,6 +5,10 @@ import {
     PermissionResponse, PermissionBody
 } from '@shared/interfaces';
 
+export const clearMenuPermissions = createAction(
+    authTypes.CLEAR_MENU_PERMISSIONS,
+);
+
 export const getMenuPermissions = createAction(
     authTypes.GET_MENU_PERMISSIONS,
 );

@@ -64,6 +64,44 @@ export default class AcessoUsuariosRepository {
     };
 
     /**
+     * Procura os registros usuários de uma determinada empresa.
+     *
+     * @param {number} companyId
+     * @returns {Promise<acessoUsuariosModel[]>}
+     * @memberof AcessoUsuariosRepository
+     */
+    public async findAllByIdEmpresa(companyId: number): Promise<acessoUsuariosModel[]> {
+        try {
+            return await this.acessoUsuariosModel.findAll({
+                attributes: [
+                    'nome', 'sobrenome', 'email', 'ddd', 'telefone',
+                    'endereco', 'numero', 'complemento', 'bairro', 'cep',
+                    'dataNascimento', 'cargo', 'cgc', 'id'
+                ],
+                where: {
+                    idEmpresa: companyId,
+                },
+                include: [
+                    { model: Database.models.empresa },
+                    { model: Database.models.acessoNiveisPermissao },
+                    { model: Database.models.cadastroSetores },
+                    {
+                        model: Database.models.municipio,
+                        include: [
+                            {
+                                model: Database.models.estado,
+                            }
+                        ],
+                    }
+                ],
+            });
+        } catch (ex) {
+            logger.error(`Erro ao realizar consulta no repository :'AcessoUsuariosRepository'-> 'findAll'. Error: ${ex}`);
+            throw ex;
+        }
+    };
+
+    /**
      * Deleta um usuário.
      *
      * @param {number} id
@@ -141,6 +179,28 @@ export default class AcessoUsuariosRepository {
             throw ex;
         }
     };
+
+    /**
+     * Procura se existe um usuário com determinado email.
+     *
+     * @param {string} email
+     * @returns {Promise<boolean>}
+     * @memberof AcessoUsuariosRepository
+     */
+    public async userWithEmailExists(email: string): Promise<boolean> {
+        try {
+            const count = await this.acessoUsuariosModel.count({
+                where: {
+                    email,
+                },
+            });
+            return (count > 0);
+        } catch (ex) {
+            logger.error(`Erro ao realizar consulta no repository :'AcessoUsuarios'-> 'userWithEmailExists'. Error: ${ex}`);
+            throw ex;
+        }
+    };
+
 
     /**
      * verifica se existe um resgistro relacionados ao email e a senha recebidos por parametro.

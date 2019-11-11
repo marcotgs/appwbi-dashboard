@@ -101,7 +101,7 @@ export class UserEffects {
                     map((response) => {
                         return userActions.getUsersSuccess(response.data);
                     }),
-                    catchError(res => of(userActions.getUsersError((
+                    catchError(res => of(userActions.userApiError((
                         (res.error && res.error.data) || { errors: [ApiConstants.UNEXPECTED_ERROR] }
                     ))))
                 )
@@ -122,7 +122,7 @@ export class UserEffects {
                         return userActions.postUserSuccess(res.data);
                     }),
                     catchError(res => {
-                        return of(userActions.postUserError(((res.error && res.error.data) || { errors: [ApiConstants.UNEXPECTED_ERROR] })));
+                        return of(userActions.userApiError(((res.error && res.error.data) || { errors: [ApiConstants.UNEXPECTED_ERROR] })));
                     })
                 )
         })));
@@ -136,7 +136,7 @@ export class UserEffects {
                         return userActions.deleteUserSuccess(action);
                     }),
                     catchError(res => {
-                        return of(userActions.deleteUserError(((res.error && res.error.data) || { errors: [ApiConstants.UNEXPECTED_ERROR] })));
+                        return of(userActions.userApiError(((res.error && res.error.data) || { errors: [ApiConstants.UNEXPECTED_ERROR] })));
                     })
                 )
         )));

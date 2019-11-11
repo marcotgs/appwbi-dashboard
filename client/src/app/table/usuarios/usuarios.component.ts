@@ -36,7 +36,7 @@ export class UsuariosComponent implements OnInit {
     private modalService: NgbModal,
     private storeUser: Store<UserState>,
     private notifierService: NotifierService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.columns = [{ name: 'Nome' }, { name: 'Sobrenome' }, { name: 'Email' }, { name: 'CGC' }];
@@ -139,7 +139,7 @@ export class UsuariosComponent implements OnInit {
   private initRows() {
     this.storeUser.select(getUserState)
       .subscribe((data) => {
-        if (data.users) {
+        if (data.users && !data.apiErrors) {
           this.loading = false;
           this.rows = data.users.map((r) => {
             return {

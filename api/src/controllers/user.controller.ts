@@ -5,12 +5,20 @@ import CryptoJS from 'crypto-js';
 import { Post, Res, JsonController, Body, Authorized, CurrentUser, Get, Delete, Param } from 'routing-controllers';
 import { AcessoUsuariosRepository } from '@api/database/repositories/acesso-usuarios';
 import BaseController from '@api/controllers/base-controller.class';
-import { LoginResponse, UserResponse, UserBody } from '@shared/interfaces';
+import { LoginResponse, UserResponse, UserBody, ApiResponseErrors } from '@shared/interfaces';
 import logger from '@api/util/logger';
 import { acessoUsuariosModel, municipioModel, empresaModel, estadoModel, acessoNiveisPermissaoModel, cadastroSetoresModel } from '@api/database/models';
 import { MunicipioRepository } from '@api/database/repositories/municipio';
 import Database from '@api/database';
 import { JwtTokenService } from '@api/services';
+
+
+type UserData = acessoUsuariosModel & {
+    municipio: municipioModel & { estado: estadoModel };
+    acessoNiveisPermissao: acessoNiveisPermissaoModel;
+    empresa: empresaModel;
+    cadastroSetore: cadastroSetoresModel;
+}
 
 
 /**
@@ -56,15 +64,19 @@ export default class UserController extends BaseController {
     @Get('/')
     public async getUsers(
         @Res() res: Response,
+        @CurrentUser() userId?: number,
     ): Promise<Response> {
         try {
-            const results = await this.acessoUsuariosRepository.findAll();
-            const response = results.map((e: acessoUsuariosModel & {
-                municipio: municipioModel & { estado: estadoModel };
-                acessoNiveisPermissao: acessoNiveisPermissaoModel;
-                empresa: empresaModel;
-                cadastroSetore: cadastroSetoresModel;
-            }): any => {
+            const userData = await this.acessoUsuariosRepository.findById(userId, {
+                attributes: ['idAcessoNiveisPermissao', 'idEmpresa']
+            });
+            let results: acessoUsuariosModel[] = [];
+            if (userData.idAcessoNiveisPermissao < 4) {
+                results = await this.acessoUsuariosRepository.findAllByIdEmpresa(userData.idEmpresa);
+            } else {
+                results = await this.acessoUsuariosRepository.findAll();
+            }
+            const response = results.map((e: UserData): any => {
                 const json = e.toJSON() as any;
                 const object = {
                     ...json,
@@ -103,6 +115,15 @@ export default class UserController extends BaseController {
     ): Promise<Response> {
         try {
             if (!body.id) {
+                if (await this.acessoUsuariosRepository.userWithEmailExists(body.email)) {
+                    const response: ApiResponseErrors = {
+                        errors: [{
+                            message: 'O email digitado já está associado a outra conta!',
+                        }],
+                    };
+                    // Retorna 400 se caso o email enviado já está associado a uma conta
+                    return this.sendResponse(res, 400, response);
+                }
                 const municipio = await this.municipioRepository.findByIbgeCode(body.codigoCompletoCidadeIbge);
                 const passwordSalt = CryptoJS.lib.WordArray.random(128 / 16).toString();
                 if (body.password) {
@@ -111,26 +132,7 @@ export default class UserController extends BaseController {
                 const results = await this.acessoUsuariosRepository.insert({ ...body, idMunicipio: municipio.id, passwordSalt });
                 body.id = results.id;
             } else {
-                const userData = await this.acessoUsuariosRepository.findById(body.id, {
-                    attributes: [
-                        'nome', 'sobrenome', 'email', 'ddd', 'telefone',
-                        'endereco', 'numero', 'complemento', 'bairro', 'cep',
-                        'dataNascimento', 'cargo', 'cgc', 'id', 'passwordSalt'
-                    ],
-                    include: [
-                        { model: Database.models.empresa },
-                        { model: Database.models.acessoNiveisPermissao },
-                        { model: Database.models.cadastroSetores },
-                        {
-                            model: Database.models.municipio,
-                            include: [
-                                {
-                                    model: Database.models.estado,
-                                }
-                            ],
-                        }
-                    ],
-                }) as any;
+                const userData = await this.getUserById(body.id);
 
                 const newValue = { ...userData.toJSON(), ...body } as any;
                 if (body.codigoCompletoCidadeIbge !== userData.municipio.codigoCompletoCidadeIbge) {
@@ -145,27 +147,8 @@ export default class UserController extends BaseController {
                 const mergeData = { ...userData.toJSON(), ...body };
                 await this.acessoUsuariosRepository.updateUser(mergeData);
             }
-            const userData = await this.acessoUsuariosRepository.findById(body.id, {
-                attributes: [
-                    'nome', 'sobrenome', 'email', 'ddd', 'telefone',
-                    'endereco', 'numero', 'complemento', 'bairro', 'cep',
-                    'dataNascimento', 'cargo', 'cgc', 'id',
-                ],
-                include: [
-                    { model: Database.models.empresa },
-                    { model: Database.models.acessoNiveisPermissao },
-                    { model: Database.models.cadastroSetores },
-                    {
-                        model: Database.models.municipio,
-                        include: [
-                            {
-                                model: Database.models.estado,
-                            }
-                        ],
-                    }
-                ],
-            }) as any;
-            const userDataJson = userData.toJSON();
+            const userData = await this.getUserById(body.id);
+            const userDataJson = userData.toJSON() as UserData;
             const response = {
                 ...userDataJson,
                 cidade: userDataJson.municipio.nome,
@@ -224,35 +207,7 @@ export default class UserController extends BaseController {
         @CurrentUser() userId?: number,
     ): Promise<Response> {
         try {
-            const userData = await this.acessoUsuariosRepository.findById(
-                userId,
-                {
-                    attributes: [
-                        'nome', 'sobrenome', 'email', 'ddd', 'telefone',
-                        'endereco', 'numero', 'complemento', 'bairro', 'cep',
-                        'dataNascimento', 'cargo', 'cgc'
-                    ],
-                    include: [
-                        { model: Database.models.empresa },
-                        { model: Database.models.acessoNiveisPermissao },
-                        { model: Database.models.cadastroSetores },
-                        {
-                            model: Database.models.municipio,
-                            include: [
-                                {
-                                    model: Database.models.estado,
-                                }
-                            ],
-                        }
-                    ],
-                }
-            ) as acessoUsuariosModel & {
-                municipio: municipioModel & { estado: estadoModel };
-                acessoNiveisPermissao: acessoNiveisPermissaoModel;
-                empresa: empresaModel;
-                cadastroSetore: cadastroSetoresModel;
-            };
-
+            const userData = await this.getUserById(userId);
             const userDataJSON = userData.toJSON() as any;
 
             const result: UserResponse = {
@@ -326,6 +281,30 @@ export default class UserController extends BaseController {
             logger.error(`Erro na requisição de updateProfile. Erro -> ${ex}`);
             return this.sendResponse(res, 500);
         }
+    }
+
+
+    private async getUserById(id: number): Promise<UserData> {
+        return await this.acessoUsuariosRepository.findById(id, {
+            attributes: [
+                'nome', 'sobrenome', 'email', 'ddd', 'telefone',
+                'endereco', 'numero', 'complemento', 'bairro', 'cep',
+                'dataNascimento', 'cargo', 'cgc', 'id', 'passwordSalt'
+            ],
+            include: [
+                { model: Database.models.empresa },
+                { model: Database.models.acessoNiveisPermissao },
+                { model: Database.models.cadastroSetores },
+                {
+                    model: Database.models.municipio,
+                    include: [
+                        {
+                            model: Database.models.estado,
+                        }
+                    ],
+                }
+            ],
+        }) as UserData;
     }
 
 }

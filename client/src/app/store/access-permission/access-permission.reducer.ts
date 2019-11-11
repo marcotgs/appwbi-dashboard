@@ -9,6 +9,7 @@ export const initialState: AccessPermissionState = {
 
 export const accessPermissionReducer = createReducer(
     initialState,
+    on(accessPermissionActions.clearMenuPermissions, () => (initialState)),
     on(accessPermissionActions.getMenuPermissionsSuccess, (state, res) => ({
         ...state, menuPermissions: Object.keys(res).reduce((array, key) => {
             if (key !== 'type')
