@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Response } from 'express';
 import { JsonController, Authorized, Get, Res, Post, Body, Delete, Param } from 'routing-controllers';
-import { EmpresaRepository, SegmentoRepository, MunicipioRepository } from '@api/database/repositories';
+import { EmpresaRepository, SegmentoRepository, MunicipioRepository, CompanyData } from '@api/database/repositories';
 import logger from '@api/util/logger';
 import BaseController from './base-controller.class';
 import { CompanyBody } from '@api/DTO';
-import { municipioModel, estadoModel, empresaModel } from '@api/database/models';
+import { CompanyResponse } from '@shared/interfaces';
+import Formatter from '@api/util/formatter';
 
 /**
  * Controller que contém os métodos de CRUD da tabela cadastro_empresaes.
@@ -46,17 +47,7 @@ export default class CompanyController extends BaseController {
     ): Promise<Response> {
         try {
             const results = await this.empresaRepository.findAll();
-            const response = results.map((e: empresaModel & { municipio: municipioModel & { estado: estadoModel } }): any => {
-                const json = e.toJSON() as any;
-                const object = {
-                    ...json,
-                    cidade: json.municipio.nome,
-                    codigoCompletoCidadeIbge: json.municipio.codigoCompletoCidadeIbge,
-                    estado: json.municipio.estado.sigla,
-                };
-                delete object.municipio;
-                return object;
-            });
+            const response = results.map((result): CompanyResponse => this.formatCompanyResponse(result));
             return this.sendResponse(res, 200, response);
         } catch (ex) {
             logger.error(`Erro na requisição de 'getCompanies' no controller 'CompanyController'. Erro -> ${ex}`);
@@ -105,9 +96,7 @@ export default class CompanyController extends BaseController {
                 const results = await this.empresaRepository.insert({ ...body, idMunicipio: municipio.id });
                 body.id = results.id;
             } else {
-                const companyData = await this.empresaRepository.findById(body.id) as empresaModel & {
-                    municipio: municipioModel & { estado: estadoModel };
-                };
+                const companyData = await this.empresaRepository.findById(body.id);
 
                 const newValue = { ...companyData.toJSON(), ...body } as any;
                 if (body.codigoCompletoCidadeIbge !== companyData.municipio.codigoCompletoCidadeIbge) {
@@ -116,15 +105,8 @@ export default class CompanyController extends BaseController {
                 }
                 await this.empresaRepository.update(body.id, newValue);
             }
-            const response = await this.empresaRepository.findById(body.id) as empresaModel & {
-                municipio: municipioModel & { estado: estadoModel };
-            };;
-            return this.sendResponse(res, 200, {
-                ...response.toJSON(),
-                cidade: response.municipio.nome,
-                codigoCompletoCidadeIbge: response.municipio.codigoCompletoCidadeIbge,
-                estado: response.municipio.estado.sigla,
-            });
+            const response = this.formatCompanyResponse(await this.empresaRepository.findById(body.id));
+            return this.sendResponse(res, 200, response);
         } catch (ex) {
             logger.error(`Erro na requisição de 'postCompany' no controller 'CompanyController'. Erro -> ${ex}`);
             return this.sendResponse(res, 500);
@@ -152,5 +134,20 @@ export default class CompanyController extends BaseController {
             logger.error(`Erro na requisição de 'deleteCompany' no controller 'CompanyController'. Erro -> ${ex}`);
             return this.sendResponse(res, 500);
         }
+    }
+
+    private formatCompanyResponse(result: CompanyData): CompanyResponse {
+        const resultJSON = result.toJSON() as CompanyData;
+        const object =  {
+            ...resultJSON,
+            numero: Number(resultJSON.numero),
+            podeDeletar: (resultJSON.cadastroSetores.length === 0 && resultJSON.cadastroFiliais.length === 0),
+            nomeFormatado: Formatter.removeAccents(resultJSON.nome),
+            cidade: resultJSON.municipio.nome,
+            codigoCompletoCidadeIbge: resultJSON.municipio.codigoCompletoCidadeIbge,
+            estado: resultJSON.municipio.estado.sigla,
+        };
+        delete object.municipio;
+        return object;
     }
 }

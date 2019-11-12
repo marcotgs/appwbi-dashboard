@@ -49,7 +49,13 @@ export class EmpresasComponent implements OnInit {
     const val = event.target.value.toLowerCase();
 
     const temp = this.temp.filter((d) => {
-      return d.nome.toLowerCase().indexOf(val) !== -1 || !val;
+      return d.nome.toLowerCase().indexOf(val) !== -1
+        || d.nomeFormatado.toLowerCase().indexOf(val) !== -1
+        || d.codigo.toLowerCase().indexOf(val) !== -1
+        || d.rawCgc.toLowerCase().indexOf(val) !== -1
+        || d.cgc.toLowerCase().indexOf(val) !== -1
+        || d.email.toLowerCase().indexOf(val) !== -1
+        || !val;
     });
     this.rows = temp;
   }
@@ -70,7 +76,11 @@ export class EmpresasComponent implements OnInit {
 
   public showAlertDelete(id: number) {
     this.selectedItem = this.data.find(m => m.id === id);
-    this.alertDeleteWarning.fire();
+    if (this.selectedItem.podeDeletar) {
+      this.alertDeleteWarning.fire();
+    } else {
+      this.notifierService.notify('error', 'Este registro não pode ser excluído porque ele está amarrado a outros cadastros!');
+    }
   }
 
   public deleteItem() {
@@ -130,7 +140,8 @@ export class EmpresasComponent implements OnInit {
           this.loading = false;
           this.rows = data.companies.map((r) => {
             return {
-              id: r.id,
+              ...r,
+              rawCgc: r.cgc,
               [this.columns[0].name.toLowerCase()]: r.cod_empresa,
               [this.columns[1].name.toLowerCase()]: r.nome,
               [this.columns[2].name.toLowerCase()]: conformToMask(r.cgc, this.getMaskCgc(r.cgc), { guide: false }).conformedValue,

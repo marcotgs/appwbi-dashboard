@@ -1,6 +1,14 @@
 import { empresaModel, empresaModelStatic } from '@api/database/models/empresa';
 import logger from '@api/util/logger';
 import Database from '@api/database';
+import { cadastroFiliaisModel, cadastroSetoresModel, municipioModel, estadoModel, segmentoModel } from '@api/database/models';
+
+export type CompanyData = empresaModel & {
+    cadastroFiliais?: cadastroFiliaisModel[];
+    cadastroSetores?: cadastroSetoresModel[];
+    municipio?: municipioModel & { estado?: estadoModel };
+    segmento?: segmentoModel;
+}
 
 /**
  * Essa classe é um repositorio com os método que acessam a tabela `empresas`.
@@ -30,10 +38,10 @@ export default class EmpresaRepository {
     /**
      * Procura os registros de empresas.
      *
-     * @returns {Promise<empresaModel[]>}
+     * @returns {Promise<CompanyData[]>}
      * @memberof EmpresaRepository
      */
-    public async findAll(): Promise<empresaModel[]> {
+    public async findAll(): Promise<CompanyData[]> {
         try {
             return await this.empresaModel.findAll({
                 attributes: [
@@ -53,9 +61,17 @@ export default class EmpresaRepository {
                     {
                         model: Database.models.segmento,
                         attributes: ['id', 'nome'],
+                    },
+                    {
+                        model: Database.models.cadastroFiliais,
+                        attributes: ['id'],
+                    },
+                    {
+                        model: Database.models.cadastroSetores,
+                        attributes: ['id'],
                     }
                 ],
-            });
+            }) as CompanyData[];
         } catch (ex) {
             logger.error(`Erro ao realizar consulta no repository :'EmpresaRepository'-> 'findAll'. Error: ${ex}`);
             throw ex;
@@ -66,10 +82,10 @@ export default class EmpresaRepository {
      * Procura uma empresa pelo id.
      *
      * @param {number} id
-     * @returns {Promise<empresaModel>}
+     * @returns {Promise<CompanyData>}
      * @memberof EmpresaRepository
      */
-    public async findById(id: number): Promise<empresaModel> {
+    public async findById(id: number): Promise<CompanyData> {
         try {
             return await this.empresaModel.findByPk(id, {
                 attributes: [
@@ -89,9 +105,17 @@ export default class EmpresaRepository {
                     {
                         model: Database.models.segmento,
                         attributes: ['id', 'nome'],
+                    },
+                    {
+                        model: Database.models.cadastroFiliais,
+                        attributes: ['id'],
+                    },
+                    {
+                        model: Database.models.cadastroSetores,
+                        attributes: ['id'],
                     }
                 ],
-            });
+            }) as CompanyData;
         } catch (ex) {
             logger.error(`Erro ao realizar consulta no repository :'EmpresaRepository'-> 'findById'. Error: ${ex}`);
             throw ex;
