@@ -11,6 +11,7 @@ import { acessoUsuariosModel, municipioModel, empresaModel, estadoModel, acessoN
 import { MunicipioRepository } from '@api/database/repositories/municipio';
 import Database from '@api/database';
 import { JwtTokenService } from '@api/services';
+import Formatter from '@api/util/formatter';
 
 
 type UserData = acessoUsuariosModel & {
@@ -86,6 +87,8 @@ export default class UserController extends BaseController {
                     perfil: e.acessoNiveisPermissao.descricao,
                     empresa: e.empresa.nome,
                     setor: e.cadastroSetore.descricao,
+                    sobrenomeFormatado: Formatter.removeAccents(e.sobrenome),
+                    nomeFormatado: Formatter.removeAccents(e.nome),
                 };
                 delete object.municipio;
                 delete object.acessoNiveisPermissao;
@@ -157,6 +160,8 @@ export default class UserController extends BaseController {
                 perfil: userDataJson.acessoNiveisPermissao.descricao,
                 empresa: userDataJson.empresa.nome,
                 setor: userDataJson.cadastroSetore.descricao,
+                sobrenomeFormatado: Formatter.removeAccents(userDataJson.sobrenome),
+                nomeFormatado: Formatter.removeAccents(userDataJson.nome),
             };
             delete response.municipio;
             delete response.acessoNiveisPermissao;

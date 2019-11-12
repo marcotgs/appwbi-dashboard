@@ -50,6 +50,12 @@ export class UsuariosComponent implements OnInit {
     const temp = this.temp.filter((d) => {
       return (
         d.nome.toLowerCase().indexOf(val) !== -1
+        || d.nome.toLowerCase().indexOf(val) !== -1
+        || d.nomeFormatado.toLowerCase().indexOf(val) !== -1
+        || d.sobrenome.toLowerCase().indexOf(val) !== -1
+        || d.sobrenomeFormatado.toLowerCase().indexOf(val) !== -1
+        || d.rawCgc.toLowerCase().indexOf(val) !== -1
+        || d.cgc.toLowerCase().indexOf(val) !== -1
         || d.email.toLowerCase().indexOf(val) !== -1
         || !val
       );
@@ -143,7 +149,8 @@ export class UsuariosComponent implements OnInit {
           this.loading = false;
           this.rows = data.users.map((r) => {
             return {
-              id: r.id,
+              ...r,
+              rawCgc: r.cgc,
               [this.columns[0].name.toLowerCase()]: r.nome,
               [this.columns[1].name.toLowerCase()]: r.sobrenome,
               [this.columns[2].name.toLowerCase()]: r.email,

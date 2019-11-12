@@ -2,7 +2,9 @@
 interface UserResponse {
     id?: number;
     nome?: string;
+    nomeFormatado?: string;
     sobrenome?: string;
+    sobrenomeFormatado?: string;
     email?: string;
     perfil?: string;
     empresa?: string;
