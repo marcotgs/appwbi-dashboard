@@ -4,6 +4,9 @@ import { CadastroProcessosRepository } from '@api/database/repositories';
 import logger from '@api/util/logger';
 import BaseController from './base-controller.class';
 import { ModuleBody } from '@api/DTO';
+import { ProcessResponse } from '@shared/interfaces';
+import Formatter from '@api/util/formatter';
+import { ProcessData } from '@api/database/repositories/cadastro-processos/cadastro-processos.class';
 
 /**
  * Controller que contém os métodos de CRUD da tabela cadastro_processos.
@@ -40,7 +43,8 @@ export default class ProcessController extends BaseController {
     ): Promise<Response> {
         try {
             const results = await this.cadastroProcessosRepository.findAll();
-            return this.sendResponse(res, 200, results);
+            const response = results.map(this.formatProcessResponse()) as ProcessResponse[];
+            return this.sendResponse(res, 200, response);
         } catch (ex) {
             logger.error(`Erro na requisição de 'getProcesses' no controller 'ProcessController'. Erro -> ${ex}`);
             return this.sendResponse(res, 500);
@@ -99,5 +103,27 @@ export default class ProcessController extends BaseController {
             logger.error(`Erro na requisição de 'deleteProcess' no controller 'ProcessController'. Erro -> ${ex}`);
             return this.sendResponse(res, 500);
         }
+    }
+
+    private formatProcessResponse(): (value: ProcessData, index: number, array: ProcessData[]) => ProcessResponse {
+        return (result): ProcessResponse => {
+            const resultJSON = result.toJSON() as ProcessData;
+            return {
+                ...resultJSON,
+                descricaoFormatada: Formatter.removeAccents(resultJSON.descricao),
+                cadastroRotina: {
+                    ...resultJSON.cadastroRotina,
+                    descricaoFormatada: Formatter.removeAccents(resultJSON.cadastroRotina.descricao),
+                    cadastroModulo: {
+                        ...resultJSON.cadastroRotina.cadastroModulo,
+                        descricaoFormatada: Formatter.removeAccents(resultJSON.cadastroRotina.cadastroModulo.descricao),
+                    }
+                },
+                acessoNiveisPermissao: {
+                    ...resultJSON.acessoNiveisPermissao,
+                    descricaoFormatada: Formatter.removeAccents(resultJSON.acessoNiveisPermissao.descricao)
+                },
+            };
+        };
     }
 }

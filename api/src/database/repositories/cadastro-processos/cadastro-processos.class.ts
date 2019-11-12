@@ -1,6 +1,12 @@
 import { cadastroProcessosModel, cadastroProcessosModelStatic } from '@api/database/models/cadastro-processos';
 import logger from '@api/util/logger';
 import Database from '@api/database';
+import { cadastroRotinasModel, acessoNiveisPermissaoModel, cadastroModulosModel } from '@api/database/models';
+
+export type ProcessData = cadastroProcessosModel & {
+    cadastroRotina: cadastroRotinasModel & { cadastroModulo: cadastroModulosModel };
+    acessoNiveisPermissao: acessoNiveisPermissaoModel;
+}
 
 /**
  * Essa classe é um repositorio com os método que acessam a tabela `cadastro_processos`.
@@ -30,10 +36,10 @@ export default class CadastroProcessosRepository {
     /**
      * Procura os registros de processos.
      *
-     * @returns {Promise<cadastroProcessosModel[]>}
+     * @returns {Promise<ProcessData[]>}
      * @memberof CadastroProcessosRepository
      */
-    public async findAll(): Promise<cadastroProcessosModel[]> {
+    public async findAll(): Promise<ProcessData[]> {
         try {
             return await this.cadastroProcessosModel.findAll({
                 attributes: ['descricao', 'id', 'icone', 'funcao'],
@@ -53,7 +59,7 @@ export default class CadastroProcessosRepository {
                         ]
                     }
                 ]
-            });
+            }) as ProcessData[];
         } catch (ex) {
             logger.error(`Erro ao realizar consulta no repository :'CadastroProcessosRepository'-> 'findAll'. Error: ${ex}`);
             throw ex;
@@ -64,10 +70,10 @@ export default class CadastroProcessosRepository {
      * Procura um processo pelo id.
      *
      * @param {number} id
-     * @returns {Promise<cadastroProcessosModel>}
+     * @returns {Promise<ProcessData>}
      * @memberof CadastroProcessosRepository
      */
-    public async findById(id: number): Promise<cadastroProcessosModel> {
+    public async findById(id: number): Promise<ProcessData> {
         try {
             return await this.cadastroProcessosModel.findByPk(id, {
                 attributes: ['descricao', 'id', 'icone', 'funcao'],
@@ -87,7 +93,7 @@ export default class CadastroProcessosRepository {
                         ]
                     }
                 ]
-            });
+            }) as ProcessData;
         } catch (ex) {
             logger.error(`Erro ao realizar consulta no repository :'CadastroProcessosRepository'-> 'findById'. Error: ${ex}`);
             throw ex;

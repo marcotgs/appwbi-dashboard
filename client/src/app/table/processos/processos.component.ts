@@ -78,11 +78,15 @@ export class ProcessosComponent implements OnInit {
     const val = event.target.value.toLowerCase();
 
     const temp = this.temp.filter((d) => {
-      return d.descricao.toLowerCase().indexOf(val) !== -1 
-      || d.cadastroRotina.descricao.toLowerCase().indexOf(val) !== -1 
-      || d.cadastroRotina.cadastroModulo.descricao.toLowerCase().indexOf(val) !== -1 
-      || d.acessoNiveisPermissao.descricao.toLowerCase().indexOf(val) !== -1 
-      || !val;
+      return d.descricao.toLowerCase().indexOf(val) !== -1
+        || d.descricaoFormatada.toLowerCase().indexOf(val) !== -1
+        || d.cadastroRotina.descricao.toLowerCase().indexOf(val) !== -1
+        || d.cadastroRotina.descricaoFormatada.toLowerCase().indexOf(val) !== -1
+        || d.cadastroRotina.cadastroModulo.descricao.toLowerCase().indexOf(val) !== -1
+        || d.cadastroRotina.cadastroModulo.descricaoFormatada.toLowerCase().indexOf(val) !== -1
+        || d.acessoNiveisPermissao.descricao.toLowerCase().indexOf(val) !== -1
+        || d.acessoNiveisPermissao.descricaoFormatada.toLowerCase().indexOf(val) !== -1
+        || !val;
     });
 
     this.rows = temp;
