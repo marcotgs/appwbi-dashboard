@@ -66,7 +66,11 @@ export class ModulosComponent implements OnInit {
     const val = event.target.value.toLowerCase();
 
     const temp = this.temp.filter(function (d) {
-      return d.descricao.toLowerCase().indexOf(val) !== -1 || !val;
+      return d.descricao.toLowerCase().indexOf(val) !== -1
+        || d.descricaoFormatada.toLowerCase().indexOf(val) !== -1
+        || d.acessoNiveisPermissao.descricao.toLowerCase().indexOf(val) !== -1
+        || d.acessoNiveisPermissao.descricaoFormatada.toLowerCase().indexOf(val) !== -1
+        || !val;
     });
 
     this.rows = temp;
@@ -125,7 +129,11 @@ export class ModulosComponent implements OnInit {
 
   public showAlertDelete(id: number) {
     this.selectedItem = this.data.find(m => m.id === id);
-    this.alertDeleteWarning.fire();
+    if (this.selectedItem.podeDeletar) {
+      this.alertDeleteWarning.fire();
+    } else {
+      this.notifierService.notify('error', 'Este registro não pode ser excluído porque ele está amarrado a outros cadastros!');
+    }
   }
 
   public deleteItem() {
@@ -168,7 +176,7 @@ export class ModulosComponent implements OnInit {
           this.data = data.modules;
           this.rows = data.modules.map((m) => {
             return {
-              id: m.id,
+              ...m,
               [this.columns[0].name.toLowerCase()]: m.descricao,
               [this.columns[1].name.toLowerCase()]: m.acessoNiveisPermissao.descricao,
             };

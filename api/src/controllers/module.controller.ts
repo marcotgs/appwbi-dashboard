@@ -1,9 +1,11 @@
 import { Response } from 'express';
 import { JsonController, Authorized, Get, Res, Post, Body, Delete, Param } from 'routing-controllers';
-import { CadastroModulosRepository } from '@api/database/repositories';
+import { CadastroModulosRepository, ModuleData } from '@api/database/repositories';
 import logger from '@api/util/logger';
 import BaseController from './base-controller.class';
 import { ModuleBody } from '@api/DTO';
+import Formatter from '@api/util/formatter';
+import { ModuleResponse } from '@shared/interfaces';
 
 /**
  * Controller que contém os métodos de CRUD da tabela cadastro_modulos
@@ -40,7 +42,8 @@ export default class ModuleController extends BaseController {
     ): Promise<Response> {
         try {
             const results = await this.cadastroModulosRepository.findAll();
-            return this.sendResponse(res, 200, results);
+            const response = results.map((result): ModuleResponse => this.formatModuleResponse(result));
+            return this.sendResponse(res, 200, response);
         } catch (ex) {
             logger.error(`Erro na requisição de 'getModules' no controller 'ModulesController'. Erro -> ${ex}`);
             return this.sendResponse(res, 500);
@@ -70,7 +73,7 @@ export default class ModuleController extends BaseController {
                 const newValue = { ...moduleData, ...body };
                 await this.cadastroModulosRepository.update(body.id, newValue);
             }
-            const response = await this.cadastroModulosRepository.findById(body.id);
+            const response = this.formatModuleResponse(await this.cadastroModulosRepository.findById(body.id));
             return this.sendResponse(res, 200, response);
         } catch (ex) {
             logger.error(`Erro na requisição de 'postModule' no controller 'ModulesController'. Erro -> ${ex}`);
@@ -99,5 +102,18 @@ export default class ModuleController extends BaseController {
             logger.error(`Erro na requisição de 'deleteModule' no controller 'ModulesController'. Erro -> ${ex}`);
             return this.sendResponse(res, 500);
         }
+    }
+
+    private formatModuleResponse(result: ModuleData): ModuleResponse {
+        const resultJSON = result.toJSON() as ModuleData;
+        return {
+            ...resultJSON,
+            descricaoFormatada: Formatter.removeAccents(resultJSON.descricao),
+            podeDeletar: (resultJSON.cadastroRotinas.length === 0),
+            acessoNiveisPermissao: {
+                ...resultJSON.acessoNiveisPermissao,
+                descricaoFormatada: Formatter.removeAccents(resultJSON.acessoNiveisPermissao.descricao)
+            },
+        };
     }
 }

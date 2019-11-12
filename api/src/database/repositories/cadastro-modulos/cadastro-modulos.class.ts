@@ -2,6 +2,12 @@ import { Op } from 'sequelize';
 import { cadastroModulosModel, cadastroModulosModelStatic } from '@api/database/models/cadastro-modulos';
 import logger from '@api/util/logger';
 import Database from '@api/database';
+import { cadastroRotinasModel, acessoNiveisPermissaoModel } from '@api/database/models';
+
+export type ModuleData = cadastroModulosModel & {
+    cadastroRotinas: cadastroRotinasModel[];
+    acessoNiveisPermissao: acessoNiveisPermissaoModel;
+}
 
 /**
  * Essa classe é um repositorio com os método que acessam a tabela `cadastro_modulos`.
@@ -76,10 +82,10 @@ export default class CadastroModulosRepository {
     /**
      * Procura os registros de modulos.
      *
-     * @returns {Promise<cadastroModulosModel[]>}
+     * @returns {Promise<ModuleData[]>}
      * @memberof CadastroModulosRepository
      */
-    public async findAll(): Promise<cadastroModulosModel[]> {
+    public async findAll(): Promise<ModuleData[]> {
         try {
             return await this.cadastroModulosModel.findAll({
                 attributes: ['descricao', 'id', 'icone'],
@@ -87,8 +93,13 @@ export default class CadastroModulosRepository {
                     {
                         model: Database.models.acessoNiveisPermissao,
                         attributes: ['descricao', 'id'],
-                    }]
-            });
+                    },
+                    {
+                        model: Database.models.cadastroRotinas,
+                        attributes: ['descricao', 'id'],
+                    },
+                ]
+            }) as ModuleData[];
         } catch (ex) {
             logger.error(`Erro ao realizar consulta no repository :'CadastroModulosRepository'-> 'findAll'. Error: ${ex}`);
             throw ex;
@@ -102,7 +113,7 @@ export default class CadastroModulosRepository {
      * @returns {Promise<cadastroModulosModel>}
      * @memberof CadastroModulosRepository
      */
-    public async findById(id: number): Promise<cadastroModulosModel> {
+    public async findById(id: number): Promise<ModuleData> {
         try {
             return await this.cadastroModulosModel.findByPk(id, {
                 attributes: ['descricao', 'id', 'icone'],
@@ -110,8 +121,13 @@ export default class CadastroModulosRepository {
                     {
                         model: Database.models.acessoNiveisPermissao,
                         attributes: ['descricao', 'id'],
-                    }]
-            });
+                    },
+                    {
+                        model: Database.models.cadastroRotinas,
+                        attributes: ['descricao', 'id'],
+                    },
+                ]
+            }) as ModuleData;
         } catch (ex) {
             logger.error(`Erro ao realizar consulta no repository :'CadastroModulosRepository'-> 'findById'. Error: ${ex}`);
             throw ex;
