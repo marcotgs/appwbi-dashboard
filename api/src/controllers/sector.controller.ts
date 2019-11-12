@@ -1,9 +1,11 @@
 import { Response } from 'express';
 import { JsonController, Authorized, Get, Res, Post, Body, Delete, Param } from 'routing-controllers';
-import { CadastroSetoresRepository } from '@api/database/repositories';
+import { CadastroSetoresRepository, SectorData } from '@api/database/repositories';
 import logger from '@api/util/logger';
 import BaseController from './base-controller.class';
 import { ModuleBody } from '@api/DTO';
+import Formatter from '@api/util/formatter';
+import { SectorResponse } from '@shared/interfaces';
 
 /**
  * Controller que contém os métodos de CRUD da tabela cadastro_setores.
@@ -40,7 +42,8 @@ export default class SectorController extends BaseController {
     ): Promise<Response> {
         try {
             const results = await this.cadastroSetoresRepository.findAll();
-            return this.sendResponse(res, 200, results);
+            const response = results.map((result): SectorResponse => this.formatSectorResponse(result));
+            return this.sendResponse(res, 200, response);
         } catch (ex) {
             logger.error(`Erro na requisição de 'getSectors' no controller 'SectorController'. Erro -> ${ex}`);
             return this.sendResponse(res, 500);
@@ -70,7 +73,7 @@ export default class SectorController extends BaseController {
                 const newValue = { ...sectorData, ...body };
                 await this.cadastroSetoresRepository.update(body.id, newValue);
             }
-            const response = await this.cadastroSetoresRepository.findById(body.id);
+            const response = this.formatSectorResponse(await this.cadastroSetoresRepository.findById(body.id));
             return this.sendResponse(res, 200, response);
         } catch (ex) {
             logger.error(`Erro na requisição de 'postSector' no controller 'SectorController'. Erro -> ${ex}`);
@@ -99,5 +102,19 @@ export default class SectorController extends BaseController {
             logger.error(`Erro na requisição de 'deleteSector' no controller 'SectorController'. Erro -> ${ex}`);
             return this.sendResponse(res, 500);
         }
+    }
+
+    private formatSectorResponse(result: SectorData): SectorResponse {
+        const resultJSON = result.toJSON() as SectorData;
+        return {
+            ...resultJSON,
+            descricaoFormatada: Formatter.removeAccents(resultJSON.descricao),
+            podeDeletar: (resultJSON.acessoUsuarios.length === 0),
+            empresa: {
+                ...resultJSON.empresa,
+                numero: null,
+                nomeFormatado: Formatter.removeAccents(resultJSON.empresa.nome)
+            }
+        };
     }
 }

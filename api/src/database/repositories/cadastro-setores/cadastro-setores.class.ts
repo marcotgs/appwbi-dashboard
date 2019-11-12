@@ -1,6 +1,13 @@
 import { cadastroSetoresModel, cadastroSetoresModelStatic } from '@api/database/models/cadastro-setores';
 import logger from '@api/util/logger';
 import Database from '@api/database';
+import { acessoUsuariosModel, empresaModel } from '@api/database/models';
+
+export type SectorData = cadastroSetoresModel & {
+    acessoUsuarios: acessoUsuariosModel[];
+    empresa: empresaModel;
+}
+
 
 /**
  * Essa classe é um repositorio com os método que acessam a tabela `cadastro_setores`.
@@ -30,10 +37,10 @@ export default class CadastroSetoresRepository {
     /**
      * Procura os registros de setores.
      *
-     * @returns {Promise<cadastroSetoresModel[]>}
+     * @returns {Promise<SectorData[]>}
      * @memberof CadastroSetoresRepository
      */
-    public async findAll(): Promise<cadastroSetoresModel[]> {
+    public async findAll(): Promise<SectorData[]> {
         try {
             return await this.cadastroSetoresModel.findAll({
                 attributes: ['descricao', 'id'],
@@ -41,9 +48,13 @@ export default class CadastroSetoresRepository {
                     {
                         model: Database.models.empresa,
                         attributes: ['nome', 'id'],
-                    }
+                    },
+                    {
+                        model: Database.models.acessoUsuarios,
+                        attributes: ['id'],
+                    },
                 ]
-            });
+            }) as SectorData[];
         } catch (ex) {
             logger.error(`Erro ao realizar consulta no repository :'CadastroSetoresRepository'-> 'findAll'. Error: ${ex}`);
             throw ex;
@@ -54,10 +65,10 @@ export default class CadastroSetoresRepository {
      * Procura um setor pelo id.
      *
      * @param {number} id
-     * @returns {Promise<cadastroSetoresModel>}
+     * @returns {Promise<SectorData>}
      * @memberof CadastroSetoresRepository
      */
-    public async findById(id: number): Promise<cadastroSetoresModel> {
+    public async findById(id: number): Promise<SectorData> {
         try {
             return await this.cadastroSetoresModel.findByPk(id, {
                 attributes: ['descricao', 'id'],
@@ -65,9 +76,13 @@ export default class CadastroSetoresRepository {
                     {
                         model: Database.models.empresa,
                         attributes: ['nome', 'id'],
-                    }
+                    },
+                    {
+                        model: Database.models.acessoUsuarios,
+                        attributes: ['id'],
+                    },
                 ]
-            });
+            }) as SectorData;
         } catch (ex) {
             logger.error(`Erro ao realizar consulta no repository :'CadastroSetoresRepository'-> 'findById'. Error: ${ex}`);
             throw ex;

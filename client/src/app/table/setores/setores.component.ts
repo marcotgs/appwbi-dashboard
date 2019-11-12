@@ -66,7 +66,9 @@ export class SetoresComponent implements OnInit {
     const val = event.target.value.toLowerCase();
     const temp = this.temp.filter((d) => {
       return d.descricao.toLowerCase().indexOf(val) !== -1
-        || d.empresa.toLowerCase().indexOf(val) !== -1
+        || d.descricaoFormatada.toLowerCase().indexOf(val) !== -1
+        || d.dadosEmpresa.nome.toLowerCase().indexOf(val) !== -1
+        || d.dadosEmpresa.nomeFormatado.toLowerCase().indexOf(val) !== -1
         || !val;
     });
     this.rows = temp;
@@ -125,7 +127,11 @@ export class SetoresComponent implements OnInit {
 
   public showAlertDelete(id: number) {
     this.selectedItem = this.data.find(m => m.id === id);
-    this.alertDeleteWarning.fire();
+    if (this.selectedItem.podeDeletar) {
+      this.alertDeleteWarning.fire();
+    } else {
+      this.notifierService.notify('error', 'Este registro não pode ser excluído porque ele está amarrado a outros cadastros!');
+    }
   }
 
   public deleteItem() {
@@ -163,6 +169,7 @@ export class SetoresComponent implements OnInit {
           this.rows = data.sectors.map((r) => {
             return {
               ...r,
+              dadosEmpresa: r.empresa,
               [this.columns[0].name.toLowerCase()]: r.descricao,
               [this.columns[1].name.toLowerCase()]: r.empresa.nome,
             };

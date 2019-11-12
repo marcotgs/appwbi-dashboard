@@ -4,6 +4,8 @@ interface CompanyResponse {
     id?: number;
     cod_empresa?: string;
     nome?: string;
+    nomeFormatado?: string;
+    podeDeletar?: boolean;
     email?: string;
     razao?: string;
     ddd?: string;
