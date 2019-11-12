@@ -1,6 +1,11 @@
 import { cadastroFiliaisModel, cadastroFiliaisModelStatic } from '@api/database/models/cadastro-filiais';
 import logger from '@api/util/logger';
 import Database from '@api/database';
+import { empresaModel } from '@api/database/models';
+
+export type CompanyBranchData = cadastroFiliaisModel & {
+    empresa: empresaModel;
+}
 
 /**
  * Essa classe é um repositorio com os método que acessam a tabela `cadastro_filiais`.
@@ -30,10 +35,10 @@ export default class CadastroFiliaisRepository {
     /**
      * Procura os registros de filiais.
      *
-     * @returns {Promise<cadastroFiliaisModel[]>}
+     * @returns {Promise<CompanyBranchData[]>}
      * @memberof CadastroFiliaisRepository
      */
-    public async findAll(): Promise<cadastroFiliaisModel[]> {
+    public async findAll(): Promise<CompanyBranchData[]> {
         try {
             return await this.cadastroFiliaisModel.findAll({
                 attributes: ['descricao', 'id', 'filial'],
@@ -43,7 +48,7 @@ export default class CadastroFiliaisRepository {
                         attributes: ['nome', 'id'],
                     }
                 ]
-            });
+            }) as CompanyBranchData[];
         } catch (ex) {
             logger.error(`Erro ao realizar consulta no repository :'CadastroFiliaisRepository'-> 'findAll'. Error: ${ex}`);
             throw ex;
@@ -54,10 +59,10 @@ export default class CadastroFiliaisRepository {
      * Procura uma filial pelo id.
      *
      * @param {number} id
-     * @returns {Promise<cadastroFiliaisModel>}
+     * @returns {Promise<CompanyBranchData>}
      * @memberof CadastroFiliaisRepository
      */
-    public async findById(id: number): Promise<cadastroFiliaisModel> {
+    public async findById(id: number): Promise<CompanyBranchData> {
         try {
             return await this.cadastroFiliaisModel.findByPk(id, {
                 attributes: ['descricao', 'id', 'filial'],
@@ -67,7 +72,7 @@ export default class CadastroFiliaisRepository {
                         attributes: ['nome', 'id'],
                     }
                 ]
-            });
+            }) as CompanyBranchData;
         } catch (ex) {
             logger.error(`Erro ao realizar consulta no repository :'CadastroFiliaisRepository'-> 'findById'. Error: ${ex}`);
             throw ex;

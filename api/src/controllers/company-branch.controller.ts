@@ -1,9 +1,11 @@
 import { Response } from 'express';
 import { JsonController, Authorized, Get, Res, Post, Body, Delete, Param } from 'routing-controllers';
-import { CadastroFiliaisRepository } from '@api/database/repositories';
+import { CadastroFiliaisRepository, CompanyBranchData } from '@api/database/repositories';
 import logger from '@api/util/logger';
 import BaseController from './base-controller.class';
 import { CompanyBranchBody } from '@api/DTO';
+import { CompanyBranchResponse } from '@shared/interfaces';
+import Formatter from '@api/util/formatter';
 
 /**
  * Controller que contém os métodos de CRUD da tabela cadastro_filiais.
@@ -40,7 +42,8 @@ export default class CompanyBranchController extends BaseController {
     ): Promise<Response> {
         try {
             const results = await this.filiailRepository.findAll();
-            return this.sendResponse(res, 200, results);
+            const response = results.map((result): CompanyBranchResponse => this.formatCompanyBranchResponse(result));
+            return this.sendResponse(res, 200, response);
         } catch (ex) {
             logger.error(`Erro na requisição de 'getCompaniesBranchs' no controller 'CompanyBranchController'. Erro -> ${ex}`);
             return this.sendResponse(res, 500);
@@ -70,7 +73,7 @@ export default class CompanyBranchController extends BaseController {
                 const newValue = { ...companyData, ...body };
                 await this.filiailRepository.update(body.id, newValue);
             }
-            const response = await this.filiailRepository.findById(body.id);
+            const response = this.formatCompanyBranchResponse(await this.filiailRepository.findById(body.id));
             return this.sendResponse(res, 200, response);
         } catch (ex) {
             logger.error(`Erro na requisição de 'postCompanyBranch' no controller 'CompanyBranchController'. Erro -> ${ex}`);
@@ -99,5 +102,18 @@ export default class CompanyBranchController extends BaseController {
             logger.error(`Erro na requisição de 'deleteCompanyBranch' no controller 'CompanyBranchController'. Erro -> ${ex}`);
             return this.sendResponse(res, 500);
         }
+    }
+
+    private formatCompanyBranchResponse(result: CompanyBranchData): CompanyBranchResponse {
+        const resultJSON = result.toJSON() as CompanyBranchData;
+        return {
+            ...resultJSON,
+            descricaoFormatada: Formatter.removeAccents(resultJSON.descricao),
+            empresa: {
+                ...resultJSON.empresa,
+                numero: null,
+                nomeFormatado: Formatter.removeAccents(resultJSON.empresa.nome)
+            }
+        };
     }
 }

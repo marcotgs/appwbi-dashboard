@@ -64,9 +64,13 @@ export class FiliaisComponent implements OnInit {
 
   public filterTable(event) {
     const val = event.target.value.toLowerCase();
-
     const temp = this.temp.filter((d) => {
-      return d.descricao.toLowerCase().indexOf(val) !== -1 || !val;
+      return d.descricao.toLowerCase().indexOf(val) !== -1
+        || d.descricaoFormatada.toLowerCase().indexOf(val) !== -1
+        || d.dadosEmpresa.nome.toLowerCase().indexOf(val) !== -1
+        || d.dadosEmpresa.nomeFormatado.toLowerCase().indexOf(val) !== -1
+        || d.filial.toLowerCase().indexOf(val) !== -1
+        || !val;
     });
     this.rows = temp;
   }
@@ -161,7 +165,8 @@ export class FiliaisComponent implements OnInit {
           this.data = data.companiesBranchs;
           this.rows = data.companiesBranchs.map((r) => {
             return {
-              id: r.id,
+              ...r,
+              dadosEmpresa: r.empresa,
               [this.columns[0].name.toLowerCase()]: r.filial,
               [this.columns[1].name.toLowerCase()]: r.descricao,
               [this.columns[2].name.toLowerCase()]: r.empresa.nome,

@@ -5,7 +5,6 @@ interface CompanyBranchResponse {
     descricao?: string;
     filial?: string;
     descricaoFormatada?: string;
-    podeDeletar?: boolean;
     empresa?: CompanyResponse;
 }
 
