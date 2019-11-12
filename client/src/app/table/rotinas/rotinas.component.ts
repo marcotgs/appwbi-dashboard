@@ -78,7 +78,13 @@ export class RotinasComponent implements OnInit {
     const val = event.target.value.toLowerCase();
 
     const temp = this.temp.filter((d) => {
-      return d.descricao.toLowerCase().indexOf(val) !== -1 || !val;
+      return d.descricao.toLowerCase().indexOf(val) !== -1
+        || d.descricaoFormatada.toLowerCase().indexOf(val) !== -1
+        || d.cadastroModulo.descricaoFormatada.toLowerCase().indexOf(val) !== -1
+        || d.cadastroModulo.descricao.toLowerCase().indexOf(val) !== -1
+        || d.acessoNiveisPermissao.descricao.toLowerCase().indexOf(val) !== -1
+        || d.acessoNiveisPermissao.descricaoFormatada.toLowerCase().indexOf(val) !== -1
+        || !val;
     });
 
     this.rows = temp;
@@ -153,7 +159,11 @@ export class RotinasComponent implements OnInit {
 
   public showAlertDelete(id: number) {
     this.selectedItem = this.data.find(m => m.id === id);
-    this.alertDeleteWarning.fire();
+    if (this.selectedItem.podeDeletar) {
+      this.alertDeleteWarning.fire();
+    } else {
+      this.notifierService.notify('error', 'Este registro não pode ser excluído porque ele está amarrado a outros cadastros!');
+    }
   }
 
   public deleteItem() {
@@ -190,7 +200,7 @@ export class RotinasComponent implements OnInit {
           this.data = data.routines;
           this.rows = data.routines.map((r) => {
             return {
-              id: r.id,
+              ...r,
               [this.columns[0].name.toLowerCase()]: r.descricao,
               [this.columns[1].name.toLowerCase()]: r.cadastroModulo.descricao,
               [this.columns[2].name.toLowerCase()]: r.acessoNiveisPermissao.descricao,

@@ -6,6 +6,7 @@ interface RoutineResponse {
     descricao?: string;
     descricaoFormatada?: string;
     icone?: string;
+    podeDeletar?: boolean;
     acessoNiveisPermissao?: PermissionResponse;
     cadastroModulo?: ModuleResponse;
 }

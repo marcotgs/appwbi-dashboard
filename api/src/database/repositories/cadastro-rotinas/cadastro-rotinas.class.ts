@@ -1,6 +1,13 @@
 import { cadastroRotinasModel, cadastroRotinasModelStatic } from '@api/database/models/cadastro-rotinas';
 import logger from '@api/util/logger';
 import Database from '@api/database';
+import { acessoNiveisPermissaoModel, cadastroModulosModel, cadastroProcessosModel } from '@api/database/models';
+
+export type RoutineData = cadastroRotinasModel & {
+    cadastroModulo: cadastroModulosModel;
+    acessoNiveisPermissao: acessoNiveisPermissaoModel;
+    cadastroProcessos: cadastroProcessosModel[];
+}
 
 /**
  * Essa classe é um repositorio com os método que acessam a tabela `cadastro_rotinas`.
@@ -30,10 +37,10 @@ export default class CadastroRotinasRepository {
     /**
      * Procura os registros de rotinas.
      *
-     * @returns {Promise<cadastroRotinasModel[]>}
+     * @returns {Promise<RoutineData[]>}
      * @memberof CadastroRotinasRepository
      */
-    public async findAll(): Promise<cadastroRotinasModel[]> {
+    public async findAll(): Promise<RoutineData[]> {
         try {
             return await this.cadastroRotinasModel.findAll({
                 attributes: ['descricao', 'id', 'icone'],
@@ -45,9 +52,13 @@ export default class CadastroRotinasRepository {
                     {
                         model: Database.models.cadastroModulos,
                         attributes: ['descricao', 'id'],
+                    },
+                    {
+                        model: Database.models.cadastroProcessos,
+                        attributes: ['id'],
                     }
                 ]
-            });
+            }) as RoutineData[];
         } catch (ex) {
             logger.error(`Erro ao realizar consulta no repository :'CadastroRotinasRepository'-> 'findAll'. Error: ${ex}`);
             throw ex;
@@ -58,10 +69,10 @@ export default class CadastroRotinasRepository {
      * Procura uma rotina pelo id.
      *
      * @param {number} id
-     * @returns {Promise<cadastroRotinasModel>}
+     * @returns {Promise<RoutineData>}
      * @memberof CadastroRotinasRepository
      */
-    public async findById(id: number): Promise<cadastroRotinasModel> {
+    public async findById(id: number): Promise<RoutineData> {
         try {
             return await this.cadastroRotinasModel.findByPk(id, {
                 attributes: ['descricao', 'id', 'icone'],
@@ -75,7 +86,7 @@ export default class CadastroRotinasRepository {
                         attributes: ['descricao', 'id'],
                     }
                 ]
-            });
+            }) as RoutineData;
         } catch (ex) {
             logger.error(`Erro ao realizar consulta no repository :'CadastroRotinasRepository'-> 'findById'. Error: ${ex}`);
             throw ex;

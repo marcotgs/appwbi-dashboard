@@ -60,7 +60,7 @@ import { FormModule } from '@app/form/forms.module';
         }
       },
       behaviour: {
-        autoHide: 2000,
+        autoHide: 2500,
       }
     }),
     SweetAlert2Module
