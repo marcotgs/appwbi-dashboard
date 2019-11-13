@@ -12,6 +12,11 @@ const addCadastroModulosAssociation = (models: any): void => {
             foreignKey: 'id_cadastro_modulos',
         }
     );
+    (models.cadastroModulos as cadastroModulosModelStatic).hasMany(
+        models.cadastroProcessos, {
+            foreignKey: 'id_cadastro_modulos',
+        }
+    );
     (models.cadastroModulos as cadastroModulosModelStatic).belongsTo(
         models.acessoNiveisPermissao, {
             foreignKey: 'id_acesso_niveis_permissao',

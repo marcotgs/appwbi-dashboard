@@ -119,6 +119,38 @@
             <div class="form-group row">
               <div class="col-sm-3">
                 <div class="b-label">
+                  <label for="inputEmail3" class="control-label col-form-label">Módulo</label>
+                </div>
+              </div>
+              <div class="col-sm-9" *ngIf="isEditing || isCreating">
+                  <input
+                  id="typeahead-focus"
+                  type="text"
+                  class="form-control"
+                  formControlName="module"
+                  [ngbTypeahead]="searchModule"
+                  (focus)="focusModule$.next($event.target.value)"
+                  (click)="clickModule$.next($event.target.value)"
+                  #instance="ngbTypeahead"
+                  [ngClass]="{'is-invalid': form.get('module').invalid  && (form.get('module').dirty || 
+                  form.get('module').touched)}"
+                />
+                    <div class="invalid-feedback" *ngFor="let validation of getMessagesError('module')">
+                        <span *ngIf="form.get('module').hasError(validation.type) && (form.get('module').dirty || 
+                        form.get('module').touched)">{{validation.message}}</span>
+                    </div>
+                </div>
+              <div class="col-sm-9" *ngIf="!isEditing && !isCreating">
+                <div class="b-label b-label--start" >
+                  <span class="control-label col-form-label">
+                    {{selectedItem.cadastroModulo.descricao}}
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-3">
+                <div class="b-label">
                   <label for="inputEmail3" class="control-label col-form-label">Rotina</label>
                 </div>
               </div>

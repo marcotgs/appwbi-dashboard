@@ -110,13 +110,15 @@ export default class ProcessController extends BaseController {
         return {
             ...resultJSON,
             descricaoFormatada: Formatter.removeAccents(resultJSON.descricao),
+            cadastroModulo: {
+                ...resultJSON.cadastroModulo,
+                descricaoFormatada: (resultJSON.cadastroModulo.descricao)
+                    ? Formatter.removeAccents(resultJSON.cadastroModulo.descricao)
+                    : '',
+            },
             cadastroRotina: {
                 ...resultJSON.cadastroRotina,
                 descricaoFormatada: Formatter.removeAccents(resultJSON.cadastroRotina.descricao),
-                cadastroModulo: {
-                    ...resultJSON.cadastroRotina.cadastroModulo,
-                    descricaoFormatada: Formatter.removeAccents(resultJSON.cadastroRotina.cadastroModulo.descricao),
-                }
             },
             acessoNiveisPermissao: {
                 ...resultJSON.acessoNiveisPermissao,

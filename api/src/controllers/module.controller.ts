@@ -109,7 +109,7 @@ export default class ModuleController extends BaseController {
         return {
             ...resultJSON,
             descricaoFormatada: Formatter.removeAccents(resultJSON.descricao),
-            podeDeletar: (resultJSON.cadastroRotinas.length === 0),
+            podeDeletar: (resultJSON.cadastroRotinas.length === 0 && resultJSON.cadastroProcessos.length === 0),
             acessoNiveisPermissao: {
                 ...resultJSON.acessoNiveisPermissao,
                 descricaoFormatada: Formatter.removeAccents(resultJSON.acessoNiveisPermissao.descricao)

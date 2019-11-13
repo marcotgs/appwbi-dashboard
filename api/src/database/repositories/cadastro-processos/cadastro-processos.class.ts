@@ -5,6 +5,7 @@ import { cadastroRotinasModel, acessoNiveisPermissaoModel, cadastroModulosModel 
 
 export type ProcessData = cadastroProcessosModel & {
     cadastroRotina: cadastroRotinasModel & { cadastroModulo: cadastroModulosModel };
+    cadastroModulo: cadastroModulosModel;
     acessoNiveisPermissao: acessoNiveisPermissaoModel;
 }
 
@@ -49,14 +50,12 @@ export default class CadastroProcessosRepository {
                         attributes: ['descricao', 'id'],
                     },
                     {
+                        model: Database.models.cadastroModulos,
+                        attributes: ['descricao', 'id'],
+                    },
+                    {
                         model: Database.models.cadastroRotinas,
                         attributes: ['descricao', 'id'],
-                        include: [
-                            {
-                                model: Database.models.cadastroModulos,
-                                attributes: ['descricao', 'id'],
-                            }
-                        ]
                     }
                 ]
             }) as ProcessData[];
@@ -83,14 +82,12 @@ export default class CadastroProcessosRepository {
                         attributes: ['descricao', 'id'],
                     },
                     {
+                        model: Database.models.cadastroModulos,
+                        attributes: ['descricao', 'id'],
+                    },
+                    {
                         model: Database.models.cadastroRotinas,
                         attributes: ['descricao', 'id'],
-                        include: [
-                            {
-                                model: Database.models.cadastroModulos,
-                                attributes: ['descricao', 'id'],
-                            }
-                        ]
                     }
                 ]
             }) as ProcessData;

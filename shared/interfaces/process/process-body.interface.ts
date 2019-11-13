@@ -5,6 +5,7 @@ interface ProcessBody {
     funcao?: string;
     idAcessoNiveisPermissao?: number;
     idCadastroRotinas?: number;
+    idCadastroModulos?: number;
 }
 
 export default ProcessBody;

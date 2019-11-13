@@ -6,13 +6,14 @@ import { Subject, Observable, merge } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { NotifierService } from 'angular-notifier';
 import { Store } from '@ngrx/store';
-import { AccessPermissionState, RoutineState, ProcessState } from '@app/store/states';
+import { AccessPermissionState, RoutineState, ProcessState, ModuleState } from '@app/store/states';
 import { getPermissions, getAccessPermissionState } from '@app/store/access-permission';
 import { RoutineResponse, ApiResponseError, PermissionResponse, ModuleResponse, ProcessResponse } from '@shared/interfaces';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import validationMessages from '@app/constants/form-validation/form-validation.constants';
 import { getRoutineState, getRoutines } from '@app/store/routine';
 import { postProcess, deleteProcess, getProcess, getProcessState } from '@app/store/process';
+import { getModules, getModuleState } from '@app/store/module';
 
 @Component({
   selector: 'app-processo',
@@ -27,6 +28,8 @@ export class ProcessosComponent implements OnInit {
   public clickPermission$ = new Subject<string>();
   public focusRoutine$ = new Subject<string>();
   public clickRoutine$ = new Subject<string>();
+  public focusModule$ = new Subject<string>();
+  public clickModule$ = new Subject<string>();
   public rows = [];
   public temp = [];
   public columns = [];
@@ -41,6 +44,7 @@ export class ProcessosComponent implements OnInit {
   private data: ProcessResponse[] = [];
   private permissions: PermissionResponse[] = [];
   private routines: RoutineResponse[] = [];
+  private modules: ModuleResponse[] = [];
   @ViewChild('alertDeleteWarning', { static: false }) private alertDeleteWarning: SwalComponent;
 
   constructor(
@@ -48,6 +52,7 @@ export class ProcessosComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private storeProcess: Store<ProcessState>,
     private storeRoutine: Store<RoutineState>,
+    private storeModule: Store<ModuleState>,
     private storeAccessPermission: Store<AccessPermissionState>,
     private notifierService: NotifierService,
   ) {
@@ -60,16 +65,23 @@ export class ProcessosComponent implements OnInit {
     this.columns = [{ name: 'Descricao' }, { name: 'Rotina' }, { name: 'Modulo' }, { name: 'Permissao' }];
     this.storeAccessPermission.dispatch(getPermissions());
     this.storeRoutine.dispatch(getRoutines());
+    this.storeModule.dispatch(getModules());
     this.storeAccessPermission.select(getAccessPermissionState)
-      .subscribe(async (data) => {
+      .subscribe((data) => {
         if (data.permissions) {
           this.permissions = data.permissions;
         }
       });
     this.storeRoutine.select(getRoutineState)
-      .subscribe(async (data) => {
+      .subscribe((data) => {
         if (data.routines) {
           this.routines = data.routines;
+        }
+      });
+    this.storeModule.select(getModuleState)
+      .subscribe((data) => {
+        if (data.modules) {
+          this.modules = data.modules;
         }
       });
   }
@@ -82,8 +94,8 @@ export class ProcessosComponent implements OnInit {
         || d.descricaoFormatada.toLowerCase().indexOf(val) !== -1
         || d.cadastroRotina.descricao.toLowerCase().indexOf(val) !== -1
         || d.cadastroRotina.descricaoFormatada.toLowerCase().indexOf(val) !== -1
-        || d.cadastroRotina.cadastroModulo.descricao.toLowerCase().indexOf(val) !== -1
-        || d.cadastroRotina.cadastroModulo.descricaoFormatada.toLowerCase().indexOf(val) !== -1
+        || d.cadastroModulo.descricao.toLowerCase().indexOf(val) !== -1
+        || d.cadastroModulo.descricaoFormatada.toLowerCase().indexOf(val) !== -1
         || d.acessoNiveisPermissao.descricao.toLowerCase().indexOf(val) !== -1
         || d.acessoNiveisPermissao.descricaoFormatada.toLowerCase().indexOf(val) !== -1
         || !val;
@@ -101,6 +113,7 @@ export class ProcessosComponent implements OnInit {
         ...this.form.value,
         idAcessoNiveisPermissao: this.permissions.find(p => p.descricao === this.form.get('accessPermission').value).id,
         idCadastroRotinas: this.routines.find(p => p.descricao === this.form.get('routine').value).id,
+        idCadastroModulos: this.modules.find(p => p.descricao === this.form.get('module').value).id,
       }
       if (this.isEditing) {
         payload.id = this.selectedItem.id;
@@ -139,6 +152,20 @@ export class ProcessosComponent implements OnInit {
     // tslint:disable-next-line:semicolon
   }
 
+  public searchModule = (text$: Observable<string>) => {
+    const debouncedText$ = text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged()
+    );
+    const inputFocus$ = this.focusModule$;
+
+    return merge(debouncedText$, inputFocus$).pipe(
+      map(term => (term === '' ? this.modules.map(v => v.descricao) :
+        this.modules.map(v => v.descricao).filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1)).slice(0, 10))
+    );
+    // tslint:disable-next-line:semicolon
+  }
+
   public viewItem(id: number) {
     this.isCreating = false;
     this.isEditing = false;
@@ -154,7 +181,8 @@ export class ProcessosComponent implements OnInit {
     this.form.patchValue({
       ...this.selectedItem,
       accessPermission: this.selectedItem.acessoNiveisPermissao.descricao,
-      routine: this.selectedItem.cadastroRotina.descricao
+      routine: this.selectedItem.cadastroRotina.descricao,
+      module: this.selectedItem.cadastroModulo.descricao,
     });
     this.openModal();
   }
@@ -201,7 +229,7 @@ export class ProcessosComponent implements OnInit {
               ...r,
               [this.columns[0].name.toLowerCase()]: r.descricao,
               [this.columns[1].name.toLowerCase()]: r.cadastroRotina.descricao,
-              [this.columns[2].name.toLowerCase()]: r.cadastroRotina.cadastroModulo.descricao,
+              [this.columns[2].name.toLowerCase()]: r.cadastroModulo.descricao,
               [this.columns[3].name.toLowerCase()]: r.acessoNiveisPermissao.descricao,
             };
           });
@@ -241,6 +269,9 @@ export class ProcessosComponent implements OnInit {
         validators: Validators.required,
       }),
       routine: new FormControl('', {
+        validators: Validators.required,
+      }),
+      module: new FormControl('', {
         validators: Validators.required,
       }),
       accessPermission: new FormControl('', {

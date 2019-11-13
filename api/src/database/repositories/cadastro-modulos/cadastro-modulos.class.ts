@@ -2,10 +2,11 @@ import { Op } from 'sequelize';
 import { cadastroModulosModel, cadastroModulosModelStatic } from '@api/database/models/cadastro-modulos';
 import logger from '@api/util/logger';
 import Database from '@api/database';
-import { cadastroRotinasModel, acessoNiveisPermissaoModel } from '@api/database/models';
+import { cadastroRotinasModel, acessoNiveisPermissaoModel, cadastroProcessosModel } from '@api/database/models';
 
 export type ModuleData = cadastroModulosModel & {
     cadastroRotinas: cadastroRotinasModel[];
+    cadastroProcessos: cadastroProcessosModel[];
     acessoNiveisPermissao: acessoNiveisPermissaoModel;
 }
 
@@ -98,6 +99,10 @@ export default class CadastroModulosRepository {
                         model: Database.models.cadastroRotinas,
                         attributes: ['descricao', 'id'],
                     },
+                    {
+                        model: Database.models.cadastroProcessos,
+                        attributes: ['id'],
+                    },
                 ]
             }) as ModuleData[];
         } catch (ex) {
@@ -125,6 +130,10 @@ export default class CadastroModulosRepository {
                     {
                         model: Database.models.cadastroRotinas,
                         attributes: ['descricao', 'id'],
+                    },
+                    {
+                        model: Database.models.cadastroProcessos,
+                        attributes: ['id'],
                     },
                 ]
             }) as ModuleData;

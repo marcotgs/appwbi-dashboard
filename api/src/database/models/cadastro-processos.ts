@@ -48,6 +48,16 @@ const cadastroProcessosModelInit = (sequelize: Sequelize): cadastroProcessosMode
 			allowNull: true,
 			comment: "null",
 			field: 'icone'
+		},
+		'idCadastroModulos': {
+			type: DataTypes.INTEGER,
+			allowNull: true,
+			comment: "null",
+			references: {
+				model: 'cadastro_modulos',
+				key: 'id'
+			},
+			field: 'id_cadastro_modulos'
 		}
 	}, {
 		tableName: 'cadastro_processos',
@@ -62,6 +72,7 @@ export interface cadastroProcessosModel extends Model {
 	idAcessoNiveisPermissao:number;
 	funcao:string;
 	icone:string;
+	idCadastroModulos:number;
 }
 
 export type cadastroProcessosModelStatic = typeof Model & {
