@@ -44,6 +44,7 @@ export class ProcessosComponent implements OnInit {
   private data: ProcessResponse[] = [];
   private permissions: PermissionResponse[] = [];
   private routines: RoutineResponse[] = [];
+  private filteredRoutines: RoutineResponse[] = [];
   private modules: ModuleResponse[] = [];
   @ViewChild('alertDeleteWarning', { static: false }) private alertDeleteWarning: SwalComponent;
 
@@ -84,6 +85,19 @@ export class ProcessosComponent implements OnInit {
           this.modules = data.modules;
         }
       });
+    this.form.get('module').valueChanges
+      .subscribe((value) => {
+        if (!this.form.get('module').disabled && !this.isSubmiting) {
+          this.form.get('routine').reset();
+          if (!value) {
+            this.form.get('routine').disable();
+          }
+          else {
+            this.filteredRoutines = this.routines.filter(s => s.cadastroModulo.descricao === value);
+            this.form.get('routine').enable();
+          }
+        }
+      });
   }
 
   public filterTable(event) {
@@ -105,6 +119,7 @@ export class ProcessosComponent implements OnInit {
   }
 
   public async formSubmit(): Promise<void> {
+    this.isSubmiting = true;
     this.markFormFieldsAsTouched();
     if (this.form.valid) {
       this.form.disable();
@@ -120,7 +135,6 @@ export class ProcessosComponent implements OnInit {
       }
       delete payload.accessPermission;
       delete payload.routine;
-      this.isSubmiting = true;
       this.storeProcess.dispatch(postProcess(payload));
     }
   }
@@ -146,8 +160,8 @@ export class ProcessosComponent implements OnInit {
     const inputFocus$ = this.focusRoutine$;
 
     return merge(debouncedText$, inputFocus$).pipe(
-      map(term => (term === '' ? this.routines.map(v => v.descricao) :
-        this.routines.map(v => v.descricao).filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1)).slice(0, 10))
+      map(term => (term === '' ? this.filteredRoutines.map(v => v.descricao) :
+        this.filteredRoutines.map(v => v.descricao).filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1)).slice(0, 10))
     );
     // tslint:disable-next-line:semicolon
   }
@@ -176,14 +190,17 @@ export class ProcessosComponent implements OnInit {
   public editItem(id: number) {
     this.isCreating = false;
     this.isEditing = true;
+    this.isSubmiting = false;
     this.form.reset();
     this.selectedItem = this.data.find(m => m.id === id);
+    this.filteredRoutines = this.routines.filter(s => s.cadastroModulo.descricao === this.selectedItem.cadastroModulo.descricao);
     this.form.patchValue({
       ...this.selectedItem,
       accessPermission: this.selectedItem.acessoNiveisPermissao.descricao,
       routine: this.selectedItem.cadastroRotina.descricao,
       module: this.selectedItem.cadastroModulo.descricao,
     });
+    this.form.get('routine').setValue(this.selectedItem.cadastroRotina.descricao);
     this.openModal();
   }
 
@@ -198,11 +215,11 @@ export class ProcessosComponent implements OnInit {
   }
 
   public addNewItem() {
+    this.isCreating = true;
+    this.isEditing = false;
     if (this.editItem) {
       this.form.reset();
     }
-    this.isCreating = true;
-    this.isEditing = false;
     this.openModal();
   }
 

@@ -9,6 +9,7 @@ import { UserState, getUserState, loginError, login } from '@app/store/user';
 import { ApiResponseError } from '@shared/interfaces';
 import { AuthTokenService } from '@app/services';
 import { getMenuPermissions, AccessPermissionState } from '@app/store/access-permission';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -18,6 +19,7 @@ import { getMenuPermissions, AccessPermissionState } from '@app/store/access-per
 export class LoginComponent implements OnInit {
   public loginForm: FormGroup;
   public loginErrors: ApiResponseError[] | string[] = [];
+  public subscriptionUserState: Subscription = null;
 
   constructor(
     private store: Store<UserState>,
@@ -37,7 +39,7 @@ export class LoginComponent implements OnInit {
     this._actions$.pipe(ofType(loginError)).subscribe((data) => {
       this.toggleErrors(data.errors);
     });
-    this.store.select(getUserState).subscribe((userState) => {
+    this.subscriptionUserState = this.store.select(getUserState).subscribe((userState) => {
       if (userState.currentUser.email) {
         this.storePermission.dispatch(getMenuPermissions());
         this.router.navigate(['/starter'], { replaceUrl: true });
@@ -47,6 +49,7 @@ export class LoginComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.spinner.hide();
+    this.subscriptionUserState.unsubscribe();
   }
 
   private toggleErrors(errors: ApiResponseError[] | string[]) {

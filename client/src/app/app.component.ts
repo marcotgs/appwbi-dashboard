@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 import { AccessPermissionState, getMenuPermissions, getAccessPermissionState } from '@app/store/access-permission';
 import { AuthTokenService } from './services';
 import { UserState, getUserState } from './store/user';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -12,6 +13,7 @@ import { UserState, getUserState } from './store/user';
 export class AppComponent implements OnInit {
   public loading = true;
   public menuPermissions = [];
+  private subscriptionUsers: Subscription;
   title = 'app';
 
   constructor(
@@ -21,7 +23,7 @@ export class AppComponent implements OnInit {
   ) { /* */ }
 
   ngOnInit() {
-    this.userStateObservable();
+    this.subscriptionUsers = this.userStateObservable();
     this.permissionsStateObservable();
     if (this.authToken.isLoggedIn()) {
       this.loading = false;
@@ -29,7 +31,7 @@ export class AppComponent implements OnInit {
   }
 
   private userStateObservable() {
-    this.storeUser.select(getUserState)
+    return this.storeUser.select(getUserState)
       .subscribe((data) => {
         if (Object.entries(data.currentUser).length !== 0
           && this.authToken.isLoggedIn()
@@ -42,11 +44,13 @@ export class AppComponent implements OnInit {
   }
 
   private permissionsStateObservable() {
-    this.storePermission.select(getAccessPermissionState)
+    const subscriptionPermissions = this.storePermission.select(getAccessPermissionState)
       .subscribe((data) => {
         if (data.menuPermissions) {
           this.menuPermissions = data.menuPermissions;
           this.loading = false;
+          this.subscriptionUsers.unsubscribe();
+          subscriptionPermissions.unsubscribe();
         }
       });
   }

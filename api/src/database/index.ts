@@ -12,6 +12,7 @@ export default class Database {
         const sequelize = new Sequelize(process.env['DB_SERVER_DATABASE'], process.env['DB_SERVER_USERNAME'], process.env['DB_SERVER_PASSWORD'], {
             host: process.env['DB_SERVER'],
             dialect: 'mssql',
+            logging: false
         });
         try {
             await sequelize.authenticate();

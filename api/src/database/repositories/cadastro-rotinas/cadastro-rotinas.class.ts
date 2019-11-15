@@ -84,6 +84,10 @@ export default class CadastroRotinasRepository {
                     {
                         model: Database.models.cadastroModulos,
                         attributes: ['descricao', 'id'],
+                    },
+                    {
+                        model: Database.models.cadastroProcessos,
+                        attributes: ['id'],
                     }
                 ]
             }) as RoutineData;

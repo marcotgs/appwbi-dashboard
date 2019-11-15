@@ -30,6 +30,6 @@ export default abstract class BaseController {
             status: statusCode,
             data,
         };
-        return res.status(statusCode).set('Content-type', 'application/json; charset=utf-8').json(result);
+        return res.status(statusCode).json(result);
     }
 }
