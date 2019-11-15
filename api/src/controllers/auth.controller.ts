@@ -133,7 +133,6 @@ export default class AuthController extends BaseController {
                 // eslint-disable-next-line @typescript-eslint/camelcase
                 dynamic_template_data: {
                     subject: (body.forgotPassword) ? '[APPWBI] Esqueceu sua senha?' : '[APPWBI] Alteração de senha!',
-                    title: (body.forgotPassword) ? 'Esqueceu sua senha?' : 'Alterar sua senha?',
                     link: process.env.AUTH_BASE_URL.concat(`/alterar-senha/${resetPasswordToken}`)
                 },
             };
