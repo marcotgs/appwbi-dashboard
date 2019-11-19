@@ -9,6 +9,7 @@ import { FormGroup } from '@angular/forms';
 import { conformToMask } from 'angular2-text-mask';
 import MasksConstants from '@app/constants/mask/mask.contants';
 import { getUserState, getUsers, deleteUser } from '@app/store/user';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-usuarios',
@@ -31,6 +32,7 @@ export class UsuariosComponent implements OnInit {
   public formErrors: ApiResponseError[] | string[] = [];
   private data: UserResponse[] = [];
   @ViewChild('alertDeleteWarning', { static: false }) private alertDeleteWarning: SwalComponent;
+  private subscriptions = new Subscription();
 
   constructor(
     private modalService: NgbModal,
@@ -143,7 +145,7 @@ export class UsuariosComponent implements OnInit {
   }
 
   private initRows() {
-    this.storeUser.select(getUserState)
+    this.subscriptions.add(this.storeUser.select(getUserState)
       .subscribe((data) => {
         if (data.users && !data.apiErrors) {
           this.loading = false;
@@ -172,12 +174,16 @@ export class UsuariosComponent implements OnInit {
           }
           this.data = data.users;
         }
-      });
+      }));
   }
 
   private getUsers() {
     this.loading = true;
     this.storeUser.dispatch(getUsers());
+  }
+
+  public ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 
 }

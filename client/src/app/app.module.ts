@@ -35,6 +35,7 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { AccessPermissionEffects } from '@app/store/access-permission';
+import { UserEffects } from '@app/store/user';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -64,7 +65,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ServicesModule,
     ApiModule,
     SweetAlert2Module.forRoot(),
-    EffectsModule.forRoot([AccessPermissionEffects]),
+    EffectsModule.forRoot([AccessPermissionEffects, UserEffects]),
     StoreModule.forRoot(reducers, {
       runtimeChecks: {
         strictStateImmutability: true,

@@ -9,6 +9,7 @@ import { ApiResponseError, PermissionResponse } from '@shared/interfaces';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import validationMessages from '@app/constants/form-validation/form-validation.constants';
 import { postPermission, deletePermission, getPermissions, getAccessPermissionState } from '@app/store/access-permission';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-permissoes',
@@ -32,6 +33,7 @@ export class PermissoesComponent implements OnInit {
   public formErrors: ApiResponseError[] | string[] = [];
   private data: PermissionResponse[] = [];
   @ViewChild('alertDeleteWarning', { static: false }) private alertDeleteWarning: SwalComponent;
+  private subscriptions = new Subscription();
 
   constructor(
     private modalService: NgbModal,
@@ -52,7 +54,9 @@ export class PermissoesComponent implements OnInit {
     const val = event.target.value.toLowerCase();
 
     const temp = this.temp.filter((d) => {
-      return d.descricao.toLowerCase().indexOf(val) !== -1 || !val;
+      return d.descricao.toLowerCase().indexOf(val) !== -1
+        || d.descricaoFormatada.toLowerCase().indexOf(val) !== -1
+        || !val;
     });
     this.rows = temp;
   }
@@ -69,7 +73,7 @@ export class PermissoesComponent implements OnInit {
         payload.id = this.selectedItem.id;
       }
       this.isSubmiting = true;
-      this.storePermission.dispatch(postPermission({...payload, update: this.isEditing}));
+      this.storePermission.dispatch(postPermission({ ...payload, update: this.isEditing }));
     }
   }
 
@@ -93,7 +97,11 @@ export class PermissoesComponent implements OnInit {
 
   public showAlertDelete(id: number) {
     this.selectedItem = this.data.find(m => m.id === id);
-    this.alertDeleteWarning.fire();
+    if (this.selectedItem.podeDeletar) {
+      this.alertDeleteWarning.fire();
+    } else {
+      this.notifierService.notify('error', 'Este registro não pode ser excluído porque ele está amarrado a outros cadastros!');
+    }
   }
 
   public deleteItem() {
@@ -118,19 +126,23 @@ export class PermissoesComponent implements OnInit {
     return (validationMessages[controlName] || validationMessages['default']);
   }
 
+  public ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+
   private openModal() {
     this.modalService.open(this.modal, { centered: true });
   }
 
   private initRows() {
-    this.storePermission.select(getAccessPermissionState)
+    this.subscriptions.add(this.storePermission.select(getAccessPermissionState)
       .subscribe(async (data) => {
         if (data.permissions) {
           this.loading = false;
           this.data = data.permissions;
           this.rows = data.permissions.map((r) => {
             return {
-              id: r.id,
+              ...r,
               [this.columns[0].name.toLowerCase()]: r.descricao,
             };
           });
@@ -149,7 +161,7 @@ export class PermissoesComponent implements OnInit {
             this.notifierService.notify('success', 'Salvo!');
           }
         }
-      });
+      }));
   }
 
   private getPermissiones() {

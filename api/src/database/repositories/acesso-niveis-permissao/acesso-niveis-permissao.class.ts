@@ -1,6 +1,17 @@
 import { acessoNiveisPermissaoModel, acessoNiveisPermissaoModelStatic } from '@api/database/models/acesso-niveis-permissao';
 import logger from '@api/util/logger';
 import Database from '@api/database';
+import {
+    cadastroProcessosModel, cadastroRotinasModel,
+    cadastroModulosModel, acessoUsuariosModel
+} from '@api/database/models';
+
+export type AccessPermissionData = acessoNiveisPermissaoModel & {
+    cadastroModulos: cadastroModulosModel[];
+    acessoUsuarios: acessoUsuariosModel[];
+    cadastroRotinas: cadastroRotinasModel[];
+    cadastroProcessos: cadastroProcessosModel[];
+}
 
 /**
  * Essa classe é um repositorio com os método que acessam a tabela `[acesso_niveis_permissao]`.
@@ -30,14 +41,20 @@ export default class AcessoNiveisPermissaoRepository {
     /**
      * Procura os registros de permissões.
      *
-     * @returns {Promise<acessoNiveisPermissaoModel[]>}
+     * @returns {Promise<AccessPermissionData[]>}
      * @memberof acessoNiveisPermissaoRepository
      */
-    public async findAll(): Promise<acessoNiveisPermissaoModel[]> {
+    public async findAll(): Promise<AccessPermissionData[]> {
         try {
             return await this.acessoNiveisPermissaoModel.findAll({
                 attributes: ['descricao', 'id'],
-            });
+                include: [
+                    { model: Database.models.acessoUsuarios, attributes: ['id'], },
+                    { model: Database.models.cadastroRotinas, attributes: ['id'], },
+                    { model: Database.models.cadastroProcessos, attributes: ['id'], },
+                    { model: Database.models.cadastroModulos, attributes: ['id'], },
+                ],
+            }) as AccessPermissionData[];
         } catch (ex) {
             logger.error(`Erro ao realizar consulta no repository :'acessoNiveisPermissaoRepository'-> 'findAll'. Error: ${ex}`);
             throw ex;
@@ -48,14 +65,20 @@ export default class AcessoNiveisPermissaoRepository {
      * Procura uma permissão pelo id.
      *
      * @param {number} id
-     * @returns {Promise<acessoNiveisPermissaoModel>}
+     * @returns {Promise<AccessPermissionData>}
      * @memberof CadastroSetoresRepository
      */
-    public async findById(id: number): Promise<acessoNiveisPermissaoModel> {
+    public async findById(id: number): Promise<AccessPermissionData> {
         try {
             return await this.acessoNiveisPermissaoModel.findByPk(id, {
-                attributes: ['descricao', 'id']
-            });
+                attributes: ['descricao', 'id'],
+                include: [
+                    { model: Database.models.acessoUsuarios, attributes: ['id'], },
+                    { model: Database.models.cadastroRotinas, attributes: ['id'], },
+                    { model: Database.models.cadastroProcessos, attributes: ['id'], },
+                    { model: Database.models.cadastroModulos, attributes: ['id'], },
+                ],
+            }) as AccessPermissionData;
         } catch (ex) {
             logger.error(`Erro ao realizar consulta no repository :'CadastroSetoresRepository'-> 'findById'. Error: ${ex}`);
             throw ex;

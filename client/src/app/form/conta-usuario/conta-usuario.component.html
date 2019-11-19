@@ -195,7 +195,7 @@
                                     <label for="CEP" class="control-label col-form-label">CEP</label>
                                 </div>
                             </div>
-                            <div class="row" [ngClass]="{'py-0 m-l-0': modal}" *ngIf="isEditing || isCreating">
+                            <div class="row py-0" [ngClass]="{'m-l-0': modal}" *ngIf="(isEditing || isCreating) || !modal">
                                 <div class="col-sm-auto">
                                     <input type="text" class="form-control" id="CEP" placeholder="CEP"
                                         formControlName="cep" [textMask]="{mask: cepMask, guide: false}" [ngClass]="{'is-invalid': manageAccountForm.get('cep').invalid  && (manageAccountForm.get('cep').dirty || 

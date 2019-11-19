@@ -12,7 +12,6 @@ import { NGXFormWizardModule } from "./ngx-wizard/ngx-wizard.module";
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { EffectsModule } from '@ngrx/effects';
 import { TextMaskModule } from 'angular2-text-mask';
-import { UserEffects } from '@app/store/user';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
 import { FormBasicComponent } from './form-basic/basic.component';
@@ -36,12 +35,11 @@ import { MultiselectComponent } from './multiselect/multiselect.component';
 import { FormEmpresaComponent } from './form-empresa/form-empresa.component';
 import { CompanyEffects } from '@app/store/company';
 import { SectorEffects } from '@app/store/sector';
-import { AccessPermissionEffects } from '@app/store/access-permission';
 
 @NgModule({
   imports: [
     CommonModule,
-    EffectsModule.forFeature([UserEffects, CompanyEffects, SectorEffects, AccessPermissionEffects]),
+    EffectsModule.forFeature([CompanyEffects, SectorEffects]),
     RouterModule.forChild(FormsRoutes),
     FormsModule,
     NGXFormWizardModule,

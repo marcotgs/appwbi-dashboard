@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Response } from 'express';
-import { JsonController, Authorized, Get, Res, Post, Body, Delete, Param } from 'routing-controllers';
-import { EmpresaRepository, SegmentoRepository, MunicipioRepository, CompanyData } from '@api/database/repositories';
+import { JsonController, Authorized, Get, Res, Post, Body, Delete, Param, CurrentUser } from 'routing-controllers';
+import { EmpresaRepository, SegmentoRepository, MunicipioRepository, CompanyData, AcessoUsuariosRepository } from '@api/database/repositories';
 import logger from '@api/util/logger';
 import BaseController from './base-controller.class';
 import { CompanyBody } from '@api/DTO';
-import { CompanyResponse } from '@shared/interfaces';
+import { CompanyResponse, ApiResponseErrors } from '@shared/interfaces';
 import Formatter from '@api/util/formatter';
 
 /**
@@ -20,6 +20,8 @@ export default class CompanyController extends BaseController {
     private empresaRepository: EmpresaRepository;
     private segmentoRepository: SegmentoRepository;
     private municipioRepository: MunicipioRepository;
+    // Repositorio de acesso_usuarios.
+    private acessoUsuariosRepository: AcessoUsuariosRepository;
 
     /**
      * Cria uma nova instância CompanyController.
@@ -28,6 +30,7 @@ export default class CompanyController extends BaseController {
      */
     public constructor() {
         super();
+        this.acessoUsuariosRepository = new AcessoUsuariosRepository();
         this.empresaRepository = new EmpresaRepository();
         this.segmentoRepository = new SegmentoRepository();
         this.municipioRepository = new MunicipioRepository();
@@ -44,9 +47,19 @@ export default class CompanyController extends BaseController {
     @Get('/')
     public async getCompanies(
         @Res() res: Response,
+        @CurrentUser() userId?: number,
     ): Promise<Response> {
         try {
-            const results = await this.empresaRepository.findAll();
+            const userData = await this.acessoUsuariosRepository.findById(userId, {
+                attributes: ['idAcessoNiveisPermissao', 'idEmpresa'],
+            });
+            let results: CompanyData[] = [];
+            if (userData.idAcessoNiveisPermissao < 4) {
+                const companyData = await this.empresaRepository.findById(userData.idEmpresa);
+                results.push(companyData);
+            } else {
+                results = await this.empresaRepository.findAll();
+            }
             const response = results.map((result): CompanyResponse => this.formatCompanyResponse(result));
             return this.sendResponse(res, 200, response);
         } catch (ex) {
@@ -131,6 +144,15 @@ export default class CompanyController extends BaseController {
             await this.empresaRepository.delete(id);
             return this.sendResponse(res, 200);
         } catch (ex) {
+            if ((ex.toString() as string).search('SequelizeForeignKeyConstraintError') != -1) {
+                const response: ApiResponseErrors = {
+                    errors: [{
+                        message: 'Este registro não pode ser excluído porque ele está amarrado a outros cadastros!',
+                    }],
+                };
+                // Retorna 400 se caso a empresa tiver amarrações.
+                return this.sendResponse(res, 400, response);
+            }
             logger.error(`Erro na requisição de 'deleteCompany' no controller 'CompanyController'. Erro -> ${ex}`);
             return this.sendResponse(res, 500);
         }
@@ -138,7 +160,7 @@ export default class CompanyController extends BaseController {
 
     private formatCompanyResponse(result: CompanyData): CompanyResponse {
         const resultJSON = result.toJSON() as CompanyData;
-        const object =  {
+        const object = {
             ...resultJSON,
             numero: Number(resultJSON.numero),
             podeDeletar: (resultJSON.cadastroSetores.length === 0 && resultJSON.cadastroFiliais.length === 0),

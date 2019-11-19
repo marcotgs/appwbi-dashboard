@@ -156,12 +156,21 @@ export class EmpresasComponent implements OnInit {
             this.isSubmiting = false;
             this.isEditing = false;
             this.isCreating = false;
-          } else if (this.isDeleting) {
+          } else if (this.isDeleting && !data.apiErrors) {
             this.isDeleting = false;
             this.loading = false;
             this.notifierService.notify('success', 'Salvo!');
           }
           this.data = data.companies;
+        }
+        if (data.apiErrors) {
+          this.isDeleting = false;
+          this.loading = false;
+
+          data.apiErrors.errors.forEach((error) => {
+            this.notifierService.notify('error', error.message);
+          });
+          this.isSubmiting = false;
         }
       });
   }

@@ -1,8 +1,19 @@
 import { FindOptions } from 'sequelize/types';
 import { Sequelize } from 'sequelize';
-import { acessoUsuariosModelStatic, acessoUsuariosModel } from '@api/database/models/acesso-usuarios';
+import {
+    acessoUsuariosModelStatic, acessoUsuariosModel,
+    municipioModel, empresaModel, estadoModel,
+    acessoNiveisPermissaoModel, cadastroSetoresModel
+} from '@api/database/models';
 import logger from '@api/util/logger';
 import Database from '@api/database';
+
+export type UserData = acessoUsuariosModel & {
+    municipio: municipioModel & { estado: estadoModel };
+    acessoNiveisPermissao: acessoNiveisPermissaoModel;
+    empresa: empresaModel;
+    cadastroSetore: cadastroSetoresModel;
+}
 
 /**
  * Essa classe é um repositorio com os método que acessam a tabela `acesso_usuarios`.

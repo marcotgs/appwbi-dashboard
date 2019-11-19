@@ -1,6 +1,6 @@
 import { Component, Input, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
-import { combineLatest, Subject, Observable, merge } from 'rxjs';
+import { combineLatest, Subject, Observable, merge, Subscription } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Store } from '@ngrx/store';
@@ -50,6 +50,7 @@ export class FormContaUsuarioComponent {
   private sectors: SectorResponse[] = [];
   private filteredSectors: SectorResponse[] = [];
   private permissions: PermissionResponse[] = [];
+  private subscriptions = new Subscription();
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -84,6 +85,7 @@ export class FormContaUsuarioComponent {
   }
 
   ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
     this.spinner.hide(this.cepSpinner);
     this.spinner.hide(this.saveSpinner);
   }
@@ -285,16 +287,16 @@ export class FormContaUsuarioComponent {
   }
 
   private updateProfileHandle(): void {
-    this._actions$.pipe(ofType(loginSuccess)).subscribe(() => {
+    this.subscriptions.add(this._actions$.pipe(ofType(loginSuccess)).subscribe(() => {
       this.spinner.hide(this.saveSpinner);
       this.enableForm();
       this.notifierService.notify('success', 'Dados atualizados!');
-    });
-    this._actions$.pipe(ofType(updateProfileError)).subscribe(() => {
+    }));
+    this.subscriptions.add(this._actions$.pipe(ofType(updateProfileError)).subscribe(() => {
       this.spinner.hide(this.saveSpinner);
       this.enableForm();
       this.notifierService.notify('error', 'Erro ao salvar!');
-    });
+    }));
   }
 
   private enableForm(): void {
@@ -416,4 +418,5 @@ export class FormContaUsuarioComponent {
       validators: this.checkPasswords
     });
   }
+
 }

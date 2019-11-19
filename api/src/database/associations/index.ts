@@ -11,6 +11,7 @@ import addCadastroRotinasAssociation from './cadastro-rotinas';
 import addCadastroSetoresAssociation from './cadastro-setores';
 import addEmpresaAssociation from './empresa';
 import addCadastroFiliaisAssociation from './cadastro-filiais';
+import addAcessoNiveisPermissaoAssociation from './acesso-niveis-permissao';
 
 const readModels = (sequelize: Sequelize): void => {
     const models: any = {};
@@ -34,6 +35,7 @@ const addAssociations = (sequelize: Sequelize): any => {
     addCadastroSetoresAssociation(models);
     addEmpresaAssociation(models);
     addCadastroFiliaisAssociation(models);
+    addAcessoNiveisPermissaoAssociation(models);
     return models;
 };
 

@@ -3,24 +3,15 @@ import { Response } from 'express';
 import sha256 from 'crypto-js/sha256';
 import CryptoJS from 'crypto-js';
 import { Post, Res, JsonController, Body, Authorized, CurrentUser, Get, Delete, Param } from 'routing-controllers';
-import { AcessoUsuariosRepository } from '@api/database/repositories/acesso-usuarios';
+import { AcessoUsuariosRepository, UserData } from '@api/database/repositories/acesso-usuarios';
 import BaseController from '@api/controllers/base-controller.class';
 import { LoginResponse, UserResponse, UserBody, ApiResponseErrors } from '@shared/interfaces';
 import logger from '@api/util/logger';
-import { acessoUsuariosModel, municipioModel, empresaModel, estadoModel, acessoNiveisPermissaoModel, cadastroSetoresModel } from '@api/database/models';
+import { acessoUsuariosModel } from '@api/database/models';
 import { MunicipioRepository } from '@api/database/repositories/municipio';
 import Database from '@api/database';
 import { JwtTokenService } from '@api/services';
 import Formatter from '@api/util/formatter';
-
-
-type UserData = acessoUsuariosModel & {
-    municipio: municipioModel & { estado: estadoModel };
-    acessoNiveisPermissao: acessoNiveisPermissaoModel;
-    empresa: empresaModel;
-    cadastroSetore: cadastroSetoresModel;
-}
-
 
 /**
  * Controller que contém dos dados da API de usuário.
@@ -264,6 +255,8 @@ export default class UserController extends BaseController {
 
             if (body.password) {
                 body.password = sha256(`${userData.passwordSalt}${body.password}`).toString();
+            } else {
+                delete body.password;
             }
 
             const mergeData = { ...userData.toJSON(), ...body };

@@ -1,10 +1,11 @@
 import { Response } from 'express';
 import { JsonController, Authorized, Get, Res, CurrentUser, Post, Delete, Body, Param } from 'routing-controllers';
-import { CadastroModulosRepository, AcessoUsuariosRepository, AcessoNiveisPermissaoRepository } from '@api/database/repositories';
+import { CadastroModulosRepository, AcessoUsuariosRepository, AcessoNiveisPermissaoRepository, AccessPermissionData } from '@api/database/repositories';
 import logger from '@api/util/logger';
 import { MenuPermissionsResponse, PermissionResponse } from '@shared/interfaces';
 import BaseController from './base-controller.class';
 import { PermissionBody } from '@api/DTO';
+import Formatter from '@api/util/formatter';
 
 /**
  * Controller que contém os métodos de permissão.
@@ -43,8 +44,9 @@ export default class AccessPermissionController extends BaseController {
         @Res() res: Response,
     ): Promise<Response> {
         try {
-            const results = await this.acessoNiveisPermissaoRepository.findAll() as PermissionResponse[];
-            return this.sendResponse(res, 200, results);
+            const results = await this.acessoNiveisPermissaoRepository.findAll() as AccessPermissionData[];
+            const response = results.map((result): PermissionResponse => this.formaPermissionResponse(result));
+            return this.sendResponse(res, 200, response);
         } catch (ex) {
             logger.error(`Erro na requisição de 'getModules' no controller 'AccessPermissionController'. Erro -> ${ex}`);
             return this.sendResponse(res, 500);
@@ -74,7 +76,7 @@ export default class AccessPermissionController extends BaseController {
                 const newValue = { ...permissionData, ...body };
                 await this.acessoNiveisPermissaoRepository.update(body.id, newValue);
             }
-            const response = await this.acessoNiveisPermissaoRepository.findById(body.id);
+            const response = this.formaPermissionResponse(await this.acessoNiveisPermissaoRepository.findById(body.id));
             return this.sendResponse(res, 200, response);
         } catch (ex) {
             logger.error(`Erro na requisição de 'postPermission' no controller 'PermissionController'. Erro -> ${ex}`);
@@ -131,5 +133,20 @@ export default class AccessPermissionController extends BaseController {
             logger.error(`Erro na requisição de 'getMenuPermissions' no controller 'AccessPermissionController'. Erro -> ${ex}`);
             return this.sendResponse(res, 500);
         }
+    }
+
+    private formaPermissionResponse(result: AccessPermissionData): PermissionResponse {
+        const resultJSON = result.toJSON() as AccessPermissionData;
+        const podeDeletar = (!result.acessoUsuarios.length && !result.cadastroRotinas.length
+            && !result.cadastroModulos.length && !result.cadastroProcessos.length);
+        delete resultJSON.acessoUsuarios;
+        delete resultJSON.cadastroModulos;
+        delete resultJSON.cadastroProcessos;
+        delete resultJSON.cadastroRotinas;
+        return {
+            ...resultJSON,
+            descricaoFormatada: Formatter.removeAccents(resultJSON.descricao),
+            podeDeletar,
+        };
     }
 }

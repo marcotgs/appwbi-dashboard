@@ -76,9 +76,9 @@ Database.connect().
 
         new Passaport().use();
 
-        app.get('*', (_req: express.Request, res: express.Response): any => {
-            res.sendFile(path.join(__dirname, '../..', 'client/dist/dashboard/index.html'));
-        });
+        // app.get('*', (_req: express.Request, res: express.Response): any => {
+        //     res.sendFile(path.join(__dirname, '../..', 'client/dist/dashboard/index.html'));
+        // });
     });
 
 export default server;
