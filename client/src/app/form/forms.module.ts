@@ -12,6 +12,7 @@ import { NGXFormWizardModule } from "./ngx-wizard/ngx-wizard.module";
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { EffectsModule } from '@ngrx/effects';
 import { TextMaskModule } from 'angular2-text-mask';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
 import { FormBasicComponent } from './form-basic/basic.component';
 import { FormvalComponent } from './form-validation/form-validation.component';
@@ -24,16 +25,21 @@ import { FormactionsComponent } from './form-actions/actions.component';
 import { FormrowsepComponent } from './form-row-separator/row-sep.component';
 import { FormstripedComponent } from './form-striped-row/striped.component';
 import { FormContaUsuarioComponent } from './conta-usuario/conta-usuario.component';
+import { FormModulosComponent } from './form-modulos/form-modulos.component';
+import { FormSetoresComponent } from './form-setores/form-setores.component';
+import { FormRotinasComponent } from './form-rotinas/form-rotinas.component';
+import { FormFiliaisComponent } from './form-filiais/form-filiais.component';
+import { FormProcessosComponent } from './form-processos/form-processos.component';
 import { FormdetailComponent } from './form-detail/detail.component';
 import { MultiselectComponent } from './multiselect/multiselect.component';
-import { UserEffects } from '@app/store/user';
-import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
-
+import { FormEmpresaComponent } from './form-empresa/form-empresa.component';
+import { CompanyEffects } from '@app/store/company';
+import { SectorEffects } from '@app/store/sector';
 
 @NgModule({
   imports: [
     CommonModule,
-    EffectsModule.forFeature([UserEffects]),
+    EffectsModule.forFeature([CompanyEffects, SectorEffects]),
     RouterModule.forChild(FormsRoutes),
     FormsModule,
     NGXFormWizardModule,
@@ -69,8 +75,18 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
     FormrowsepComponent,
     FormstripedComponent,
     FormContaUsuarioComponent,
+    FormFiliaisComponent,
+    FormModulosComponent,
+    FormSetoresComponent,
+    FormRotinasComponent,
+    FormProcessosComponent,
     MultiselectComponent,
     FormdetailComponent,
+    FormEmpresaComponent,
+  ],
+  exports: [
+    FormEmpresaComponent,
+    FormContaUsuarioComponent
   ]
 })
 export class FormModule { }

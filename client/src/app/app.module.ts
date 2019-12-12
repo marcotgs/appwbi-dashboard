@@ -15,6 +15,8 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from '../environments/environment';
 
 import { FullComponent } from './layouts/full/full.component';
 import { BlankComponent } from './layouts/blank/blank.component';
@@ -25,7 +27,6 @@ import { BreadcrumbComponent } from './shared/breadcrumb/breadcrumb.component';
 
 import { Approutes } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { SpinnerComponent } from './shared/spinner.component';
 import { reducers } from '@app/store/reducers';
 import { ApiModule } from '@api/api.module';
 import { ServicesModule } from '@app/services';
@@ -33,18 +34,19 @@ import { ServicesModule } from '@app/services';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
+import { AccessPermissionEffects } from '@app/store/access-permission';
+import { UserEffects } from '@app/store/user';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
   wheelSpeed: 1,
   wheelPropagation: true,
   minScrollbarLength: 20
-};          
+};
 
 @NgModule({
   declarations: [
     AppComponent,
-    SpinnerComponent,
     FullComponent,
     BlankComponent,
     NavigationComponent,
@@ -63,12 +65,16 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ServicesModule,
     ApiModule,
     SweetAlert2Module.forRoot(),
-    EffectsModule.forRoot([]),
+    EffectsModule.forRoot([AccessPermissionEffects, UserEffects]),
     StoreModule.forRoot(reducers, {
       runtimeChecks: {
         strictStateImmutability: true,
         strictActionImmutability: true
       }
+    }),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25, // Retains last 25 states
+      logOnly: environment.production, // Restrict extension to log-only mode
     }),
     RouterModule.forRoot(Approutes),
     PerfectScrollbarModule,
@@ -83,4 +89,4 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

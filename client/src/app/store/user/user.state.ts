@@ -1,5 +1,7 @@
-import { acessoUsuariosResponse } from "@shared/interfaces";
+import { UserResponse, ApiResponseErrors } from "@shared/interfaces";
 
 export interface UserState {
-    user?: acessoUsuariosResponse
+    currentUser?: UserResponse
+    users?: UserResponse[],
+    apiErrors?: ApiResponseErrors,
 }

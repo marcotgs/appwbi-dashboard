@@ -258,6 +258,11 @@ label {
   justify-content: flex-end;
 }
 
+*.b-label--start {
+  justify-content: flex-start;
+}
+
+
 // Custom validation Classes
 .error {
   .form-control {
@@ -850,3 +855,24 @@ button.toast-close-button {
 .toast-warning {
   background-color: $warning !important;
 }
+
+.modal-header h4{
+  margin: 0;
+}
+
+input.ng-valid{
+  border: 1px solid #e9ecef;
+  border-color: #e9ecef !important;
+}
+
+.btn-submit{
+  min-width: 4rem;
+  min-height: 2rem;
+}
+
+@media (min-width: 576px){
+  .modal-dialog {
+    max-width: 700px !important;
+  }
+}
+

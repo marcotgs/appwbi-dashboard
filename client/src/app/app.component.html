@@ -1,3 +1,9 @@
-<router-outlet>
-    <app-spinner></app-spinner>
+<router-outlet *ngIf="!loading">
 </router-outlet>
+
+<div class="preloader" *ngIf="loading">
+    <div class="spinner">
+        <div class="double-bounce1"></div>
+        <div class="double-bounce2"></div>
+    </div>
+</div>

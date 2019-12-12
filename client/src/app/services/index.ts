@@ -1,2 +1,2 @@
-export { default as AuthService } from './auth/auth.service';
+export { default as AuthTokenService } from './auth/auth-token.service';
 export * from './services.module';

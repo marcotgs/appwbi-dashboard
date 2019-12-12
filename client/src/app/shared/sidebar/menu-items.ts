@@ -3,14 +3,6 @@ import { RouteInfo } from './sidebar.metadata';
 export const ROUTES: RouteInfo[] = [
   {
     path: '',
-    title: 'Módulos',
-    icon: 'mdi mdi-dots-horizontal',
-    class: 'nav-small-cap',
-    extralink: true,
-    submenu: []
-  },
-  {
-    path: '',
     title: 'Faturamento',
     icon: 'mdi mdi-cart-outline',
     class: 'has-arrow',
@@ -27,7 +19,7 @@ export const ROUTES: RouteInfo[] = [
       {
         path: '',
         title: 'Gráficos',
-        icon: 'icon-chart ',
+        icon: 'icon-chart',
         class: 'has-arrow',
         extralink: false,
         submenu: [
@@ -94,9 +86,42 @@ export const ROUTES: RouteInfo[] = [
         extralink: false,
         submenu: [
           {
-            //path: '/tables/aberturachamados',
-            path: '/construcao',
+            path: '/tables/controlechamados',
             title: 'Controle de Chamados',
+            icon: 'mdi mdi-chevron-right',
+            class: '',
+            extralink: false,
+            submenu: []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    path: '',
+    title: 'Funções',
+    icon: 'far fa-lightbulb',
+    class: 'has-arrow',
+    extralink: false,
+    submenu: [
+      {
+        path: '',
+        title: 'Second Level',
+        icon: 'mdi mdi-octagram',
+        class: '',
+        extralink: true,
+        submenu: []
+      },
+      {
+        path: '',
+        title: 'Push',
+        icon: 'icon-paper-plane',
+        class: 'has-arrow',
+        extralink: false,
+        submenu: [
+          {
+            path: '/construcao',
+            title: 'Enviar Mensagem',
             icon: 'mdi mdi-chevron-right',
             class: '',
             extralink: false,
@@ -129,7 +154,6 @@ export const ROUTES: RouteInfo[] = [
         extralink: false,
         submenu: [
           {
-            //path: '/sample-pages/profile',
             path: '/forms/conta-usuario',
             title: 'Conta',
             icon: 'mdi mdi-chevron-right',
@@ -138,18 +162,8 @@ export const ROUTES: RouteInfo[] = [
             submenu: []
           },
           {
-            //path: '/sample-pages/profile',
-            path: '/construcao',
+            path: '/tables/usuarios',
             title: 'Usuários',
-            icon: 'mdi mdi-chevron-right',
-            class: '',
-            extralink: false,
-            submenu: []
-          },
-          {
-            //path: '/sample-pages/profile',
-            path: '/construcao',
-            title: 'Grupos de Usuários',
             icon: 'mdi mdi-chevron-right',
             class: '',
             extralink: false,
@@ -174,8 +188,7 @@ export const ROUTES: RouteInfo[] = [
         extralink: false,
         submenu: [
           {
-            //path: '/sample-pages/profile',
-            path: '/construcao',
+            path: '/tables/empresas',
             title: 'Empresas',
             icon: 'mdi mdi-chevron-right',
             class: '',
@@ -183,14 +196,21 @@ export const ROUTES: RouteInfo[] = [
             submenu: []
           },
           {
-            //path: '/sample-pages/profile',
-            path: '/construcao',
+            path: '/tables/filiais',
             title: 'Filiais',
             icon: 'mdi mdi-chevron-right',
             class: '',
             extralink: false,
             submenu: []
           },
+          {
+            path: '/tables/setores',
+            title: 'Setores',
+            icon: 'mdi mdi-chevron-right',
+            class: '',
+            extralink: false,
+            submenu: []
+          }
         ]
       },
       {
@@ -201,8 +221,7 @@ export const ROUTES: RouteInfo[] = [
         extralink: false,
         submenu: [
           {
-            //path: '/sample-pages/profile',
-            path: '/construcao',
+            path: '/tables/modulos',
             title: 'Módulos',
             icon: 'mdi mdi-chevron-right',
             class: '',
@@ -210,8 +229,7 @@ export const ROUTES: RouteInfo[] = [
             submenu: []
           },
           {
-            //path: '/sample-pages/profile',
-            path: '/construcao',
+            path: '/tables/rotinas',
             title: 'Rotinas',
             icon: 'mdi mdi-chevron-right',
             class: '',
@@ -219,27 +237,8 @@ export const ROUTES: RouteInfo[] = [
             submenu: []
           },
           {
-            //path: '/sample-pages/profile',
-            path: '/construcao',
+            path: '/tables/processos',
             title: 'Processos',
-            icon: 'mdi mdi-chevron-right',
-            class: '',
-            extralink: false,
-            submenu: []
-          }
-        ]
-      },
-      {
-        path: '',
-        title: 'Funções',
-        icon: 'icon-paper-clip',
-        class: 'has-arrow',
-        extralink: false,
-        submenu: [
-          {
-            //path: '/sample-pages/profile',
-            path: '/construcao',
-            title: 'Push',
             icon: 'mdi mdi-chevron-right',
             class: '',
             extralink: false,
@@ -257,14 +256,6 @@ export const ROUTES: RouteInfo[] = [
     extralink: false,
     submenu: [
       {
-        path: '/component/modal',
-        title: 'Modal',
-        icon: 'mdi mdi-tablet',
-        class: '',
-        extralink: false,
-        submenu: []
-      },
-      {
         path: '/forms/ngx',
         title: 'NGX',
         icon: 'mdi mdi-tablet',
@@ -281,36 +272,12 @@ export const ROUTES: RouteInfo[] = [
         submenu: []
       },
       {
-        path: '/component/pagination',
-        title: 'Pagination',
-        icon: 'mdi mdi-backburger',
-        class: '',
-        extralink: false,
-        submenu: []
-      },
-      {
-        path: '/extra-component/upload',
-        title: 'File Upload',
-        icon: 'mdi mdi-arrow-up-box',
-        class: '',
-        extralink: false,
-        submenu: []
-      },
-      {
         path: '/component/buttons',
         title: 'Button',
         icon: 'mdi mdi-toggle-switch',
         class: '',
         extralink: false,
         submenu: []
-      },
-      { 
-        path: '/component/notifier',
-        title: 'Notifier',
-        icon: 'mdi mdi-bandcamp', 
-        class: '', 
-        extralink: false, 
-        submenu: [] 
       },
       {
         path: '/ecom/edit',

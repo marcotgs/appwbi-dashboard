@@ -10,7 +10,13 @@ import { createExpressServer, Action } from 'routing-controllers';
 import bodyParser from 'body-parser';
 import Config from '@api/util/config';
 import Database from '@api/database';
-import { UserController } from '@api/controllers';
+import {
+    UserController, AuthController,
+    ModuleController, AccessPermissionController,
+    RoutineController, ProcessController,
+    SectorController, CompanyController, 
+    CompanyBranchController
+} from '@api/controllers';
 import Passaport from '@api/util/passport';
 import express from 'express';
 
@@ -25,8 +31,13 @@ Database.connect().
         const app = createExpressServer({
             routePrefix: '/api',
             cors: true,
-            controllers: [UserController],
+            controllers: [UserController, AuthController, ModuleController,
+                RoutineController, AccessPermissionController, ProcessController,
+                SectorController, CompanyController, CompanyBranchController],
             authorizationChecker: async (action: Action): Promise<boolean> => {
+                if (!action.request.headers.authorization) {
+                    return false;
+                }
                 const token = action.request.headers.authorization.split('Bearer ')[1];
                 try {
                     jwt.verify(token, process.env.JWT_SECRET);
@@ -41,7 +52,7 @@ Database.connect().
                 return Number(payload.sub);
             }
         });
-        
+
         app.set('port', process.env.PORT || 3000); // porta
         app.use(express.static(path.join(__dirname, '../..', 'client/dist/dashboard')));
 
@@ -65,9 +76,9 @@ Database.connect().
 
         new Passaport().use();
 
-        app.get('*', (_req: express.Request, res: express.Response): any => {
-            res.sendFile(path.join(__dirname, '../..', 'client/dist/dashboard/index.html'));
-        });
+        // app.get('*', (_req: express.Request, res: express.Response): any => {
+        //     res.sendFile(path.join(__dirname, '../..', 'client/dist/dashboard/index.html'));
+        // });
     });
 
 export default server;

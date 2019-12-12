@@ -163,6 +163,16 @@ const acessoUsuariosModelInit = (sequelize: Sequelize): acessoUsuariosModelStati
 			allowNull: true,
 			comment: "null",
 			field: 'password_salt'
+		},
+		'idSetor': {
+			type: DataTypes.INTEGER,
+			allowNull: true,
+			comment: "null",
+			references: {
+				model: 'cadastro_setores',
+				key: 'id'
+			},
+			field: 'id_setor'
 		}
 	}, {
 		tableName: 'acesso_usuarios',
@@ -195,6 +205,7 @@ export interface acessoUsuariosModel extends Model {
 	cgc:string;
 	resetPasswordToken:string;
 	passwordSalt:string;
+	idSetor:number;
 }
 
 export type acessoUsuariosModelStatic = typeof Model & {

@@ -3,9 +3,9 @@ import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { switchMap, map, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 import * as userActions from '@app/store/user/user.actions';
-import { UserService } from '@api/services';
-import { AuthService } from '@app/services';
+import { UserService, AuthService } from '@api/services';
 import { ApiConstants } from '@app/constants/api';
+import { AuthTokenService } from '@app/services';
 
 @Injectable()
 export class UserEffects {
@@ -14,16 +14,17 @@ export class UserEffects {
         private actions$: Actions,
         private userService: UserService,
         private authService: AuthService,
+        private authTokenService: AuthTokenService,
     ) { }
 
     public userLogin$ = createEffect(() => this.actions$.pipe(
         ofType(userActions.login),
         switchMap((action) =>
-            this.userService.login(action)
+            this.authService.login(action)
                 .pipe(
                     map(res => {
-                        this.authService.setSession(res.data);
-                        return userActions.loginSuccess(this.authService.decodeToken(res.data.token));
+                        this.authTokenService.setSession(res.data);
+                        return userActions.loginSuccess(this.authTokenService.decodeToken(res.data.token));
                     }),
                     catchError(res => {
                         return of(userActions.loginError(((res.error && res.error.data) || { errors: [ApiConstants.UNEXPECTED_ERROR] })));
@@ -34,7 +35,7 @@ export class UserEffects {
     public sendEmailChangePassword$ = createEffect(() => this.actions$.pipe(
         ofType(userActions.sendEmailChangePassword),
         switchMap((action) =>
-            this.userService.sendEmailChangePassword(action)
+            this.authService.sendEmailChangePassword(action)
                 .pipe(
                     map(() => {
                         return userActions.sendEmailChangePasswordSuccess();
@@ -49,7 +50,7 @@ export class UserEffects {
     public changePassword$ = createEffect(() => this.actions$.pipe(
         ofType(userActions.changePassword),
         switchMap((action) =>
-            this.userService.changePassword(action)
+            this.authService.changePassword(action)
                 .pipe(
                     map(() => {
                         return userActions.changePasswordSuccess();
@@ -82,8 +83,8 @@ export class UserEffects {
             this.userService.updateUserProfile(action)
                 .pipe(
                     map((response) => {
-                        this.authService.setSession(response.data);
-                        return userActions.loginSuccess(this.authService.decodeToken(response.data.token));
+                        this.authTokenService.setSession(response.data);
+                        return userActions.loginSuccess(this.authTokenService.decodeToken(response.data.token));
                     }),
                     catchError(res => of(userActions.updateProfileError((
                         (res.error && res.error.data) || { errors: [ApiConstants.UNEXPECTED_ERROR] }
@@ -91,4 +92,52 @@ export class UserEffects {
                 )
         )
     ));
+
+    public getUsers$ = createEffect(() => this.actions$.pipe(
+        ofType(userActions.getUsers),
+        switchMap(() =>
+            this.userService.getUsers()
+                .pipe(
+                    map((response) => {
+                        return userActions.getUsersSuccess(response.data);
+                    }),
+                    catchError(res => of(userActions.userApiError((
+                        (res.error && res.error.data) || { errors: [ApiConstants.UNEXPECTED_ERROR] }
+                    ))))
+                )
+        )
+    ));
+
+    public postUser$ = createEffect(() => this.actions$.pipe(
+        ofType(userActions.postUser),
+        switchMap((action) => {
+            const body = { ...action };
+            delete body.type;
+            return this.userService.postUser(body)
+                .pipe(
+                    map(res => {
+                        if (action.id) {
+                            return userActions.postUserEditSuccess(res.data);
+                        }
+                        return userActions.postUserSuccess(res.data);
+                    }),
+                    catchError(res => {
+                        return of(userActions.userApiError(((res.error && res.error.data) || { errors: [ApiConstants.UNEXPECTED_ERROR] })));
+                    })
+                )
+        })));
+
+    public deleteUser$ = createEffect(() => this.actions$.pipe(
+        ofType(userActions.deleteUser),
+        switchMap((action) =>
+            this.userService.deleteUser(action.id)
+                .pipe(
+                    map(() => {
+                        return userActions.deleteUserSuccess(action);
+                    }),
+                    catchError(res => {
+                        return of(userActions.userApiError(((res.error && res.error.data) || { errors: [ApiConstants.UNEXPECTED_ERROR] })));
+                    })
+                )
+        )));
 }

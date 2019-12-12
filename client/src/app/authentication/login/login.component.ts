@@ -7,7 +7,9 @@ import validationMessages from '@app/constants/form-validation/form-validation.c
 import { Store } from '@ngrx/store';
 import { UserState, getUserState, loginError, login } from '@app/store/user';
 import { ApiResponseError } from '@shared/interfaces';
-import { AuthService } from '@app/services';
+import { AuthTokenService } from '@app/services';
+import { getMenuPermissions, AccessPermissionState } from '@app/store/access-permission';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -17,16 +19,18 @@ import { AuthService } from '@app/services';
 export class LoginComponent implements OnInit {
   public loginForm: FormGroup;
   public loginErrors: ApiResponseError[] | string[] = [];
+  public subscriptionUserState: Subscription = null;
 
   constructor(
     private store: Store<UserState>,
+    private storePermission: Store<AccessPermissionState>,
     private spinner: NgxSpinnerService,
     private router: Router,
     private _actions$: Actions,
-    authService: AuthService,
+    private authTokenService: AuthTokenService,
   ) {
-    if (authService.isLoggedIn()) {
-      this.router.navigate(['/'], { replaceUrl: true });
+    if (this.authTokenService.isLoggedIn()) {
+      this.router.navigate(['/starter'], { replaceUrl: true });
     }
   }
 
@@ -35,11 +39,17 @@ export class LoginComponent implements OnInit {
     this._actions$.pipe(ofType(loginError)).subscribe((data) => {
       this.toggleErrors(data.errors);
     });
-    this.store.select(getUserState).subscribe((userState) => {
-      if (userState.user.email) {
-        this.router.navigate(['/'], { replaceUrl: true });
+    this.subscriptionUserState = this.store.select(getUserState).subscribe((userState) => {
+      if (userState.currentUser.email) {
+        this.storePermission.dispatch(getMenuPermissions());
+        this.router.navigate(['/starter'], { replaceUrl: true });
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.spinner.hide();
+    this.subscriptionUserState.unsubscribe();
   }
 
   private toggleErrors(errors: ApiResponseError[] | string[]) {

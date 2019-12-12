@@ -1,0 +1,191 @@
+<notifier-container></notifier-container>
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="form-body">
+          <div class="row">
+            <div class="col-md-1">
+              <div class="form-group">
+                <button type="button" class="btn btn-info" (click)="addNewItem()">Incluir</button>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <button class="btn btn-outline-primary mb-2 mr-2"
+                  (click)="openVerticallyCentered(content)">Filtrar</button>
+              </div>
+            </div>
+            <div class="col-md-4 ml-auto">
+              <div class="form-group">
+                <input type='text' class="form-control" placeholder='Pesquisar' (keyup)='filterTable($event)' />
+              </div>
+            </div>
+          </div>
+        </div>
+        <ngx-datatable class="material" [rows]="rows" [columns]="columns" [columnMode]="'force'" [headerHeight]="50"
+          [footerHeight]="50" [rowHeight]="'auto'" [columnMode]="'force'" [loadingIndicator]="loading"  [limit]="10">
+          <ngx-datatable-column *ngFor="let col of columns" [name]="col.name">
+            <ng-template let-row="data" let-value="value" ngx-datatable-cell-template>
+              {{value}}
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Controles" sortable="false" prop="id">
+            <ng-template let-row="data" let-value="value" ngx-datatable-cell-template>
+              <div class="ml-auto">
+                <div class="btn-group">
+                  <button (click)="viewItem(value)" type="button" class="btn btn-warning" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-search-plus"></i>
+                  </button>
+                </div>
+                <div class="btn-group">
+                  <button (click)="editItem(value)" type="button" class="btn btn-success" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                </div>
+                <div class="btn-group">
+                  <button (click)="showAlertDelete(value)" type="button" class="btn btn-danger" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+              </div>
+
+            </ng-template>
+          </ngx-datatable-column>
+        </ngx-datatable>
+      </div>
+    </div>
+  </div>
+</div>
+
+<swal #alertDeleteWarning title="Tem certeza que deseja excluir essa filial?" type="question" [focusCancel]="true"
+  confirmButtonColor="#39afdb" [reverseButtons]="true" [showCancelButton]="true" cancelButtonText="cancelar" confirmButtonText="excluir"  (confirm)="deleteItem()">
+</swal>
+
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Filtrar</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>Criar aqui a opção de Filtrar, irei passar posteriormente como será!"&hellip;</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="c('Close click')">Fechar</button>
+  </div>
+</ng-template>
+
+<ng-template #modal let-modal>
+  <div class="modal-header">
+    <h4 class="card-title" *ngIf="isCreating">Cadastrar nova filial</h4>
+    <h4 class="card-title" *ngIf="!isCreating">Dados da filial</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss(); form.reset()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <form class="form-horizontal striped-rows b-form" [formGroup]="form" (ngSubmit)="formSubmit()">
+          <div class="card-body">
+              <div class="form-group row">
+                  <div class="col-sm-3">
+                    <div class="b-label">
+                      <label for="inputEmail3" class="control-label col-form-label">Código</label>
+                    </div>
+                  </div>
+                  <div class="col-sm-9" *ngIf="isEditing || isCreating">
+                      <input type="text" formControlName="filial" class="form-control" id="inputEmail3" maxlength="6" 
+                        [ngClass]="{'is-invalid': form.get('filial').invalid  && (form.get('filial').dirty || 
+                        form.get('filial').touched)}">
+                        <div class="invalid-feedback" *ngFor="let validation of getMessagesError('filial')">
+                            <span *ngIf="form.get('filial').hasError(validation.type) && (form.get('filial').dirty || 
+                            form.get('filial').touched)">{{validation.message}}</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-9" *ngIf="!isEditing && !isCreating">
+                      <div class="b-label b-label--start">
+                        <span class="control-label col-form-label">
+                          {{selectedItem.filial}}
+                        </span>
+                      </div>
+                    </div>
+                </div>
+            <div class="form-group row">
+              <div class="col-sm-3">
+                <div class="b-label">
+                  <label for="inputEmail3" class="control-label col-form-label">Descrição</label>
+                </div>
+              </div>
+              <div class="col-sm-9" *ngIf="isEditing || isCreating">
+                <input type="text" formControlName="descricao" class="form-control" id="inputEmail3" 
+                  [ngClass]="{'is-invalid': form.get('descricao').invalid  && (form.get('descricao').dirty || 
+                  form.get('descricao').touched)}">
+                  <div class="invalid-feedback" *ngFor="let validation of getMessagesError('descricao')">
+                      <span *ngIf="form.get('descricao').hasError(validation.type) && (form.get('descricao').dirty || 
+                      form.get('descricao').touched)">{{validation.message}}</span>
+                  </div>
+              </div>
+              <div class="col-sm-9" *ngIf="!isEditing && !isCreating">
+                <div class="b-label b-label--start">
+                  <span class="control-label col-form-label">
+                    {{selectedItem.descricao}}
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-3">
+                <div class="b-label">
+                  <label for="inputEmail3" class="control-label col-form-label">Empresa</label>
+                </div>
+              </div>
+              <div class="col-sm-9" *ngIf="isEditing || isCreating">
+                  <input
+                  id="typeahead-focus"
+                  type="text"
+                  class="form-control"
+                  formControlName="company"
+                  [ngbTypeahead]="search"
+                  (focus)="focusCompany$.next($event.target.value)"
+                  (click)="clickCompany$.next($event.target.value)"
+                  #instance="ngbTypeahead"
+                  [ngClass]="{'is-invalid': form.get('company').invalid  && (form.get('company').dirty || 
+                  form.get('company').touched)}"
+                />
+                    <div class="invalid-feedback" *ngFor="let validation of getMessagesError('company')">
+                        <span *ngIf="form.get('company').hasError(validation.type) && (form.get('company').dirty || 
+                        form.get('company').touched)">{{validation.message}}</span>
+                    </div>
+                </div>
+              <div class="col-sm-9" *ngIf="!isEditing && !isCreating">
+                <div class="b-label b-label--start" >
+                  <span class="control-label col-form-label">
+                    {{selectedItem.empresa.nome}}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr *ngIf="isEditing || isCreating">
+          <div class="card-body" *ngIf="isEditing || isCreating">
+            <div class="form-group m-b-0 text-right">
+                <button class="btn btn-info waves-effect waves-light btn-submit" type="submit">
+                    <span *ngIf="!form.disabled">Salvar</span>
+                    <ngx-spinner bdColor="transparent" size="default" color="#fff" type="ball-beat"
+                        [fullScreen]="false">
+                    </ngx-spinner>
+                </button>
+              <button type="button" (click)="modal.dismiss(); form.reset()" class="btn btn-dark waves-effect waves-light">Cancelar</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</ng-template>

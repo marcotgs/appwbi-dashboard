@@ -1,8 +1,19 @@
 import { FindOptions } from 'sequelize/types';
 import { Sequelize } from 'sequelize';
-import { acessoUsuariosModelStatic, acessoUsuariosModel } from '@api/database/models/acesso-usuarios';
+import {
+    acessoUsuariosModelStatic, acessoUsuariosModel,
+    municipioModel, empresaModel, estadoModel,
+    acessoNiveisPermissaoModel, cadastroSetoresModel
+} from '@api/database/models';
 import logger from '@api/util/logger';
 import Database from '@api/database';
+
+export type UserData = acessoUsuariosModel & {
+    municipio: municipioModel & { estado: estadoModel };
+    acessoNiveisPermissao: acessoNiveisPermissaoModel;
+    empresa: empresaModel;
+    cadastroSetore: cadastroSetoresModel;
+}
 
 /**
  * Essa classe é um repositorio com os método que acessam a tabela `acesso_usuarios`.
@@ -30,13 +41,127 @@ export default class AcessoUsuariosRepository {
     }
 
     /**
+    * Procura os registros usuários.
+    *
+    * @returns {Promise<acessoUsuariosModel[]>}
+    * @memberof AcessoUsuariosRepository
+    */
+    public async findAll(): Promise<acessoUsuariosModel[]> {
+        try {
+            return await this.acessoUsuariosModel.findAll({
+                attributes: [
+                    'nome', 'sobrenome', 'email', 'ddd', 'telefone',
+                    'endereco', 'numero', 'complemento', 'bairro', 'cep',
+                    'dataNascimento', 'cargo', 'cgc', 'id'
+                ],
+                include: [
+                    { model: Database.models.empresa },
+                    { model: Database.models.acessoNiveisPermissao },
+                    { model: Database.models.cadastroSetores },
+                    {
+                        model: Database.models.municipio,
+                        include: [
+                            {
+                                model: Database.models.estado,
+                            }
+                        ],
+                    }
+                ],
+            });
+        } catch (ex) {
+            logger.error(`Erro ao realizar consulta no repository :'AcessoUsuariosRepository'-> 'findAll'. Error: ${ex}`);
+            throw ex;
+        }
+    };
+
+    /**
+     * Procura os registros usuários de uma determinada empresa.
+     *
+     * @param {number} companyId
+     * @returns {Promise<acessoUsuariosModel[]>}
+     * @memberof AcessoUsuariosRepository
+     */
+    public async findAllByIdEmpresa(companyId: number): Promise<acessoUsuariosModel[]> {
+        try {
+            return await this.acessoUsuariosModel.findAll({
+                attributes: [
+                    'nome', 'sobrenome', 'email', 'ddd', 'telefone',
+                    'endereco', 'numero', 'complemento', 'bairro', 'cep',
+                    'dataNascimento', 'cargo', 'cgc', 'id'
+                ],
+                where: {
+                    idEmpresa: companyId,
+                },
+                include: [
+                    { model: Database.models.empresa },
+                    { model: Database.models.acessoNiveisPermissao },
+                    { model: Database.models.cadastroSetores },
+                    {
+                        model: Database.models.municipio,
+                        include: [
+                            {
+                                model: Database.models.estado,
+                            }
+                        ],
+                    }
+                ],
+            });
+        } catch (ex) {
+            logger.error(`Erro ao realizar consulta no repository :'AcessoUsuariosRepository'-> 'findAll'. Error: ${ex}`);
+            throw ex;
+        }
+    };
+
+    /**
+     * Deleta um usuário.
+     *
+     * @param {number} id
+     * @returns {Promise<number>}
+     * @memberof AcessoUsuariosRepository
+     */
+    public async delete(id: number): Promise<number> {
+        try {
+            return await this.acessoUsuariosModel.destroy({
+                where: {
+                    id,
+                },
+            });
+        } catch (ex) {
+            logger.error(`Erro ao realizar consulta no repository :'AcessoUsuariosRepository'-> 'delete'. Error: ${ex}`);
+            throw ex;
+        }
+    };
+
+    /**
+     * Insere uma novo usuário.
+     *
+     * @param {object} data
+     * @returns {Promise<acessoUsuariosModel>}
+     * @memberof AcessoUsuariosRepository
+     */
+    public async insert(data: object): Promise<acessoUsuariosModel> {
+        try {
+            return await this.acessoUsuariosModel.create({
+                ...data,
+                ativo: true,
+                idTipoEndereco: 1,
+                dataNascimento: Sequelize.cast(new Date((data as acessoUsuariosModel).dataNascimento), 'DATETIMEOFFSET'),
+            });
+        } catch (ex) {
+            logger.error(`Erro ao realizar consulta no repository :'AcessoUsuariosRepository'-> 'insert'. Error: ${ex}`);
+            throw ex;
+        }
+    };
+
+
+    /**
      * Procura um registro por id na tabela.
      *
      * @param {number} id
      * @returns {Promise<acessoUsuariosModel>}
      * @memberof AcessoUsuariosRepository
      */
-    public async findById(id: number, options: Omit<FindOptions, 'where'> = {} ): Promise<acessoUsuariosModel> {
+    public async findById(id: number, options: Omit<FindOptions, 'where'> = {}): Promise<acessoUsuariosModel> {
         try {
             return await this.acessoUsuariosModel.findByPk(id, options);
         } catch (ex) {
@@ -65,6 +190,28 @@ export default class AcessoUsuariosRepository {
             throw ex;
         }
     };
+
+    /**
+     * Procura se existe um usuário com determinado email.
+     *
+     * @param {string} email
+     * @returns {Promise<boolean>}
+     * @memberof AcessoUsuariosRepository
+     */
+    public async userWithEmailExists(email: string): Promise<boolean> {
+        try {
+            const count = await this.acessoUsuariosModel.count({
+                where: {
+                    email,
+                },
+            });
+            return (count > 0);
+        } catch (ex) {
+            logger.error(`Erro ao realizar consulta no repository :'AcessoUsuarios'-> 'userWithEmailExists'. Error: ${ex}`);
+            throw ex;
+        }
+    };
+
 
     /**
      * verifica se existe um resgistro relacionados ao email e a senha recebidos por parametro.

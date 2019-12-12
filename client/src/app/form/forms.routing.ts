@@ -13,6 +13,11 @@ import { FormstripedComponent } from './form-striped-row/striped.component';
 import { FormdetailComponent } from './form-detail/detail.component';
 import { MultiselectComponent } from './multiselect/multiselect.component';
 import { FormContaUsuarioComponent } from './conta-usuario/conta-usuario.component';
+import { FormModulosComponent } from './form-modulos/form-modulos.component';
+import { FormSetoresComponent } from './form-setores/form-setores.component';
+import { FormFiliaisComponent } from './form-filiais/form-filiais.component';
+import { FormRotinasComponent } from './form-rotinas/form-rotinas.component';
+import { FormProcessosComponent } from './form-processos/form-processos.component';
 
 export const FormsRoutes: Routes = [
   {
@@ -129,10 +134,45 @@ export const FormsRoutes: Routes = [
         }
       },
       {
+        path: 'form-modulos',
+        component: FormModulosComponent,
+        data: {
+          title: 'Módulos - Incluir',
+        }
+      },
+      {
+        path: 'form-setores',
+        component: FormSetoresComponent,
+        data: {
+          title: 'Setores - Incluir',
+        }
+      },
+      {
+        path: 'form-rotinas',
+        component: FormRotinasComponent,
+        data: {
+          title: 'Rotinas - Incluir',
+        }
+      },
+      {
+        path: 'form-processos',
+        component: FormProcessosComponent,
+        data: {
+          title: 'Processos - Incluir',
+        }
+      },
+      {
         path: 'conta-usuario',
         component: FormContaUsuarioComponent,
         data: {
           title: 'Conta do Usuário',
+        }
+      },
+      {
+        path: 'form-filiais',
+        component: FormFiliaisComponent,
+        data: {
+          title: 'Filiais',
         }
       },
       {

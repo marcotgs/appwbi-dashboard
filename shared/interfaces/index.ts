@@ -1,6 +1,12 @@
-export { default as ApiPayload } from "./api-payload.interface";
-export * from "./api-response-error.interface";
-export { default as LoginResponse } from "./login-response.interface";
-export { default as acessoUsuariosResponse } from "./acesso-usuarios-response.interface";
-export { default as ChangePasswordBody } from './change-password-body.interface';
-export { default as SendEmailChangePasswordBody } from './send-email-password-body.interface';
+export { default as ApiPayload } from './api-payload.interface';
+export * from './api-response-error.interface';
+export * from './auth';
+export * from './user';
+export * from './module';
+export * from './routine';
+export * from './process';
+export * from './sector';
+export * from './permission';
+export * from './company';
+export * from './segment';
+export * from './company-branch';
