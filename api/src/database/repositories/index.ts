@@ -8,3 +8,4 @@ export * from './cadastro-filiais';
 export * from './empresa';
 export * from './segmento';
 export * from './acesso-niveis-permissao';
+export * from './mensagem';

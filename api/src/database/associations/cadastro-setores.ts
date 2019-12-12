@@ -12,6 +12,11 @@ const addCadastroSetoresAssociation = (models: any): void => {
             foreignKey: 'id_setor',
         }
     );
+    (models.cadastroSetores as cadastroSetoresModelStatic).hasMany(
+        models.mensagem, {
+            foreignKey: 'id_cadastro_setores',
+        }
+    );
 };
 
 export default addCadastroSetoresAssociation;
