@@ -2,7 +2,7 @@ import { mensagemModel, mensagemModelStatic } from '@api/database/models/mensage
 import logger from '@api/util/logger';
 import Database from '@api/database';
 import { empresaModel, cadastroSetoresModel } from '@api/database/models';
-import { Op } from 'sequelize/types';
+import { Op, Sequelize } from 'sequelize';
 
 export type MessageData = mensagemModel & {
     cadastroSetore: cadastroSetoresModel & { empresa: empresaModel };
@@ -76,7 +76,11 @@ export default class MensagemRepository {
      */
     public async insert(data: object): Promise<mensagemModel> {
         try {
-            return await this.mensagemModel.create(data);
+            return await this.mensagemModel.create({
+                ...data,
+                enviado: false,
+                dataCadastro: Sequelize.cast(new Date(), 'DATETIMEOFFSET'),
+            });
         } catch (ex) {
             logger.error(`Erro ao realizar consulta no repository :'MensagemRepository'-> 'insert'. Error: ${ex}`);
             throw ex;

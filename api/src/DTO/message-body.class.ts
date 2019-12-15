@@ -22,8 +22,5 @@ export default class MessageBody {
 
     public idEmpresa?: number;
 
-    @IsNotEmpty({
-        message: validationMessages.default.required
-    })
-    public idCadastroSetores?: string;
+    public idCadastroSetores?: number;
 }

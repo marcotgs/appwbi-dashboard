@@ -35,6 +35,7 @@ import { MultiselectComponent } from './multiselect/multiselect.component';
 import { FormEmpresaComponent } from './form-empresa/form-empresa.component';
 import { CompanyEffects } from '@app/store/company';
 import { SectorEffects } from '@app/store/sector';
+import { FormPushComponent } from './push/push.component';
 
 @NgModule({
   imports: [
@@ -83,10 +84,12 @@ import { SectorEffects } from '@app/store/sector';
     MultiselectComponent,
     FormdetailComponent,
     FormEmpresaComponent,
+    FormPushComponent,
   ],
   exports: [
     FormEmpresaComponent,
-    FormContaUsuarioComponent
+    FormContaUsuarioComponent,
+    FormPushComponent
   ]
 })
 export class FormModule { }

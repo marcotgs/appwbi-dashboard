@@ -1,0 +1,64 @@
+<ngx-spinner [name]="initialSpinner" bdColor="transparent" size="medium" color="#39afdb" [fullScreen]="false"
+    type="ball-scale-multiple">
+    <p style="font-size: 20px; color: gray">Carregando...</p>
+</ngx-spinner>
+<notifier-container></notifier-container>
+<div *ngIf="form">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <hr class="m-t-0">
+                <form class="form-horizontal striped-rows b-form" (ngSubmit)="formSubmit()" [formGroup]="form"
+                    id="form">
+                    <div class="card-body" [ngClass]="{'p-t-0': modal}">
+                        <h4 class="card-title">Informações</h4>
+                        <div class="form-group row">
+                            <div class="col-sm-3">
+                                <div class="b-label">
+                                    <label for="titulo" class="control-label col-form-label">Título</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" id="titulo" placeholder="Título"
+                                    formControlName="titulo" [ngClass]="{'is-invalid': form.get('titulo').invalid  && (form.get('titulo').dirty || 
+                                    form.get('titulo').touched)}">
+                                <div class="invalid-feedback" *ngFor="let validation of getMessagesError('titulo')">
+                                    <span *ngIf="form.get('titulo').hasError(validation.type) && (form.get('titulo').dirty || 
+                                    form.get('titulo').touched)">{{validation.message}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-3">
+                                <div class="b-label">
+                                    <label for="mensagem" class="control-label col-form-label">Mensagem</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <textarea type="text" class="form-control" id="mensagem" placeholder="Mensagem"
+                                    formControlName="mensagem" [ngClass]="{'is-invalid': form.get('mensagem').invalid  && (form.get('mensagem').dirty || 
+                                    form.get('mensagem').touched)}"></textarea>
+                                <div class="invalid-feedback" *ngFor="let validation of getMessagesError('mensagem')">
+                                    <span *ngIf="form.get('mensagem').hasError(validation.type) && (form.get('mensagem').dirty || 
+                                            form.get('mensagem').touched)">{{validation.message}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group m-b-0 text-right">
+                                <button class="btn btn-info waves-effect waves-light btn-submit" type="submit">
+                                    <span *ngIf="!form.disabled">Salvar</span>
+                                    <ngx-spinner bdColor="transparent" size="default" color="#fff" type="ball-beat"
+                                        [fullScreen]="false">
+                                    </ngx-spinner>
+                                </button>
+                                <button type="button" (click)="form.reset()"
+                                    class="btn btn-dark waves-effect waves-light">Cancelar</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

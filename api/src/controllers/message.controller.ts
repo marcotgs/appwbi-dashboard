@@ -1,9 +1,9 @@
 import { Response } from 'express';
-import { JsonController, Authorized, Get, Res, Post, Body, Delete, Param } from 'routing-controllers';
-import { CadastroProcessosRepository } from '@api/database/repositories';
+import { JsonController, Authorized, Res, Post, Body } from 'routing-controllers';
+import { MensagemRepository } from '@api/database/repositories';
 import logger from '@api/util/logger';
 import BaseController from './base-controller.class';
-import { ModuleBody, MessageBody } from '@api/DTO';
+import { MessageBody } from '@api/DTO';
 import { BodyValidator } from '@api/services';
 
 /**
@@ -15,7 +15,7 @@ import { BodyValidator } from '@api/services';
  */
 @JsonController('/message')
 export default class MessageController extends BaseController {
-    private cadastroProcessosRepository: CadastroProcessosRepository;
+    private mensagemRepository: MensagemRepository;
 
     /**
      * Cria uma nova instância MessageController.
@@ -24,7 +24,7 @@ export default class MessageController extends BaseController {
      */
     public constructor() {
         super();
-        this.cadastroProcessosRepository = new CadastroProcessosRepository();
+        this.mensagemRepository = new MensagemRepository();
     }
 
     /**
@@ -47,18 +47,10 @@ export default class MessageController extends BaseController {
                 // Retorna 422 se os dados do body estiverem inválidos.
                 return this.sendResponse(res, 422, bodyValidationResults);
             }
-            if (!body.id) {
-                const results = await this.cadastroProcessosRepository.insert(body);
-                body.id = results.id;
-            } else {
-                const processData = await this.cadastroProcessosRepository.findById(body.id);
-                const newValue = { ...processData, ...body };
-                await this.cadastroProcessosRepository.update(body.id, newValue);
-            }
-            const response = this.formatProcessResponse(await this.cadastroProcessosRepository.findById(body.id));
-            return this.sendResponse(res, 200, response);
+            await this.mensagemRepository.insert(body);
+            return this.sendResponse(res, 200, true);
         } catch (ex) {
-            logger.error(`Erro na requisição de 'postProcess' no controller 'MessageController'. Erro -> ${ex}`);
+            logger.error(`Erro na requisição de 'postMessage' no controller 'MessageController'. Erro -> ${ex}`);
             return this.sendResponse(res, 500);
         }
     }

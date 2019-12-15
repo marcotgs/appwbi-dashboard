@@ -1,0 +1,1 @@
+export { default as MessageBody } from './message-body.interface';

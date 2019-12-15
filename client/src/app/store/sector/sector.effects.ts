@@ -16,8 +16,8 @@ export class SectorEffects {
 
     public getSector$ = createEffect(() => this.actions$.pipe(
         ofType(sectorActions.getSector),
-        switchMap(() =>
-            this.sectorService.getSectors()
+        switchMap((action) =>
+            this.sectorService.getSectors(action.companyId)
                 .pipe(
                     map(res => {
                         return sectorActions.getSectorSuccess(res.data);
@@ -36,7 +36,7 @@ export class SectorEffects {
             return this.sectorService.postSector(body)
                 .pipe(
                     map(res => {
-                        if(action.id){
+                        if (action.id) {
                             return sectorActions.postSectorEditSuccess(res.data);
                         }
                         return sectorActions.postSectorSuccess(res.data);

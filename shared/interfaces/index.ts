@@ -10,3 +10,4 @@ export * from './permission';
 export * from './company';
 export * from './segment';
 export * from './company-branch';
+export * from './message';

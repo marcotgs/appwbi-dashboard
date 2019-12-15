@@ -241,7 +241,7 @@ export class FormContaUsuarioComponent {
 
   private loadData() {
     this.storeCompany.dispatch(getCompanies());
-    this.storeSector.dispatch(getSector());
+    this.storeSector.dispatch(getSector({}));
     this.storePermission.dispatch(getPermissions());
     combineLatest(this.storeCompany.select(getCompanyState),
       this.storeSector.select(getSectorState),

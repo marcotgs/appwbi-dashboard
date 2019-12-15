@@ -5,7 +5,8 @@ import {
 } from '@shared/interfaces';
 
 export const getSector = createAction(
-    sectorTypes.GET_SECTOR
+    sectorTypes.GET_SECTOR,
+    props<{ companyId?: number }>(),
 );
 
 export const getSectorSuccess = createAction(

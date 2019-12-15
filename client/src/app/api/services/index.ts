@@ -7,3 +7,4 @@ export { default as AccessPermissionService } from "./access-permission.service"
 export { default as SectorService } from "./sector.service";
 export { default as CompanyService } from "./company.service";
 export { default as CompanyBranchService } from "./company-branch.service";
+export { default as MessageService } from "./message.service";

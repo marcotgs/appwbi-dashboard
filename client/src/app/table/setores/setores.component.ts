@@ -194,7 +194,7 @@ export class SetoresComponent implements OnInit {
 
   private getSectores() {
     this.loading = true;
-    this.storeSector.dispatch(getSector());
+    this.storeSector.dispatch(getSector({}));
   }
 
   private markFormFieldsAsTouched(): void {

@@ -191,6 +191,7 @@ export default class AuthController extends BaseController {
                 data: {
                     email: userData.email,
                     nome: userData.nome,
+                    idEmpresa: userData.idEmpresa
                 },
                 subject: userData.id.toString(),
             });

@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import { JsonController, Authorized, Get, Res, Post, Body, Delete, Param } from 'routing-controllers';
+import { JsonController, Authorized, Get, Res, Post, Body, Delete, Param, QueryParam } from 'routing-controllers';
 import { CadastroSetoresRepository, SectorData } from '@api/database/repositories';
 import logger from '@api/util/logger';
 import BaseController from './base-controller.class';
@@ -39,9 +39,10 @@ export default class SectorController extends BaseController {
     @Get('/')
     public async getSectors(
         @Res() res: Response,
+        @QueryParam('companyId') companyId: number,
     ): Promise<Response> {
         try {
-            const results = await this.cadastroSetoresRepository.findAll();
+            const results = await this.cadastroSetoresRepository.findAll(companyId);
             const response = results.map((result): SectorResponse => this.formatSectorResponse(result));
             return this.sendResponse(res, 200, response);
         } catch (ex) {
@@ -109,7 +110,7 @@ export default class SectorController extends BaseController {
         return {
             ...resultJSON,
             descricaoFormatada: Formatter.removeAccents(resultJSON.descricao),
-            podeDeletar: (resultJSON.acessoUsuarios.length === 0),
+            podeDeletar: (resultJSON.acessoUsuarios && resultJSON.acessoUsuarios.length === 0),
             empresa: {
                 ...resultJSON.empresa,
                 numero: null,

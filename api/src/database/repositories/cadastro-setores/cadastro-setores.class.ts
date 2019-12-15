@@ -2,6 +2,7 @@ import { cadastroSetoresModel, cadastroSetoresModelStatic } from '@api/database/
 import logger from '@api/util/logger';
 import Database from '@api/database';
 import { acessoUsuariosModel, empresaModel } from '@api/database/models';
+import { FindOptions } from 'sequelize/types';
 
 export type SectorData = cadastroSetoresModel & {
     acessoUsuarios: acessoUsuariosModel[];
@@ -40,21 +41,24 @@ export default class CadastroSetoresRepository {
      * @returns {Promise<SectorData[]>}
      * @memberof CadastroSetoresRepository
      */
-    public async findAll(): Promise<SectorData[]> {
+    public async findAll(companyId?: number): Promise<SectorData[]> {
         try {
-            return await this.cadastroSetoresModel.findAll({
+            const options: FindOptions = {
                 attributes: ['descricao', 'id'],
-                include: [
-                    {
-                        model: Database.models.empresa,
-                        attributes: ['nome', 'id'],
-                    },
-                    {
-                        model: Database.models.acessoUsuarios,
-                        attributes: ['id'],
-                    },
-                ]
-            }) as SectorData[];
+                include: [{
+                    model: Database.models.empresa,
+                    attributes: ['nome', 'id'],
+                }, {
+                    model: Database.models.acessoUsuarios,
+                    attributes: ['id'],
+                }]
+            };
+            if (companyId) {
+                options.where = {
+                    idEmpresa: companyId,
+                }
+            }
+            return await this.cadastroSetoresModel.findAll(options) as SectorData[];
         } catch (ex) {
             logger.error(`Erro ao realizar consulta no repository :'CadastroSetoresRepository'-> 'findAll'. Error: ${ex}`);
             throw ex;
@@ -137,11 +141,11 @@ export default class CadastroSetoresRepository {
             await this.cadastroSetoresModel.update({
                 ...data,
             },
-            {
-                where: {
-                    id,
-                },
-            });
+                {
+                    where: {
+                        id,
+                    },
+                });
         } catch (ex) {
             logger.error(`Erro ao realizar consulta no repository :'CadastroSetoresRepository'-> 'insert'. Error: ${ex}`);
             throw ex;

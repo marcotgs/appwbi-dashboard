@@ -5,6 +5,7 @@ import {
     AccessPermissionService, RoutineService, 
     ProcessService, SectorService, CompanyService, 
     CompanyBranchService,
+    MessageService,
 } from './services';
 import { ApiHttpInterceptor } from './interceptors/http.interceptor';
 
@@ -19,6 +20,7 @@ import { ApiHttpInterceptor } from './interceptors/http.interceptor';
         RoutineService,
         ProcessService,
         SectorService,
+        MessageService,
         CompanyService,
         CompanyBranchService,
         AccessPermissionService,

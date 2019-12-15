@@ -14,9 +14,5 @@ export default class JwtTokenService {
         return sign({
             ...options.data
         }, process.env.JWT_SECRET, jwtOptions);
-
-        // const expirationDate = new Date();
-        // expirationDate.setDate(expirationDate.getDate() + 180);
-        // return { token, expirationDate };
     }
 }

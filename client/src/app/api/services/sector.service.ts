@@ -12,9 +12,11 @@ export default class SectorService {
         this.controllerPath = '/sector';
     }
 
-    public getSectors(): Observable<ApiPayload<SectorResponse[]>> {
+    public getSectors(companyId?: number): Observable<ApiPayload<SectorResponse[]>> {
         const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authToken.getToken()}`);
-        return this.http.get<ApiPayload<SectorResponse[]>>(`${this.controllerPath}/`, { headers });
+        const params: { companyId?: any } = {};
+        if (companyId) params.companyId = companyId;
+        return this.http.get<ApiPayload<SectorResponse[]>>(`${this.controllerPath}/`, { headers, params });
     }
 
     public postSector(body: SectorBody): Observable<ApiPayload<SectorResponse>> {

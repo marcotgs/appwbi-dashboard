@@ -183,7 +183,7 @@ export default class AcessoUsuariosRepository {
                 where: {
                     email: email,
                 },
-                attributes: ['id', 'email', 'nome', ['password_salt', 'passwordSalt']],
+                attributes: ['id', 'email', 'nome', 'idEmpresa', ['password_salt', 'passwordSalt']],
             });
         } catch (ex) {
             logger.error(`Erro ao realizar consulta no repository :'AcessoUsuarios'-> 'getByEmail'. Error: ${ex}`);
@@ -294,11 +294,11 @@ export default class AcessoUsuariosRepository {
                 ...data,
                 dataNascimento: Sequelize.cast(new Date((data as acessoUsuariosModel).dataNascimento), 'DATETIMEOFFSET'),
             },
-            {
-                where: {
-                    id: (data as acessoUsuariosModel).id,
-                },
-            });
+                {
+                    where: {
+                        id: (data as acessoUsuariosModel).id,
+                    },
+                });
         } catch (ex) {
             logger.error(`Erro ao realizar update no repository :'AcessoUsuarios'-> 'updateUser'. Error: ${ex}`);
             throw ex;

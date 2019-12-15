@@ -18,6 +18,7 @@ import { FormSetoresComponent } from './form-setores/form-setores.component';
 import { FormFiliaisComponent } from './form-filiais/form-filiais.component';
 import { FormRotinasComponent } from './form-rotinas/form-rotinas.component';
 import { FormProcessosComponent } from './form-processos/form-processos.component';
+import { FormPushComponent } from './push/push.component';
 
 export const FormsRoutes: Routes = [
   {
@@ -169,6 +170,20 @@ export const FormsRoutes: Routes = [
         }
       },
       {
+        path: 'mensagem/:publica',
+        component: FormPushComponent,
+        data: {
+          title: 'Enviar Mensagem Pública',
+        }
+      },
+      {
+        path: 'mensagem',
+        component: FormPushComponent,
+        data: {
+          title: 'Enviar Mensagem Pública',
+        }
+      },
+      {
         path: 'form-filiais',
         component: FormFiliaisComponent,
         data: {
@@ -197,9 +212,9 @@ export const FormsRoutes: Routes = [
           ]
         }
       },
-	  {
-      path: 'ngx',
-      loadChildren: () => import('./ngx-wizard/ngx-wizard.module').then(m => m.NGXFormWizardModule)
+      {
+        path: 'ngx',
+        loadChildren: () => import('./ngx-wizard/ngx-wizard.module').then(m => m.NGXFormWizardModule)
       }
     ]
   }

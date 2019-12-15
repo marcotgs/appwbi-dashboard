@@ -8,6 +8,7 @@ interface UserResponse {
     email?: string;
     perfil?: string;
     empresa?: string;
+    idEmpresa?: number;
     setor?: string;
     ddd?: string;
     telefone?: string;

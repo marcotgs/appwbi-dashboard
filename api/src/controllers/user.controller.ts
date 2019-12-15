@@ -266,6 +266,7 @@ export default class UserController extends BaseController {
                 data: {
                     email: userData.email,
                     nome: userData.nome,
+                    idEmpresa: userData.idEmpresa
                 },
                 subject: userData.id.toString(),
             });
@@ -285,7 +286,7 @@ export default class UserController extends BaseController {
     private async getUserById(id: number): Promise<UserData> {
         return await this.acessoUsuariosRepository.findById(id, {
             attributes: [
-                'nome', 'sobrenome', 'email', 'ddd', 'telefone',
+                'nome', 'sobrenome', 'email', 'ddd', 'telefone', 'idEmpresa',
                 'endereco', 'numero', 'complemento', 'bairro', 'cep',
                 'dataNascimento', 'cargo', 'cgc', 'id', 'passwordSalt'
             ],
