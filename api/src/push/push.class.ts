@@ -21,7 +21,7 @@ class Push {
     }
 
     public initCron(): void {
-        const task = cron.schedule('*/30 * * * * *', () => {
+        const task = cron.schedule('*/10 * * * *', () => {
             this.getMessages();
         });
 
