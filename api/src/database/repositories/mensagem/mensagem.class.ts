@@ -35,15 +35,14 @@ export default class MensagemRepository {
 
     /**
      * Procura os registros de mensagens que não foram enviadas
-     * mais recentes que a data recebida por parametro
      *
      * @returns {Promise<MessageData[]>}
      * @memberof MensagemRepository
      */
-    public async findAllUnsentByDate(date: Date): Promise<MessageData[]> {
+    public async findAllUnsent(): Promise<MessageData[]> {
         try {
             return await this.mensagemModel.findAll({
-                attributes: ['titulo', 'id', 'mensagem', 'publica', 'id_cadastro_setores'],
+                attributes: ['titulo', 'id', 'mensagem', 'idEmpresa', 'idCadastroSetores'],
                 include: [
                     {
                         model: Database.models.cadastroSetores,
@@ -55,13 +54,35 @@ export default class MensagemRepository {
                     },
                 ],
                 where: {
-                    dataCadastro: {
-                        [Op.gte]: date,
-                    },
-                },
+                    enviado: false,
+                }
             }) as MessageData[];
         } catch (ex) {
-            logger.error(`Erro ao realizar consulta no repository :'MensagemRepository'-> 'findAllUnsentByDate'. Error: ${ex}`);
+            logger.error(`Erro ao realizar consulta no repository :'MensagemRepository'-> 'findAllUnsent'. Error: ${ex}`);
+            throw ex;
+        }
+    };
+
+    /**
+     * atualiza os registros recebidos no parametro para enviados
+     *
+     * @memberof MensagemRepository
+     */
+    public async updateToSent(ids: number[]): Promise<void> {
+        try {
+            await this.mensagemModel.update({
+                enviado: true,
+                dataEnviada: Sequelize.cast(new Date(), 'DATETIMEOFFSET'),
+            },
+                {
+                    where: {
+                        id: {
+                            [Op.in]: ids,
+                        }
+                    },
+                });
+        } catch (ex) {
+            logger.error(`Erro ao realizar consulta no repository :'MensagemRepository'-> 'updateToSent'. Error: ${ex}`);
             throw ex;
         }
     };

@@ -20,6 +20,7 @@ import {
 import Passaport from '@api/util/passport';
 import express from 'express';
 import MessageController from './controllers/message.controller';
+import Push from './push/push.class';
 
 Config.init();
 
@@ -78,6 +79,7 @@ Database.connect().
         app.use(bodyParser.urlencoded({ extended: true })); // formatação dos dados de resposta/body da Api
 
         new Passaport().use();
+        new Push().initCron();
 
         // app.get('*', (_req: express.Request, res: express.Response): any => {
         //     res.sendFile(path.join(__dirname, '../..', 'client/dist/dashboard/index.html'));

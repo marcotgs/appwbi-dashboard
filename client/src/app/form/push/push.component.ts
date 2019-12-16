@@ -25,8 +25,8 @@ export class FormPushComponent {
     public initialSpinner = 'initialSpinner';
     public focusSector$ = new Subject<string>();
     public clickSector$ = new Subject<string>();
+    public isMessagePublic: boolean = false;
     private sectors: SectorResponse[] = [];
-    private isMessagePublic: boolean = false;
     private idEmpresa: number;
 
     constructor(
@@ -66,10 +66,10 @@ export class FormPushComponent {
             }
             if (!this.isMessagePublic) {
                 payload.idEmpresa = this.idEmpresa;
-                if (this.form.get('sector').value)
-                    payload.idCadastroSetores = this.sectors.find(p => p.descricao === this.form.get('sector').value).id;
+                if (this.form.get('setor').value)
+                    payload.idCadastroSetores = this.sectors.find(p => p.descricao === this.form.get('setor').value).id;
             }
-            delete (payload as any).sector;
+            delete (payload as any).setor;
             this.postMessage(payload);
         }
     }
@@ -79,7 +79,8 @@ export class FormPushComponent {
             .subscribe(() => {
                 this.notifierService.notify('success', 'Sua mensagem será enviada em alguns minutos!');
                 this.form.reset();
-            }, (err) => {
+            }, async (err) => {
+                await this.spinner.hide();
                 this.notifierService.notify('error', 'Erro ao enviar mensagem!');
             }, async () => {
                 this.form.enable();
@@ -130,7 +131,7 @@ export class FormPushComponent {
             titulo: new FormControl('', {
                 validators: Validators.required,
             }),
-            sector: new FormControl(''),
+            setor: new FormControl(''),
         });
     }
 

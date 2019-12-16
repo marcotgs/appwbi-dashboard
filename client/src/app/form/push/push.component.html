@@ -11,7 +11,26 @@
                 <form class="form-horizontal striped-rows b-form" (ngSubmit)="formSubmit()" [formGroup]="form"
                     id="form">
                     <div class="card-body" [ngClass]="{'p-t-0': modal}">
-                        <h4 class="card-title">Informações</h4>
+                        <h4 class="card-title">Nova mensagem</h4>
+                        <div class="form-group row" *ngIf="!isMessagePublic">
+                            <div class="col-sm-3">
+                                <div class="b-label">
+                                    <label for="setor" class="control-label col-form-label">Setor</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" id="setor" placeholder="Setor"
+                                    formControlName="setor" [ngbTypeahead]="searchSector"
+                                    (focus)="focusSector$.next($event.target.value)"
+                                    (click)="clickSector$.next($event.target.value)" #instance="ngbTypeahead" [ngClass]="{'is-invalid': form.get('setor').invalid  && (form.get('setor').dirty || 
+                                    form.get('setor').touched)}">
+                                <div class="invalid-feedback" *ngFor="let validation of getMessagesError('setor')">
+                                    <span
+                                        *ngIf="form.get('setor').hasError(validation.type) && (form.get('setor').dirty || 
+                                                                form.get('setor').touched)">{{validation.message}}</span>
+                                </div>
+                            </div>
+                        </div>
                         <div class="form-group row">
                             <div class="col-sm-3">
                                 <div class="b-label">
